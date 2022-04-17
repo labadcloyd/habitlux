@@ -2,8 +2,6 @@ package helpers
 
 import (
 	"database/sql/driver"
-	"errors"
-	"fmt"
 	"strings"
 	"time"
 )
@@ -12,6 +10,7 @@ type Datetime struct {
 	time.Time
 }
 
+// for parsing datetime on fiber http request
 func (t *Datetime) UnmarshalJSON(input []byte) error {
 	strInput := strings.Trim(string(input), `"`)
 	newTime, err := time.Parse("2006-01-02", strInput)
@@ -26,16 +25,8 @@ func (t *Datetime) UnmarshalJSON(input []byte) error {
 // for gorm custom data type
 // the Scan method will try to convert the raw data to the data type gorm accepts
 func (j *Datetime) Scan(value interface{}) error {
-	// first we get the bytes from the original value
-	bytes, ok := value.([]byte)
-  if !ok {
-    return errors.New(fmt.Sprint("Failed to unmarshal JSONB value:", value))
-  }
-	// here we will parse the data into the custom data type we want
-	strInput := strings.Trim(string(bytes), `"`)
-	if newTime, err := time.Parse("2006-01-02", strInput); err != nil {
-		// then we set the value of the custom data type to the struct
-		j.Time = newTime
+	if t, ok := value.(time.Time); ok {
+		j.Time = t
 	}
 	return nil
 }
