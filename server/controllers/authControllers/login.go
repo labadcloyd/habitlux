@@ -29,7 +29,7 @@ func Login(c *fiber.Ctx) error {
 
 	// checking if user exists
 	if err := database.
-		DB.Where("email = ?", reqData.Email).First(&user).Error; 
+		DB.Where("username = ?", reqData.Username).First(&user).Error; 
 		err != nil {
 			c.Status(fiber.StatusNotFound)
 			return c.JSON(fiber.Map{
