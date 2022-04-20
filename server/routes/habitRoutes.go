@@ -8,5 +8,6 @@ import (
 func HabitRoutes(app *fiber.App) {
 	app.Get("/api/habit", controllers.GetAllUserHabits)
 	app.Post("/api/habit", controllers.CreateHabit)
+	app.Put("/api/habit", controllers.UpdateHabit)
 	app.Post("/api/habitList", controllers.CreateHabitList)
 }
