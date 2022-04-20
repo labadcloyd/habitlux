@@ -13,7 +13,7 @@ import (
 )
 
 
-func UpdateHabit(c *fiber.Ctx) error {
+func DeleteHabit(c *fiber.Ctx) error {
 	//* auth middleware
 	token := middlewares.AuthMiddleware(c)
 	if token == nil {
@@ -31,7 +31,7 @@ func UpdateHabit(c *fiber.Ctx) error {
 	owner_id := uint(u64)
 
 	//* data validation
-	reqData := new(ReqUpdateHabit)
+	reqData := new(ReqDeleteHabit)
 	if err := c.BodyParser(&reqData); err != nil {
 		log.Println("err: ", err)
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
@@ -44,23 +44,18 @@ func UpdateHabit(c *fiber.Ctx) error {
 	}
 
 	//* saving the habit
-	habit := models.Habit {
-		Owner_ID: 						owner_id,
-		Habit_Name:						reqData.Habit_Name,
-		Date_Created: 				reqData.Date_Created,
-		Comment: 							reqData.Comment,
-		Target_Repeat_Count: 	reqData.Target_Repeat_Count,
-		Repeat_Count: 				reqData.Repeat_Count,
-	}
+	habit := models.Habit{}
 	if err := database.DB.Model(&habit).
 		Where("Owner_ID = ?", owner_id).
 		Where("ID = ?", reqData.ID).
-		Updates(habit).Error; err != nil {
+		Delete(&habit).Error; err != nil {
 			return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 				"message": err.Error(),
 			})
 	}
 
-	log.Println("Successfully updated habbit")
-	return c.JSON(habit)
+	log.Println("Successfully deleted habbit")
+	return c.Status(fiber.StatusAccepted).JSON(fiber.Map{
+		"message": "Successfully deleted habbit",
+	})
 }
