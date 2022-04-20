@@ -11,5 +11,6 @@ func HabitRoutes(app *fiber.App) {
 	app.Put("/api/habit", controllers.UpdateHabit)
 	app.Delete("/api/habit", controllers.DeleteHabit)
 	app.Post("/api/habitList", controllers.CreateHabitList)
+	app.Put("/api/habitList", controllers.UpdateHabitList)
 	app.Delete("/api/habitList", controllers.DeleteHabitList)
 }

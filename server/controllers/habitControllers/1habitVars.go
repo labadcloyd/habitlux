@@ -30,6 +30,11 @@ type ReqCreateHabitList struct {
 	Habit_Name						string  						`json:"habit_name" validate:"required,min=1,max=32"`
 }
 
+type ReqUpdateHabitList struct {
+	ID                    uint      					`json:"id" validate:"required"`
+	Habit_Name						string	    				`json:"habit_name" validate:"required,min=1,max=32"`
+}
+
 type ReqDeleteHabitList struct {
 	Habit_Name						string  						`json:"habit_name" validate:"required,min=1,max=32"`
 }

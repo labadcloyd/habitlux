@@ -43,7 +43,7 @@ func UpdateHabit(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusBadRequest).JSON(errors)
 	}
 
-	//* saving the habit
+	//* updating the habit
 	habit := models.Habit {
 		Owner_ID: 						owner_id,
 		Habit_Name:						reqData.Habit_Name,
