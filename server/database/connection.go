@@ -24,4 +24,5 @@ func Connect() {
 
 	connection.AutoMigrate(&models.User{})
 	connection.AutoMigrate(&models.Habit{})
+	connection.AutoMigrate(&models.HabitList{})
 }

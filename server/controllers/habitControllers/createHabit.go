@@ -22,7 +22,6 @@ func CreateHabit(c *fiber.Ctx) error {
 		})
 	}
 	claims := token.Claims.(*jwt.StandardClaims)
-
 	u64, err := strconv.ParseUint(claims.Issuer, 10, 32)
 	if err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
@@ -31,7 +30,7 @@ func CreateHabit(c *fiber.Ctx) error {
 	}
 	owner_id := uint(u64)
 
-	// data validation
+	//* data validation
 	reqData := new(ReqCreateHabit)
 	if err := c.BodyParser(&reqData); err != nil {
 		log.Println("err: ", err)
@@ -40,12 +39,11 @@ func CreateHabit(c *fiber.Ctx) error {
 		})
 	}
 	errors := helpers.ValidateStruct(*reqData)
-
 	if errors != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(errors)
 	}
 
-	// saving the habit
+	//* saving the habit
 	habit := models.Habit {
 		Owner_ID: 						owner_id,
 		Habit_Name:						reqData.Habit_Name,

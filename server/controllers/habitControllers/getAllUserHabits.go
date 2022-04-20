@@ -12,7 +12,7 @@ import (
 	"github.com/golang-jwt/jwt/v4"
 )
 
-func GetAllHabitLists(c *fiber.Ctx) error {
+func GetAllUserHabits(c *fiber.Ctx) error {
 	//* auth middleware
 	token := middlewares.AuthMiddleware(c)
 	if token == nil {
@@ -30,7 +30,7 @@ func GetAllHabitLists(c *fiber.Ctx) error {
 	}
 	owner_id := uint(u64)
 
-	// data validation
+	//* data validation
 	reqData := new(ReqGetUserHabits)
 	if err := c.BodyParser(&reqData); err != nil {
 		log.Println("err: ", err)
@@ -44,28 +44,34 @@ func GetAllHabitLists(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusBadRequest).JSON(errors)
 	}
 
-	// querying the data
+	//* querying the data
 	habits := []models.Habit{}
-	habitNames := []string{}
-
-	// getting the list os habit names
-	if err := database.DB.Model(&models.Habit{}).Where("Owner_ID = ?", owner_id).Select("Habit_Name").Group("Habit_Name").Find(&habitNames).Error; err != nil {
-		log.Println(err)
-		c.Status(fiber.StatusBadRequest)
-		return c.JSON(fiber.Map{
-			"message": err,
-		})
+	habitNames := []models.HabitList{}
+	// getting the list of habit names
+	if err := database.DB.Model(&models.HabitList{}).
+		Where("Owner_ID = ?", owner_id).
+		Find(&habitNames).Error; err != nil {
+			log.Println(err)
+			c.Status(fiber.StatusBadRequest)
+			return c.JSON(fiber.Map{
+				"message": err,
+			})
 	}
 	// getting habits
-	if err := database.DB.Model(&models.Habit{}).Where("Owner_ID = ?", owner_id).Where("Date_Created BETWEEN ? AND ?", reqData.Start_Date, reqData.End_Date).Group("Habit_Name, Date_Created").Order("Date_Created desc").Find(&habits).Error; err != nil {
-		log.Println(err)
-		c.Status(fiber.StatusBadRequest)
-		return c.JSON(fiber.Map{
-			"message": err,
-		})
+	if err := database.DB.Model(&models.Habit{}).
+		Where("Owner_ID = ?", owner_id).
+		Where("Date_Created BETWEEN ? AND ?", reqData.Start_Date, reqData.End_Date).
+		Group("Habit_Name, Date_Created").
+		Order("Date_Created desc").
+		Find(&habits).Error; err != nil {
+			log.Println(err)
+			c.Status(fiber.StatusBadRequest)
+			return c.JSON(fiber.Map{
+				"message": err,
+			})
 	}
 
-	// formatting data
+	//* formatting data
 	habitListSummary := make([][]models.Habit, len(habitNames))
 	// initializing slice size (creates a joker element in order to append elements later)
 	for i := 0; i < len(habitNames); i++ {
@@ -74,7 +80,7 @@ func GetAllHabitLists(c *fiber.Ctx) error {
 	// appending elements
 	for i := 0; i < len(habits); i++ {
 		for j := 0; j < len(habitNames); j++ {
-			if habitNames[j] == habits[i].Habit_Name {
+			if habitNames[j].Habit_Name == habits[i].Habit_Name {
 				habitListSummary[j] = append(habitListSummary[j], habits[i])
 				break
 			}
