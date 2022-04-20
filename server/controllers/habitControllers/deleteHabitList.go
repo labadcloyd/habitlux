@@ -13,7 +13,7 @@ import (
 )
 
 
-func DeleteHabit(c *fiber.Ctx) error {
+func DeleteHabitList(c *fiber.Ctx) error {
 	//* auth middleware
 	token := middlewares.AuthMiddleware(c)
 	if token == nil {
@@ -31,7 +31,7 @@ func DeleteHabit(c *fiber.Ctx) error {
 	owner_id := uint(u64)
 
 	//* data validation
-	reqData := new(ReqDeleteHabit)
+	reqData := new(ReqDeleteHabitList)
 	if err := c.BodyParser(&reqData); err != nil {
 		log.Println("err: ", err)
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
@@ -43,19 +43,30 @@ func DeleteHabit(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusBadRequest).JSON(errors)
 	}
 
-	//* deleting the habit
-	habit := models.Habit{}
-	if err := database.DB.Model(&habit).
+	//* deleting the habitlist
+	habitlist := models.HabitList{}
+	habits := models.Habit{}
+	if err := database.DB.Model(&habitlist).
 		Where("Owner_ID = ?", owner_id).
-		Where("ID = ?", reqData.ID).
-		Delete(&habit).Error; err != nil {
+		Where("Habit_Name = ?", reqData.Habit_Name).
+		Delete(&habitlist).Error; err != nil {
+			return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+				"message": err.Error(),
+			})
+	}
+	// deleting all habits associated to that habit list name
+	if err := database.DB.Model(&habits).
+		Where("Owner_ID = ?", owner_id).
+		Where("Habit_Name = ?", reqData.Habit_Name).
+		Group("Habit_Name, Date_Created").
+		Delete(&habits).Error; err != nil {
 			return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 				"message": err.Error(),
 			})
 	}
 
-	log.Println("Successfully deleted habbit")
+	log.Println("Successfully deleted habit List and its habits")
 	return c.Status(fiber.StatusAccepted).JSON(fiber.Map{
-		"message": "Successfully deleted habbit",
+		"message": "Successfully deleted habit List and its habits",
 	})
 }

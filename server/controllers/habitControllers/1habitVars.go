@@ -30,6 +30,10 @@ type ReqCreateHabitList struct {
 	Habit_Name						string  						`json:"habit_name" validate:"required,min=1,max=32"`
 }
 
+type ReqDeleteHabitList struct {
+	Habit_Name						string  						`json:"habit_name" validate:"required,min=1,max=32"`
+}
+
 type ReqGetUserHabits struct {
 	Start_Date						helpers.Datetime		`json:"start_date"`
 	End_Date							helpers.Datetime		`json:"end_date"`
