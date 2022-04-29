@@ -1,6 +1,7 @@
 .pageWrapper {
   height: 100vh;
   width: 100vw;
+  padding: 20px;
 
   display: flex;
   justify-content: center;
@@ -82,6 +83,7 @@
 }
 .mockupShadow {
   height: 20px;
+  width: 370px;
   border-radius: 100%;
   filter: blur(5px);
   animation: enlarge 1.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) infinite alternate-reverse both;
@@ -98,5 +100,127 @@
   100% {
     width: 500px;
     background-color: rgba(0, 0, 0, 0.1);
+  }
+}
+
+@media only screen and (max-width: 450px){
+  .mockupWrapper {
+    gap: 20px !important;
+  }
+  .buttonWrapper button {
+    font-size: 12px !important;
+    padding: 5px 10px;
+    border-radius: 5px;
+  }
+  .headerWrapper h1 {
+    font-size: 50px !important;
+  }
+  .mockupContainer {
+    width: 100px !important;
+    border-radius: 16px !important;
+  }
+  .mockupShadow {
+    animation: enlargeRes 1.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) infinite alternate-reverse both !important;
+  }
+  @keyframes enlargeRes {
+    0% {
+      width: 170px;
+      background-color: rgba(0, 0, 0, 0.3);
+    }
+    100% {
+      width: 230px;
+      background-color: rgba(0, 0, 0, 0.1);
+    }
+  }
+}
+@media only screen and (max-width: 300px){
+  .mockupWrapper {
+    gap: 12px !important;
+  }
+  .headerWrapper h1 {
+    font-size: 40px !important;
+  }
+  .mockupContainer {
+    width: 70px !important;
+    border-radius: 12px !important;
+  }
+  .mockupShadow {
+    height: 10px;
+    animation: enlargeRes 1.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) infinite alternate-reverse both !important;
+  }
+  @keyframes enlargeRes {
+    0% {
+      width: 120px;
+      background-color: rgba(0, 0, 0, 0.3);
+    }
+    100% {
+      width: 160px;
+      background-color: rgba(0, 0, 0, 0.1);
+    }
+  }
+}
+@media only screen and (max-height: 900px){
+  .mockupContainer {
+    width: 200px;
+    border-radius: 25px;
+  }
+  @keyframes enlarge {
+    0% {
+      width: 330px;
+      background-color: rgba(0, 0, 0, 0.3);
+    }
+    100% {
+      width: 430px;
+      background-color: rgba(0, 0, 0, 0.1);
+    }
+  }
+}
+
+@media only screen and (max-height: 800px){
+  .mockupWrapper {
+    gap: 22px;
+  }
+  .headerWrapper h1 {
+    font-size: 60px;
+  }
+  .mockupContainer {
+    width: 150px;
+    border-radius: 25px;
+  }
+  @keyframes enlarge {
+    0% {
+      width: 230px;
+      background-color: rgba(0, 0, 0, 0.3);
+    }
+    100% {
+      width: 330px;
+      background-color: rgba(0, 0, 0, 0.1);
+    }
+  }
+}
+
+@media only screen and (max-height: 700px){
+  .mockupWrapper {
+    gap: 15px;
+  }
+  .buttonWrapper button {
+    font-size: 12px;
+  }
+  .headerWrapper h1 {
+    font-size: 40px;
+  }
+  .mockupContainer {
+    width: 100px;
+    border-radius: 16px;
+  }
+  @keyframes enlarge {
+    0% {
+      width: 130px;
+      background-color: rgba(0, 0, 0, 0.3);
+    }
+    100% {
+      width: 230px;
+      background-color: rgba(0, 0, 0, 0.1);
+    }
   }
 }
