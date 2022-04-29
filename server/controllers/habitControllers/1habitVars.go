@@ -5,7 +5,6 @@ import (
 )
 
 type ReqCreateHabit struct {
-	ID                    uint      					`json:"id"`
 	Habit_Name						string	    				`json:"habit_name" validate:"required,min=1,max=32"`
 	Date_Created          helpers.Datetime		`json:"date_created" validate:"required,min=1,max=32"`
 	Comment               string    					`json:"comment"`
