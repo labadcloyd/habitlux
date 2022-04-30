@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import styles from '../styles/Home.module.css'
-import MockupSvg from '../public/svgs/mockup.js'
+import { MockupSvg } from '../public/svgs'
 
 export default function Home() {
   return (
