@@ -46,7 +46,7 @@
   display: flex;
   gap: 20px;
 }
-.buttonWrapper button {
+.buttonWrapper a {
   font-size: 16px;
   font-family: 'Source Sans Pro';
 
@@ -59,7 +59,7 @@
   transition: all .5s;
   cursor: pointer;
 }
-.buttonWrapper button:hover{
+.buttonWrapper a:hover{
   border: 1px solid rgba(0, 0, 0, 0.3);
 }
 
@@ -107,7 +107,7 @@
   .mockupWrapper {
     gap: 20px !important;
   }
-  .buttonWrapper button {
+  .buttonWrapper a {
     font-size: 12px !important;
     padding: 5px 10px;
     border-radius: 5px;
@@ -203,7 +203,7 @@
   .mockupWrapper {
     gap: 15px;
   }
-  .buttonWrapper button {
+  .buttonWrapper a {
     font-size: 12px;
   }
   .headerWrapper h1 {

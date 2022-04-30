@@ -1,0 +1,23 @@
+.inputWrapper{
+	display: flex;
+	flex-direction: column;
+	gap: 15px;
+}
+.inputWrapper h3{
+	margin: 0;
+	font-size: 16px;
+	font-weight: 400;
+}
+
+.inputWrapper input {
+	font-size: 16px;
+	padding: 10px;
+
+	border-radius: 10px;
+	border: 1px solid rgba(0, 0, 0, 0.3);
+	transition: .3s;
+}
+.inputWrapper input:focus {
+	outline: none !important;
+	border: 1px solid #62E3FF;
+}

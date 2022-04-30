@@ -1,11 +1,17 @@
+import Head from 'next/head'
 import '../styles/globals.css'
 
 function MyApp({ Component, pageProps }) {
   return (
-    <div>
-      <meta name="viewport" content="width=device-width, initial-scale=1.0"></meta>
+    <>
+      <Head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"></meta>
+        <title>Habitmo</title>
+        <meta name="description" content="Build up your habits with the Habitmo Habit tracker" />
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
       <Component {...pageProps} />
-    </div>
+    </>
   )
 
 }
