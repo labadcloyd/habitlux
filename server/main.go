@@ -27,5 +27,5 @@ func main() {
 		return c.Status(fiber.StatusNotFound).SendString("Error 404: not found")
 	})
 
-	log.Fatal(app.Listen(":3000"))
+	log.Fatal(app.Listen(":3001"))
 }
