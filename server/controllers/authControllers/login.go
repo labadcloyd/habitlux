@@ -50,11 +50,11 @@ func Login(c *fiber.Ctx) error {
 			"message": "inccorect password",
 		})
 	}
-
+	
 	// generating jwt token
-	claims := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.StandardClaims{
+	claims := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.RegisteredClaims{
 		Issuer: strconv.Itoa(int(user.ID)),
-		ExpiresAt: time.Now().Add(time.Hour * 24).Unix(),
+		ExpiresAt: jwt.NewNumericDate(time.Now().AddDate(0, 1, 0)),
 	})
 	token, err := claims.SignedString([]byte(SecretKey))
 	if err != nil {
@@ -68,7 +68,7 @@ func Login(c *fiber.Ctx) error {
 	cookie := fiber.Cookie{
 		Name: "jwt",
 		Value: token,
-		Expires: time.Now().Add(time.Hour * 24),
+		Expires: time.Now().AddDate(0, 1, 0),
 		HTTPOnly: true,
 	}
 

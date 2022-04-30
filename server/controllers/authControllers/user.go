@@ -15,7 +15,7 @@ func User(c *fiber.Ctx) error {
 	// parsing token
 	token, err := jwt.ParseWithClaims(
 		cookie, 
-		&jwt.StandardClaims{}, 
+		&jwt.RegisteredClaims{}, 
 		func(t *jwt.Token) (interface{}, error) {
 			return []byte(SecretKey), nil
 		},
@@ -28,7 +28,7 @@ func User(c *fiber.Ctx) error {
 		})
 	}
 	
-	claims := token.Claims.(*jwt.StandardClaims)
+	claims := token.Claims.(*jwt.RegisteredClaims)
 
 	user := models.User{}
 
