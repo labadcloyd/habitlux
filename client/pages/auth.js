@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { useState } from "react"
+import { useEffect, useState } from "react"
 
 import styles from '../styles/auth.module.css'
 import { MediumLogo, SmallArrow } from "../public/svgs"
@@ -7,20 +7,35 @@ import { TextInput, Button } from "../components/common"
 import { RippleLoader } from '../public/loaders'
 
 export default function Auth() {
-	const [isLogin, setIsLogin] = useState(false)
+	const [isSignup, setIsSignup] = useState(false)
 	const [isLoading, setIsLoading] = useState(false)
 	const [username, setUsername] = useState("")
 	const [password, setPassword] = useState("")
+	const [errorMsgs, setErrorMsgs] = useState([])
 
 	function handleChangeForm() {
 		setUsername("")
 		setPassword("")
 		setIsLoading(true)
-		setIsLogin((prevState) => !prevState)
+		setIsSignup((prevState) => !prevState)
 
 		setTimeout(() => {
 			setIsLoading(false)
 		}, 500);
+	}
+
+	function validateForm() {
+		const currentErrors = []
+		if (username.length < 3) {
+			currentErrors.push("Username length must not be less than 3")
+		}
+		if (password.length < 10) {
+			currentErrors.push("Password length must not be less than 10")
+		}
+		if (username.length > 32 || password.length > 32 ) {
+			currentErrors.push("Username or password length must not be morethan 32")
+		}
+		setErrorMsgs(currentErrors)
 	}
 
 	function submitData () {
@@ -28,9 +43,13 @@ export default function Auth() {
 			username,
 			password
 		}
-		if (isLogin) {
+		if (isSignup) {
 		}
 	}
+
+	useEffect(() => {
+		validateForm()
+	}, [username, password])
 
 	return (
 		<div className={styles.pageWrapper}>
@@ -46,7 +65,16 @@ export default function Auth() {
 						</div>
 					:
 						<div className={styles.formContainer}>
-							<h2>{!isLogin ? "Sign in to your account" : "Register an account"}</h2>
+							<h2>{!isSignup ? "Sign in to your account" : "Register an account"}</h2>
+							
+							{(errorMsgs.length > 0 && isSignup) &&
+								<div className={styles.errorWrapper}>
+										{errorMsgs.map((value) => (
+											<h4>{value}</h4>
+										))}
+								</div>
+							}
+							
 							<TextInput
 								value={username}
 								setValue={setUsername}
@@ -64,7 +92,7 @@ export default function Auth() {
 									required
 								/>
 								<p className={styles.changeFormBtn} onClick={handleChangeForm}>
-								{!isLogin ? "Register an account" : "Sign in to your account"}
+								{!isSignup ? "Register an account" : "Sign in to your account"}
 									<SmallArrow/>
 								</p>
 							</div>
