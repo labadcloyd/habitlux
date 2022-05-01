@@ -21,7 +21,7 @@ export async function Signup({ username, password }) {
 
 export async function VerifyToken() {
 	try {
-		const res = await newAxios.post(AUTH_ENDPOINTS.VERIFYTOKEN)
+		const res = await newAxios.get(AUTH_ENDPOINTS.VERIFYTOKEN)
 		return res
 	} catch (err) {
 		return err.response

@@ -82,9 +82,10 @@ export default function Auth() {
 
 	async function verifySession() {
 		const res = await VerifyToken()
-		if (res.status !== 200) {
-			router.push('/dashboard')
+		if (res.status === 200) {
+			return router.push('/dashboard')
 		}
+		setIsLoading(false)
 	}
 
 	useEffect(() => {
