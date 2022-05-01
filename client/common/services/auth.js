@@ -18,3 +18,12 @@ export async function Signup({ username, password }) {
 		return err.response
 	}
 }
+
+export async function VerifyToken() {
+	try {
+		const res = await newAxios.post(AUTH_ENDPOINTS.VERIFYTOKEN)
+		return res
+	} catch (err) {
+		return err.response
+	}
+}

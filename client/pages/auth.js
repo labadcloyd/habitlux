@@ -1,4 +1,5 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
+import { useRouter } from 'next/router'
 
 import styles from '../styles/auth.module.css'
 import { MediumLogo, SmallArrow } from "../public/svgs"
@@ -6,10 +7,13 @@ import { TextInput, Button } from "../components/common"
 import { RippleLoader } from '../public/loaders'
 
 import { Signin, Signup } from '../common/services'
+import { VerifyToken } from "../common/services/auth"
 
 export default function Auth() {
+  const router = useRouter()
+
 	const [isSignup, setIsSignup] = useState(false)
-	const [isLoading, setIsLoading] = useState(false)
+	const [isLoading, setIsLoading] = useState(true)
 	const [username, setUsername] = useState("")
 	const [password, setPassword] = useState("")
 	const [errorMsgs, setErrorMsgs] = useState([])
@@ -76,6 +80,16 @@ export default function Auth() {
 		}
 	}
 
+	async function verifySession() {
+		const res = await VerifyToken()
+		if (res.status !== 200) {
+			router.push('/dashboard')
+		}
+	}
+
+	useEffect(() => {
+		verifySession()
+	}, [])
 
 	return (
 		<div className={styles.pageWrapper}>
