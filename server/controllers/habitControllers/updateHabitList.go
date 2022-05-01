@@ -21,7 +21,7 @@ func UpdateHabitList(c *fiber.Ctx) error {
 			"message": "Unauthenticated",
 		})
 	}
-	claims := token.Claims.(*jwt.StandardClaims)
+	claims := token.Claims.(*jwt.RegisteredClaims)
 	u64, err := strconv.ParseUint(claims.Issuer, 10, 32)
 	if err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{

@@ -13,14 +13,17 @@ func main() {
 	database.Connect()
 	app := fiber.New()
 
+	// allowing clients from different urls to access server
+	// it is very important that we use the cors config first before-
+	// declaring any routes
+	app.Use(cors.New(cors.Config{
+		AllowCredentials: true,
+	}))
+
 	// routes
 	routes.AuthRoutes(app)
 	routes.HabitRoutes(app)
 
-	// allowing clients from different urls to access server
-	app.Use(cors.New(cors.Config{
-		AllowCredentials: true,
-	}))
 
 	// returning 404 after wrong route
 	app.Use(func(c *fiber.Ctx) error {

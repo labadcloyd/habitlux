@@ -31,13 +31,13 @@ func Login(c *fiber.Ctx) error {
 	if err := database.
 		DB.Where("username = ?", reqData.Username).First(&user).Error; 
 		err != nil {
-			c.Status(fiber.StatusNotFound)
+			c.Status(fiber.StatusBadRequest)
 			return c.JSON(fiber.Map{
 				"message": "user not found",
 			})
 	}
 	if user.ID == 0 {
-		c.Status(fiber.StatusNotFound)
+		c.Status(fiber.StatusBadRequest)
 		return c.JSON(fiber.Map{
 			"message": "user not found",
 		})
