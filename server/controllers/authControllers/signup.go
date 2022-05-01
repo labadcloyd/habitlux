@@ -37,7 +37,7 @@ func Signup(c *fiber.Ctx) error {
 
 	// saving user
 	if err := database.DB.Create(&user).Error; err != nil {
-		return err
+		return c.Status(fiber.StatusBadRequest).JSON(err)
 	}
 
 	// generating jwt token

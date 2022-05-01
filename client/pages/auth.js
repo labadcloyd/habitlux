@@ -1,10 +1,11 @@
-import Link from 'next/link'
-import { useEffect, useState } from "react"
+import { useState } from "react"
 
 import styles from '../styles/auth.module.css'
 import { MediumLogo, SmallArrow } from "../public/svgs"
 import { TextInput, Button } from "../components/common"
 import { RippleLoader } from '../public/loaders'
+
+import { Signin, Signup } from '../common/services'
 
 export default function Auth() {
 	const [isSignup, setIsSignup] = useState(false)
@@ -16,6 +17,7 @@ export default function Auth() {
 	function handleChangeForm() {
 		setUsername("")
 		setPassword("")
+		setErrorMsgs([])
 		setIsLoading(true)
 		setIsSignup((prevState) => !prevState)
 
@@ -36,20 +38,48 @@ export default function Auth() {
 			currentErrors.push("Username or password length must not be morethan 32")
 		}
 		setErrorMsgs(currentErrors)
+		return currentErrors.length
 	}
 
-	function submitData () {
+	async function submitData () {
 		const data = {
 			username,
 			password
 		}
 		if (isSignup) {
+			const errLength = validateForm()
+			if (errLength > 0) { return }
+
+			const res = await Signup(data)
+			console.log(res)
+			if (res.status !== 200) {
+				console.log(res)
+				const currentErrors = []
+				if (res.status === 400) {
+					if (res.data.Number === 1062) {
+						currentErrors.push("Username already taken")
+					} else {
+						currentErrors.push("Invalid password")
+					}
+				} else {
+					currentErrors.push("Server error, please try again.")
+				}
+				setErrorMsgs(currentErrors)
+			}
+		}
+		if (!isSignup) {
+			const errLength = validateForm()
+			if (errLength > 0) { return }
+
+			const res = await Signin(data)
+			if (res.status !== 200) {
+				const currentErrors = []
+				currentErrors.push("Username and password do not match")
+				setErrorMsgs(currentErrors)
+			}
 		}
 	}
 
-	useEffect(() => {
-		validateForm()
-	}, [username, password])
 
 	return (
 		<div className={styles.pageWrapper}>
@@ -67,10 +97,10 @@ export default function Auth() {
 						<div className={styles.formContainer}>
 							<h2>{!isSignup ? "Sign in to your account" : "Register an account"}</h2>
 							
-							{(errorMsgs.length > 0 && isSignup) &&
+							{(errorMsgs.length > 0) &&
 								<div className={styles.errorWrapper}>
-										{errorMsgs.map((value) => (
-											<h4>{value}</h4>
+										{errorMsgs.map((value, i) => (
+											<h4 key={i}>{value}</h4>
 										))}
 								</div>
 							}
