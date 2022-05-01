@@ -42,18 +42,13 @@ export default function Auth() {
 	}
 
 	async function submitData () {
-		const data = {
-			username,
-			password
-		}
+		const data = { username, password }
 		if (isSignup) {
 			const errLength = validateForm()
 			if (errLength > 0) { return }
 
 			const res = await Signup(data)
-			console.log(res)
 			if (res.status !== 200) {
-				console.log(res)
 				const currentErrors = []
 				if (res.status === 400) {
 					if (res.data.Number === 1062) {
@@ -72,6 +67,7 @@ export default function Auth() {
 			if (errLength > 0) { return }
 
 			const res = await Signin(data)
+			console.log(res)
 			if (res.status !== 200) {
 				const currentErrors = []
 				currentErrors.push("Username and password do not match")

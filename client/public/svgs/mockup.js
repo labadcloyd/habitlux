@@ -1,11 +1,9 @@
 
-export default function Mockup(props) {
+export default function Mockup() {
   return (
     <svg
       viewBox="0 0 395 801"
       fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-      {...props}
     >
       <rect width={395} height={801} rx={20}/>
       <g filter="url(#filter0_d_65_234)">

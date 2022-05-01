@@ -16,7 +16,9 @@ func main() {
 	// allowing clients from different urls to access server
 	// it is very important that we use the cors config first before-
 	// declaring any routes
-	app.Use(cors.New(cors.Config{
+	// also make sure to specify headers because it will block cookies if you dont
+	app.Use(cors.New(cors.Config {
+		AllowHeaders: "Accept, Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization",
 		AllowCredentials: true,
 	}))
 
