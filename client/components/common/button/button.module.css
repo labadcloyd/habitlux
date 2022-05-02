@@ -1,9 +1,12 @@
 .btn {
-	background: #62A1FF;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	gap: 10px;
+
 	padding: 14px;
 	width: 100%;
 	
-	color: #fff;
 	font-size: 16px;
 
 	border: none;
@@ -13,6 +16,15 @@
 	transition: .3s;
 }
 .btn:hover {
-	transform: translate(-4px, -4px);
-	box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.3);
+	transform: translate(-4px, -4px) !important;
+	box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.3) !important;
+}
+
+#btnPrimary {
+	background: #62A1FF;
+	color: #fff;
+}
+#btnSecondary {
+	background: #fff;
+	box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.15);
 }

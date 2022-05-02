@@ -1,0 +1,24 @@
+.btn {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+
+	padding: 9px;
+	width: 30px;
+	height: 30px;
+	
+	font-size: 16px;
+	background: #ffffff;
+	color: #fff;
+
+	border: none;
+	border-radius: 8px;
+	box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
+
+	cursor: pointer;
+	transition: .3s;
+}
+.btn:hover {
+	box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.3);
+	transform: translate(-2px, -2px);
+}

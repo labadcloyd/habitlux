@@ -1,0 +1,21 @@
+.pageWrapper {
+	display: flex;
+	justify-content: center;
+
+	width: 100%;
+}
+.pageContainer {
+	display: flex;
+	flex-direction: column;
+	
+	width: 100%;
+	max-width: 1080px;	
+	height: 100%;
+
+	padding: 80px 15px 0 15px;
+}
+
+.rowContainer {
+	display: flex;
+	flex-direction: row;
+}

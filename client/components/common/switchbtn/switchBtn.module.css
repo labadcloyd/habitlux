@@ -1,0 +1,22 @@
+.wrapper {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+
+	background-color: #fff;
+	border-radius: 10px;
+	padding: 10px;
+	box-shadow: 0px 2px 9px rgba(0, 0, 0, 0.2);
+}
+.wrapper div {
+	padding: 10px;
+	border-radius: 7px;
+	
+	transition: .3s;
+	cursor: pointer;
+}
+
+.container {
+	color: #fff;
+	background: #62A1FF;
+}

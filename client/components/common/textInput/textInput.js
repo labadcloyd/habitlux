@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import style from "./textInput.module.css"
+import css from "./textInput.module.css"
 
 export default function TextInput(props) {
 	const {value, setValue, placeholder, title, ...rest} = props
@@ -17,7 +17,7 @@ export default function TextInput(props) {
 	}, [])
 
 	return (
-		<div className={style.inputWrapper}>
+		<div className={css.inputWrapper}>
 			{title && <h3> {title} </h3>}
 			<input
 				placeholder={placeholder || ""}

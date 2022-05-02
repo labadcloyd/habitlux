@@ -1,0 +1,28 @@
+.wrapper {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	width: 100%;
+}
+.wrapper >div {
+	display: flex;
+	width: 100%;
+	gap: 20px;
+}
+.wrapper > button {
+	width: auto !important;
+	min-width: 120px;
+}
+
+.arrowBtnContainer {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+}
+
+.dateContainer {
+	display: flex;
+	align-items: center;
+	font-weight: 600;
+	font-size: 36px;
+}

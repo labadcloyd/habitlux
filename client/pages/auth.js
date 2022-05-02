@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"
 import { useRouter } from 'next/router'
 
-import styles from '../styles/auth.module.css'
+import css from '../styles/auth.module.css'
 import { MediumLogo, SmallArrow } from "../public/svgs"
 import { TextInput, Button } from "../components/common"
 import { RippleLoader } from '../public/loaders'
@@ -93,23 +93,23 @@ export default function Auth() {
 	}, [])
 
 	return (
-		<div className={styles.pageWrapper}>
-			<div className={styles.pageContainer}>
-				<a className={styles.logoContainer} href="/">
+		<div className={css.pageWrapper}>
+			<div className={css.pageContainer}>
+				<a className={css.logoContainer} href="/">
 					<MediumLogo/>
 				</a>
 
-				<div className={styles.formWrapper}>
+				<div className={css.formWrapper}>
 					{isLoading?
-						<div className={styles.loadingWrapper}>
+						<div className={css.loadingWrapper}>
 							<RippleLoader/>
 						</div>
 					:
-						<div className={styles.formContainer}>
+						<div className={css.formContainer}>
 							<h2>{!isSignup ? "Sign in to your account" : "Register an account"}</h2>
 							
 							{(errorMsgs.length > 0) &&
-								<div className={styles.errorWrapper}>
+								<div className={css.errorWrapper}>
 										{errorMsgs.map((value, i) => (
 											<h4 key={i}>{value}</h4>
 										))}
@@ -132,12 +132,12 @@ export default function Auth() {
 									minLength="10"
 									required
 								/>
-								<p className={styles.changeFormBtn} onClick={handleChangeForm}>
+								<p className={css.changeFormBtn} onClick={handleChangeForm}>
 								{!isSignup ? "Register an account" : "Sign in to your account"}
 									<SmallArrow/>
 								</p>
 							</div>
-							<Button value={"Continue"} onClick={submitData} />
+							<Button primary={true} onClick={submitData}>Continue</Button>
 						</div>
 					}
 				</div>
