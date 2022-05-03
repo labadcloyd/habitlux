@@ -6,7 +6,13 @@ function getDateMonthly(dateValue) {
 		weeklength=date.daysInMonth(), 
 		result=[];
 	while(weeklength--) {
-		result.push(date.format(dateformat));
+		const habit = {
+			date: date.format(dateformat),
+			repeatCount: 0,
+			requiredRepeatCount: 0,
+			comment: ''
+		}
+		result.push(habit);
 		date.add(1,"day")
 	}
 	return result;
@@ -27,7 +33,13 @@ function getDateBiWeekly(dateValue) {
 	let weeknumber = (moment(dateValue || moment()).week()) -1
 	let date = moment().isoWeek(weeknumber||1).startOf("week"), weeklength=14, result=[];
 	while(weeklength--) {
-		result.push(date.format(dateformat));
+		const habit = {
+			date: date.format(dateformat),
+			repeatCount: 0,
+			requiredRepeatCount: 0,
+			comment: ''
+		}
+		result.push(habit);
 		date.add(1,"day")
 	}
 	return result;
@@ -47,7 +59,13 @@ function getDateWeekly(dateValue) {
 	let weeknumber = (moment(dateValue || moment()).week()) -1
 	let date = moment().isoWeek(weeknumber||1).startOf("week"), weeklength=7, result=[];
 	while(weeklength--) {
-		result.push(date.format(dateformat));
+		const habit = {
+			date: date.format(dateformat),
+			repeatCount: 0,
+			requiredRepeatCount: 0,
+			comment: ''
+		}
+		result.push(habit);
 		date.add(1,"day")
 	}
 	return result;

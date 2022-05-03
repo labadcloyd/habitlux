@@ -15,7 +15,7 @@
 	padding: 80px 15px 0 15px;
 }
 
-.rowContainer {
+.contentContainer {
 	display: flex;
-	flex-direction: row;
+	flex-direction: column;
 }
