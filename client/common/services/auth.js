@@ -1,5 +1,5 @@
 import { AUTH_ENDPOINTS } from '../constants'
-import { newAxios } from '../utils/axios'
+import { newAxios } from '../utils'
 
 export async function Signin({ username, password }) {
 	try {

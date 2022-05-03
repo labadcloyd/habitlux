@@ -1,11 +1,20 @@
+import { decrementBiWeekly, decrementMonthly, incrementBiWeekly, incrementMonthly } from '../../../common/utils';
+
 import css from './dateChanger.module.css'
 import { SwitchBtn, SmallBtn, Button } from "../../common";
 import { ArrowLeft, ArrowRight, Plus } from '../../../public/svgs';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 export default function DateChanger () {
 
 	const [dateSort, setDateSort] = useState()
+
+	useEffect(() => {
+		const newDate = incrementBiWeekly("2022-04-23")
+		console.log({ increment: newDate})
+		const newDate2 = decrementBiWeekly("2022-04-17")
+		console.log({ decrement: newDate2})
+	},[])
 
 	return (
 		<div className={css.wrapper}>
