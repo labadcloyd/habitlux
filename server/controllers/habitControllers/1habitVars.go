@@ -28,9 +28,9 @@ type ReqDeleteHabit struct {
 
 type ReqCreateHabitList struct {
 	Habit_Name						string  						`json:"habit_name" validate:"required,min=1,max=32"`
-	Icon_Url							string							`json:"icon_url" validate:"required"`
-	Color									string							`json:"color" validate:"required"`
-	Default_Repeat_Count	uint								`json:"default_repeat_count" validate:"required"`
+	Icon_Url							string							`json:"icon_url"`
+	Color									string							`json:"color"`
+	Default_Repeat_Count	uint								`json:"default_repeat_count"`
 }
 
 type ReqUpdateHabitList struct {
@@ -52,6 +52,11 @@ type ReqGetUserHabits struct {
 
 
 type ResGetUserHabits struct {
-	Habits								[][]models.Habit		`json:"habits"`
-	HabitNames  					[]models.HabitList	`json:"habit_name"`
+	ID                    uint   							`json:"id"`
+	Owner_ID              uint 								`json:"owner_id"`
+	Habit_Name						string							`json:"habit_name"`
+	Icon_Url							string							`json:"icon_url"`
+	Color									string							`json:"color"`
+	Default_Repeat_Count	uint								`json:"default_repeat_count"`
+	Habits								[]models.Habit			`json:"habits"`
 }
