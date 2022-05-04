@@ -91,5 +91,11 @@ func GetAllUserHabits(c *fiber.Ctx) error {
 		habitListSummary[i] = habitListSummary[i][1:]
 	}
 
-	return c.JSON(habitListSummary)
+	habitFormatted := &ResGetUserHabits {
+		HabitNames: habitNames,
+		Habits: habitListSummary,
+	}
+
+	log.Println(habitFormatted)
+	return c.JSON(habitFormatted)
 }

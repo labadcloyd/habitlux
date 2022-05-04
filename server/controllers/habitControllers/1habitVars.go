@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"habit-tracker/helpers"
+	"habit-tracker/models"
 )
 
 type ReqCreateHabit struct {
@@ -47,4 +48,10 @@ type ReqDeleteHabitList struct {
 type ReqGetUserHabits struct {
 	Start_Date						string		`query:"start_date"`
 	End_Date							string		`query:"end_date"`
+}
+
+
+type ResGetUserHabits struct {
+	Habits								[][]models.Habit		`json:"habits"`
+	HabitNames  					[]models.HabitList	`json:"habit_name"`
 }
