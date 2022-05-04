@@ -10,6 +10,7 @@ import {
 	incrementWeekly,
 	decrementWeekly
 } from "./date"
+import { addHabitsToDate } from "./format";
 
 export {
 	newAxios,
@@ -21,5 +22,6 @@ export {
 	decrementBiWeekly,
 	getDateWeekly,
 	incrementWeekly,
-	decrementWeekly
+	decrementWeekly,
+	addHabitsToDate
 }

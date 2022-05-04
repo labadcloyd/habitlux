@@ -2,20 +2,21 @@
 import css from '../styles/dashboard.module.css'
 import { Navbar, DateChanger, BiWeeklyHabits } from "../components/layouts";
 import { useEffect, useState } from 'react';
-import { getDateBiWeekly } from '../common/utils';
+import { addHabitsToDate, getDateBiWeekly } from '../common/utils';
+import { getAllUserHabits } from '../common/services/habit';
+import { DATE_CHOICES } from '../common/constants/dates';
 
 export default function Dashboard() {
 	const [habits, setHabits] = useState([])
 
-	useEffect(() => {
-		const newHabit = {
-			name: 'testing',
-			habits: getDateBiWeekly()
-		}
-		
-		setHabits([newHabit])
+	async function fetchData() {
+		const res = await getAllUserHabits({ Start_Date: '2022-05-01', End_Date: '2022-05-15'})
+		const formatedHabits = addHabitsToDate({habits: res.data, dateSortChoice: DATE_CHOICES.biweekly, startingDate: '2022-05-01' })
+		setHabits(formatedHabits)
+	}
 
-		console.log(newHabit)
+	useEffect(() => {
+		fetchData()
 	},[])
 	return(
 		<div className={css.pageWrapper}>

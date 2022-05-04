@@ -7,7 +7,7 @@ function getDateMonthly(dateValue) {
 		result=[];
 	while(weeklength--) {
 		const habit = {
-			date: date.format(dateformat),
+			date_created: date.format(dateformat),
 			repeatCount: 0,
 			requiredRepeatCount: 0,
 			comment: ''
@@ -34,7 +34,7 @@ function getDateBiWeekly(dateValue) {
 	let date = moment().isoWeek(weeknumber||1).startOf("week"), weeklength=14, result=[];
 	while(weeklength--) {
 		const habit = {
-			date: date.format(dateformat),
+			date_created: date.format(dateformat),
 			repeatCount: 0,
 			requiredRepeatCount: 0,
 			comment: ''
@@ -60,7 +60,7 @@ function getDateWeekly(dateValue) {
 	let date = moment().isoWeek(weeknumber||1).startOf("week"), weeklength=7, result=[];
 	while(weeklength--) {
 		const habit = {
-			date: date.format(dateformat),
+			date_created: date.format(dateformat),
 			repeatCount: 0,
 			requiredRepeatCount: 0,
 			comment: ''

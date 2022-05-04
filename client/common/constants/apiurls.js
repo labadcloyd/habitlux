@@ -7,3 +7,13 @@ export const AUTH_ENDPOINTS = {
 	USER: '/api/use',
 	VERIFYTOKEN: '/api/verifytoken'
 }
+
+export const HABIT_ENDPOINTS = {
+	GET_ALL: '/api/habit',
+	CREATE_HABIT: '/api/habit',
+	UPDATE_HABIT: '/api/habit',
+	DELETE_HABIT: '/api/habit',
+	CREATE_HABIT_LIST: '/api/habitlist',
+	UPDATE_HABIT_LIST: '/api/habitlist',
+	DELETE_HABIT_LIST: '/api/habitlist',
+}

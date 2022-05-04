@@ -20,10 +20,10 @@ export default function BiWeeklyHabits(props) {
 
 			{habits && habits.map((habit, i) => (
 				<div className={css.rowWrapper} key={i}>
-					<div className={css.rowTitle}> {habit.name} </div>
+					<div className={css.rowTitle}> {habit.habit_name} </div>
 					<div className={css.contentContainer}>
 						{habit.habits.map((habitDay, i) => (
-							<h6 key={i} className={css.dayContainer}>{moment(habitDay.date).format("DD")}</h6>
+							<h6 key={i} className={css.dayContainer}>{moment(habitDay.date_created).format("DD")}</h6>
 						))}
 					</div>
 				</div>
