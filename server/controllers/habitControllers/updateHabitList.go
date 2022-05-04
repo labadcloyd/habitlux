@@ -57,7 +57,9 @@ func UpdateHabitList(c *fiber.Ctx) error {
 	}
 	newHabitList := models.HabitList {
 		Owner_ID: 						owner_id,
-		Habit_Name:						reqData.Habit_Name,
+		Icon_Url: 						reqData.Icon_Url,
+		Color: 								reqData.Color,
+		Default_Repeat_Count: reqData.Default_Repeat_Count,
 	}
 	// updating habit list name
 	if err := database.DB.Model(&models.HabitList{}).

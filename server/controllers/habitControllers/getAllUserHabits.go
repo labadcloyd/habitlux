@@ -31,14 +31,14 @@ func GetAllUserHabits(c *fiber.Ctx) error {
 	owner_id := uint(u64)
 
 	//* data validation
-	reqData := new(ReqGetUserHabits)
-	if err := c.BodyParser(&reqData); err != nil {
+	reqData := ReqGetUserHabits{}
+	if err := c.QueryParser(&reqData); err != nil {
 		log.Println("err: ", err)
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
 			"message": err.Error(),
 		})
 	}
-	errors := helpers.ValidateStruct(*reqData)
+	errors := helpers.ValidateStruct(reqData)
 
 	if errors != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(errors)

@@ -27,11 +27,17 @@ type ReqDeleteHabit struct {
 
 type ReqCreateHabitList struct {
 	Habit_Name						string  						`json:"habit_name" validate:"required,min=1,max=32"`
+	Icon_Url							string							`json:"icon_url" validate:"required"`
+	Color									string							`json:"color" validate:"required"`
+	Default_Repeat_Count	uint								`json:"default_repeat_count" validate:"required"`
 }
 
 type ReqUpdateHabitList struct {
 	ID                    uint      					`json:"id" validate:"required"`
 	Habit_Name						string	    				`json:"habit_name" validate:"required,min=1,max=32"`
+	Icon_Url							string							`json:"icon_url" validate:"required"`
+	Color									string							`json:"color" validate:"required"`
+	Default_Repeat_Count	uint								`json:"default_repeat_count" validate:"required"`
 }
 
 type ReqDeleteHabitList struct {
@@ -39,6 +45,6 @@ type ReqDeleteHabitList struct {
 }
 
 type ReqGetUserHabits struct {
-	Start_Date						helpers.Datetime		`json:"start_date"`
-	End_Date							helpers.Datetime		`json:"end_date"`
+	Start_Date						string		`query:"start_date"`
+	End_Date							string		`query:"end_date"`
 }

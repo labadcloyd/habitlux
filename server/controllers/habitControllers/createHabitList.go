@@ -48,6 +48,9 @@ func CreateHabitList(c *fiber.Ctx) error {
 	habit := models.HabitList {
 		Owner_ID: owner_id,
 		Habit_Name: reqData.Habit_Name,
+		Icon_Url: reqData.Icon_Url,
+		Color: reqData.Color,
+		Default_Repeat_Count: reqData.Default_Repeat_Count,
 	}
 	if err := database.DB.Create(&habit).Error; err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
