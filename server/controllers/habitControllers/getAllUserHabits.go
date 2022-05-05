@@ -71,44 +71,36 @@ func GetAllUserHabits(c *fiber.Ctx) error {
 				"message": err,
 			})
 	}
+	if len(habitList) < 1 {
+		return c.JSON([]models.HabitList{})
+	}
+	if len(habits) < 1 {
+		return c.JSON(habitList)
+	}
 
 	//* formatting data
-	groupedHabits := make([][]models.Habit, len(habitList))
 	// initializing slice size (creates a joker element in order to append elements later)
 	for i := 0; i < len(habitList); i++ {
-		groupedHabits[i] = make([]models.Habit, 1, len(habits))
-	}
-	// appending elements
-	for i := 0; i < len(habits); i++ {
-		for j := 0; j < len(habitList); j++ {
-			if habitList[j].Habit_Name == habits[i].Habit_Name {
-				groupedHabits[j] = append(groupedHabits[j], habits[i])
-				break
+		newHabit := ResGetUserHabits {
+			ID:										habitList[i].ID,
+			Owner_ID:							habitList[i].Owner_ID,
+			Habit_Name:						habitList[i].Habit_Name,
+			Icon_Url: 						habitList[i].Icon_Url,	
+			Color:								habitList[i].Color,
+			Default_Repeat_Count: habitList[i].Default_Repeat_Count,
+			Habits:								[]models.Habit{},
+		}
+		for j := 0; j < len(habits); j++ {
+			if habitList[i].Habit_Name == habits[j].Habit_Name {
+				newHabit.Habits = append(newHabit.Habits, habits[j])
+				// * you can still Make this loop more efficient 
+				// * by removing the elements that have already been appended
+				// habits = append(habits[:j], habits[:]...)
+				// log.Println(habits)
 			}
 		}
-	}
-	// removing first joker element in each slice
-	for i := 0; i < len(habitList); i++ {
-		groupedHabits[i] = groupedHabits[i][1:]
-	}
-	// pushing habits to their respective habit group
-	for i := 0; i < len(habitList); i++ {
-		for j := 0; j < len(groupedHabits); j++ {
-			if habitList[i].Habit_Name == groupedHabits[j][0].Habit_Name {
-				newHabit := ResGetUserHabits {
-					ID:										habitList[i].ID,
-					Owner_ID:							habitList[i].Owner_ID,
-					Habit_Name:						habitList[i].Habit_Name,
-					Icon_Url: 						habitList[i].Icon_Url,	
-					Color:								habitList[i].Color,
-					Default_Repeat_Count: habitList[i].Default_Repeat_Count,
-					Habits:								groupedHabits[j],
-				}
-				habitListFormatted = append(habitListFormatted, newHabit)
-				break
-			}
-		}
-	}
 
+		habitListFormatted = append(habitListFormatted, newHabit)
+	}
 	return c.JSON(habitListFormatted)
 }

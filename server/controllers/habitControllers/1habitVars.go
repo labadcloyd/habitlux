@@ -46,8 +46,8 @@ type ReqDeleteHabitList struct {
 }
 
 type ReqGetUserHabits struct {
-	Start_Date						string		`query:"start_date"`
-	End_Date							string		`query:"end_date"`
+	Start_Date						string							`query:"start_date" validate:"required,min=1,max=32"`
+	End_Date							string							`query:"end_date" validate:"required,min=1,max=32"`
 }
 
 
