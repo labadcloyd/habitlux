@@ -3,18 +3,26 @@ import { SwitchBtn, SmallBtn, Button } from "../../common";
 import { ArrowLeft, ArrowRight, Plus } from '../../../public/svgs';
 import { useState } from 'react';
 
-export default function DateChanger () {
+export default function DateChanger (props) {
+	const {
+		setIsLoading,
+		dateSort,
+		setDateSort,
+		isLoading,
+		incrementDate,
+		decrementDate
+	} = props
 
-	const [dateSort, setDateSort] = useState()
+
 
 	return (
 		<div className={css.wrapper}>
 			<div>
 				<div className={css.arrowBtnContainer}>
-					<SmallBtn>
+					<SmallBtn onClick={decrementDate}>
 						<ArrowLeft/>
 					</SmallBtn>
-					<SmallBtn>
+					<SmallBtn onClick={incrementDate}>
 						<ArrowRight/>
 					</SmallBtn>
 				</div>

@@ -6,3 +6,4 @@ export const DATE_CHOICES = {
 	biweekly:'Bi-Weekly',
 	weekly: 'Weekly'
 }
+export const DATE_CHOICES_ARRAY = [ 'Monthly', 'Bi-Weekly', 'Weekly' ]
