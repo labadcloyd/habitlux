@@ -1,4 +1,5 @@
 export const WEEKDAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
+export const WEEKDAYS_INITIALS = ['S', 'M', 'T', 'W', 'T', 'F', 'S']
 
 export const DATE_CHOICES = {
 	monthly: 'Monthly',

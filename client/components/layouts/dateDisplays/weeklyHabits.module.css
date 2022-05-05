@@ -92,12 +92,3 @@
 
 	border-radius: 10px;
 }
-
-@media only screen and (max-width: 1080px) {
-	#mainWeekTitle {
-		display: none;
-	}
-	.dayTitle {
-		display: flex;
-	}
-}

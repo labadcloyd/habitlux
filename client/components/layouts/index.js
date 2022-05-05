@@ -1,5 +1,5 @@
 import DateChanger from "./dateChanger"
 import Navbar from "./navbar"
-import { BiWeeklyHabits } from "./dateDisplays"
+import { BiWeeklyHabits, WeeklyHabits, MonthlyHabits } from "./dateDisplays"
 
-export { Navbar, DateChanger, BiWeeklyHabits }
+export { Navbar, DateChanger, BiWeeklyHabits, WeeklyHabits, MonthlyHabits }
