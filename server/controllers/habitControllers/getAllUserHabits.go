@@ -74,9 +74,6 @@ func GetAllUserHabits(c *fiber.Ctx) error {
 	if len(habitList) < 1 {
 		return c.JSON([]models.HabitList{})
 	}
-	if len(habits) < 1 {
-		return c.JSON(habitList)
-	}
 
 	//* formatting data
 	// initializing slice size (creates a joker element in order to append elements later)
@@ -96,10 +93,8 @@ func GetAllUserHabits(c *fiber.Ctx) error {
 				// * you can still Make this loop more efficient 
 				// * by removing the elements that have already been appended
 				// habits = append(habits[:j], habits[:]...)
-				// log.Println(habits)
 			}
 		}
-
 		habitListFormatted = append(habitListFormatted, newHabit)
 	}
 	return c.JSON(habitListFormatted)
