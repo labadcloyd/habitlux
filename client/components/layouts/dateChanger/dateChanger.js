@@ -22,7 +22,12 @@ export default function DateChanger (props) {
 		const end_date = moment(selectedDates[selectedDates.length -1]) 
 
 		if( start_date.year() !== end_date.year() ) {
-			setDateTitle(`${start_date.format('MMMM d, YYYY')} - ${end_date.format('MMMM d, YYYY')}`)
+			return setDateTitle(`${start_date.format('MMMM D, YYYY')} - ${end_date.format('MMMM D, YYYY')}`)
+		} else if (start_date.year() === end_date.year()) {
+			if (start_date.month() === end_date.month()) {
+				return setDateTitle(`${start_date.format('MMMM D')} - ${end_date.format('D, YYYY')}`)
+			}
+			return setDateTitle(`${start_date.format('MMMM D')} - ${end_date.format('MMMM D, YYYY')}`)
 		}
 	}, [selectedDates])
 

@@ -41,7 +41,6 @@ function getDateBiWeekly(dateValue) {
 		result.push(habit);
 		date.add(1,"day")
 	}
-	console.log(result)
 	return result;
 }
 function incrementBiWeekly(lastDateValue) {
@@ -49,9 +48,7 @@ function incrementBiWeekly(lastDateValue) {
 	return getDateBiWeekly(newDate)
 }
 function decrementBiWeekly(firstDateValue) {
-	console.log(moment(firstDateValue).format("YYYY-MMMM-DD"))
 	const newDate = moment(firstDateValue || moment()).subtract(2, "weeks")
-	console.log(moment(newDate).format("YYYY-MMMM-DD"))
 	return getDateBiWeekly(newDate)
 }
 
