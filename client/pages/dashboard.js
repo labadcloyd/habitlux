@@ -59,12 +59,19 @@ export default function Dashboard() {
 		setIsLoading(false)
 	}
 
-	async function incrementDate() {
+	async function changeDate({increment}) {
 		setIsLoading(true)
 		let selectedDatesWithHabits = [], newSelectedDates = []
-		if (dateSort === DATE_CHOICES.biweekly) {selectedDatesWithHabits = incrementBiWeekly(selectedDates[selectedDates.length -1])}
-		if (dateSort === DATE_CHOICES.weekly) {selectedDatesWithHabits = incrementWeekly(selectedDates[selectedDates.length -1])}
-		if (dateSort === DATE_CHOICES.monthly) {selectedDatesWithHabits = incrementMonthly(selectedDates[selectedDates.length -1])}
+		if (increment) {
+			if (dateSort === DATE_CHOICES.biweekly) {selectedDatesWithHabits = incrementBiWeekly(selectedDates[selectedDates.length -1])}
+			if (dateSort === DATE_CHOICES.weekly) {selectedDatesWithHabits = incrementWeekly(selectedDates[selectedDates.length -1])}
+			if (dateSort === DATE_CHOICES.monthly) {selectedDatesWithHabits = incrementMonthly(selectedDates[selectedDates.length -1])}
+		} else if (!increment) {
+			if (dateSort === DATE_CHOICES.biweekly) {selectedDatesWithHabits = decrementBiWeekly(selectedDates[0])}
+			if (dateSort === DATE_CHOICES.weekly) {selectedDatesWithHabits = decrementWeekly(selectedDates[0])}
+			if (dateSort === DATE_CHOICES.monthly) {selectedDatesWithHabits = decrementMonthly(selectedDates[0])}
+		}
+
 		selectedDatesWithHabits.forEach((dateWithHabit) => {
 			newSelectedDates.push(dateWithHabit.date_created)
 		})
@@ -84,32 +91,6 @@ export default function Dashboard() {
 		setIsLoading(false)
 	}
 
-	async function decrementDate() {
-		setIsLoading(true)
-		let selectedDatesWithHabits = [], newSelectedDates = []
-		if (dateSort === DATE_CHOICES.biweekly) {selectedDatesWithHabits = decrementBiWeekly(selectedDates[0])}
-		if (dateSort === DATE_CHOICES.weekly) {selectedDatesWithHabits = decrementWeekly(selectedDates[0])}
-		if (dateSort === DATE_CHOICES.monthly) {selectedDatesWithHabits = decrementMonthly(selectedDates[0])}
-		selectedDatesWithHabits.forEach((dateWithHabit) => {
-			newSelectedDates.push(dateWithHabit.date_created)
-		})
-
-		setSelectedDates(newSelectedDates)
-	
-		const res = await getAllUserHabits({ 
-			Start_Date: newSelectedDates[0],
-			End_Date: newSelectedDates[newSelectedDates.length - 1]
-		})
-		if (res.data.length < 1) {
-			setHabits(selectedDatesWithHabits)
-			return setIsLoading(false)
-		}
-		const formattedHabits = addHabitsToDate({habits: res.data, selectedDatesWithHabits: selectedDatesWithHabits })
-
-		setHabits(formattedHabits)
-		setIsLoading(false)
-	}
-
 	useEffect(() => {
 		fetchData()
 	},[dateSort])
@@ -124,8 +105,7 @@ export default function Dashboard() {
 						setDateSort={setDateSort}
 						isLoading={isLoading}
 						setIsLoading={setIsLoading}
-						incrementDate={incrementDate}
-						decrementDate={decrementDate}
+						changeDate={changeDate}
 						selectedDates={selectedDates}
 					/>
 					{isLoading ?

@@ -6,12 +6,8 @@ import moment from 'moment';
 
 export default function DateChanger (props) {
 	const {
-		setIsLoading,
-		dateSort,
 		setDateSort,
-		isLoading,
-		incrementDate,
-		decrementDate,
+		changeDate,
 		selectedDates
 	} = props
 
@@ -36,10 +32,10 @@ export default function DateChanger (props) {
 		<div className={css.wrapper}>
 			<div>
 				<div className={css.arrowBtnContainer}>
-					<SmallBtn onClick={decrementDate}>
+					<SmallBtn onClick={() => {changeDate({increment: false})}}>
 						<ArrowLeft/>
 					</SmallBtn>
-					<SmallBtn onClick={incrementDate}>
+					<SmallBtn onClick={() => {changeDate({increment: true})}}>
 						<ArrowRight/>
 					</SmallBtn>
 				</div>
