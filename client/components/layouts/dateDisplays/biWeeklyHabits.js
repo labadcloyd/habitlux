@@ -4,7 +4,6 @@ import css from './biWeeklyHabits.module.css'
 
 export default function BiWeeklyHabits(props) {
 	const { habits, setCurrentHabit, setIsHabitModalOpen } = props
-
 	const biWeeklyDays = [...WEEKDAYS, ...WEEKDAYS]
 
 	function updateCurrentHabit({habit, habitDay}) {

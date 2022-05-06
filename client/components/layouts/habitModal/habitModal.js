@@ -13,7 +13,6 @@ export default function HabitModal(props) {
 	function markComplete() {
 		setHabitState({...habitState, repeat_count: habitState.target_repeat_count})
 	}
-	console.log(habitState)
 
 	useEffect(() => {
 		setHabitState(habit)

@@ -7,6 +7,7 @@ function getDateMonthly(dateValue) {
 		result=[];
 	while(weeklength--) {
 		const habit = {
+			habit_id: null,
 			date_created: date.format(dateformat),
 			repeat_count: 0,
 			target_repeat_count: 0,
@@ -33,6 +34,7 @@ function getDateBiWeekly(dateValue) {
 	let date = moment(dateValue || moment()).startOf("week"), weeklength=14, result=[];
 	while(weeklength--) {
 		const habit = {
+			habit_id: null,
 			date_created: date.format(dateformat),
 			repeat_count: 0,
 			target_repeat_count: 0,
@@ -41,6 +43,7 @@ function getDateBiWeekly(dateValue) {
 		result.push(habit);
 		date.add(1,"day")
 	}
+	console.log(result)
 	return result;
 }
 function incrementBiWeekly(lastDateValue) {
@@ -58,6 +61,7 @@ function getDateWeekly(dateValue) {
 	let date = moment(dateValue || moment()).startOf("week"), weeklength=7, result=[];
 	while(weeklength--) {
 		const habit = {
+			habit_id: null,
 			date_created: date.format(dateformat),
 			repeat_count: 0,
 			target_repeat_count: 0,
