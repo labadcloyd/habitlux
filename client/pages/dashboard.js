@@ -22,7 +22,8 @@ import {
 	DateChanger, 
 	MonthlyHabits, 
 	BiWeeklyHabits, 
-	WeeklyHabits
+	WeeklyHabits,
+	HabitModal
 } from "../components/layouts";
 
 
@@ -31,6 +32,8 @@ export default function Dashboard() {
 	const [dateSort, setDateSort] = useState(DATE_CHOICES.biweekly)
 	const [isLoading, setIsLoading] = useState(true)
 	const [selectedDates, setSelectedDates] = useState([])
+	const [currentHabit, setCurrentHabit] = useState()
+	const [isHabitModalOpen, setIsHabitModalOpen] = useState(false)
 
 	async function fetchData() {
 		setIsLoading(true)
@@ -90,7 +93,7 @@ export default function Dashboard() {
 		setHabits(formattedHabits)
 		setIsLoading(false)
 	}
-
+	console.log(currentHabit)
 	useEffect(() => {
 		fetchData()
 	},[dateSort])
@@ -98,6 +101,11 @@ export default function Dashboard() {
 	return(
 		<div className={css.pageWrapper}>
 			<Navbar/>
+			<HabitModal 
+				habit={currentHabit}
+				openHabitModal={isHabitModalOpen}
+				setOpenHabitModal={setIsHabitModalOpen}
+			/>
 			<div className={css.pageContainer}>
 				<div className={css.contentContainer}>
 					<DateChanger
@@ -113,13 +121,25 @@ export default function Dashboard() {
 					:
 						<>
 							{dateSort === DATE_CHOICES.monthly &&
-								<MonthlyHabits habits={habits} />
+								<MonthlyHabits
+									habits={habits}
+									setCurrentHabit={setCurrentHabit}
+									setIsHabitModalOpen={setIsHabitModalOpen}
+								/>
 							}
 							{dateSort === DATE_CHOICES.biweekly &&
-								<BiWeeklyHabits habits={habits} />
+								<BiWeeklyHabits 
+									habits={habits} 
+									setCurrentHabit={setCurrentHabit} 
+									setIsHabitModalOpen={setIsHabitModalOpen}
+								/>
 							}
 							{dateSort === DATE_CHOICES.weekly &&
-								<WeeklyHabits habits={habits} />
+								<WeeklyHabits 
+									habits={habits} 
+									setCurrentHabit={setCurrentHabit} 
+									setIsHabitModalOpen={setIsHabitModalOpen}
+								/>
 							}
 						</>
 					}

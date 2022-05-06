@@ -8,8 +8,8 @@ function getDateMonthly(dateValue) {
 	while(weeklength--) {
 		const habit = {
 			date_created: date.format(dateformat),
-			repeatCount: 0,
-			requiredRepeatCount: 0,
+			repeat_count: 0,
+			target_repeat_count: 0,
 			comment: ''
 		}
 		result.push(habit);
@@ -34,8 +34,8 @@ function getDateBiWeekly(dateValue) {
 	while(weeklength--) {
 		const habit = {
 			date_created: date.format(dateformat),
-			repeatCount: 0,
-			requiredRepeatCount: 0,
+			repeat_count: 0,
+			target_repeat_count: 0,
 			comment: ''
 		}
 		result.push(habit);
@@ -59,8 +59,8 @@ function getDateWeekly(dateValue) {
 	while(weeklength--) {
 		const habit = {
 			date_created: date.format(dateformat),
-			repeatCount: 0,
-			requiredRepeatCount: 0,
+			repeat_count: 0,
+			target_repeat_count: 0,
 			comment: ''
 		}
 		result.push(habit);

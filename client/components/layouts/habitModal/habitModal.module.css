@@ -1,0 +1,80 @@
+.wrapper {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+
+	position: fixed;
+	top: 0;
+	height: 100vh;
+	width: 100vw;
+
+	background-color: rgba(0, 0, 0, 0.3);
+}
+.container {
+	z-index: 2;
+	display: flex;
+	flex-direction: column;
+	gap: 25px;
+
+	background-color: #fff;
+
+	padding: 20px;
+	border-radius: 15px;
+	width: 100%;
+	max-width: 430px;
+}
+.rowContainer {
+	display: flex;
+	gap: 20px;
+}
+.iconContainer {
+	width: 60px;
+	height: 60px;
+
+	border-radius: 15px;
+}
+
+.headerWrapper {
+	display: flex;
+	justify-content: space-between;
+	align-items: flex-start;
+	gap: 15px;
+	width: 100%;
+}
+.headerContainer {
+	display: flex;
+	justify-content: flex-start;
+	gap: 15px;
+}
+.titleContainer {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: flex-start;
+}
+.titleContainer h1 {
+	margin: 0;
+	font-weight: 600;
+}
+.titleContainer span {
+	margin: 0;
+	color: #757575;
+	text-transform: capitalize;
+}
+.headerWrapper button {
+	background-color: #FF4646 !important;
+	max-width: 40px;
+	max-height: 40px;
+}
+#requiredCountContainer h6{
+	color: #FF4646 !important;
+}
+#greenBtn{
+	color: #03A600 !important;
+	background-color: #fff !important;
+	box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1) !important; 
+}
+#greenBtn:hover {
+	transform: translate(-4px, -4px) !important;
+	box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.2) !important;
+}

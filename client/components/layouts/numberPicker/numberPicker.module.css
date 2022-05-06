@@ -1,0 +1,29 @@
+.wrapper {
+	display: flex;
+	align-items: center;
+	gap: 15px;
+}
+.wrapper h6 {
+	margin: 0;
+	font-size: 16px;
+	font-weight: 400;
+}
+.btnsWrapper {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+}
+.counterContainer {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+
+	background-color: #fff;
+	border-radius: 10px;
+	padding: 10px;
+	box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.15);
+
+	width: 40px;
+	height: 40px;
+	font-size: 18px;
+}

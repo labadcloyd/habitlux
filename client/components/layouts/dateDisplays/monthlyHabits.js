@@ -4,7 +4,18 @@ import { WEEKDAYS_INITIALS } from '../../../common/constants'
 import css from './monthlyHabits.module.css'
 
 export default function MonthlyHabits(props) {
-	const { habits } = props
+	const { habits, setCurrentHabit, setIsHabitModalOpen } = props
+
+	function updateCurrentHabit({habit, habitDay}) {
+		const newCurrentHabit = {
+			...habitDay,
+			...habit,
+		}
+		delete newCurrentHabit.id
+		delete newCurrentHabit.habits
+		setCurrentHabit(newCurrentHabit)
+		setIsHabitModalOpen(true)
+	}
 
 	return (
 		<div className={css.pageWrapper}>
@@ -29,8 +40,12 @@ export default function MonthlyHabits(props) {
 					<div className={css.contentContainer}>
 						{habit.habits.map((habitDay, i) => (
 							<div className={css.dayWrapper} key={i}>
-								<h6 className={css.dayTitle}>{WEEKDAYS_INITIALS[(moment(habitDay.date_created).day())]}</h6>
-								<h6 className={css.dayContainer}>{moment(habitDay.date_created).format("DD")}</h6>
+								<h6 className={css.dayTitle}>
+									{WEEKDAYS_INITIALS[(moment(habitDay.date_created).day())]}
+								</h6>
+								<h6	className={css.dayContainer} onClick={() => { updateCurrentHabit({habit, habitDay}) }} >
+									{moment(habitDay.date_created).format("DD")}
+								</h6>
 							</div>
 						))}
 					</div>
