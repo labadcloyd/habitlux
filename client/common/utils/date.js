@@ -30,8 +30,7 @@ function decrementMonthly(firstDateValue) {
 
 function getDateBiWeekly(dateValue) {
 	let dateformat = "YYYY-MM-DD";
-	let weeknumber = (moment(dateValue || moment()).week()) -1
-	let date = moment().isoWeek(weeknumber||1).startOf("week"), weeklength=14, result=[];
+	let date = moment(dateValue || moment()).startOf("week"), weeklength=14, result=[];
 	while(weeklength--) {
 		const habit = {
 			date_created: date.format(dateformat),
@@ -42,6 +41,7 @@ function getDateBiWeekly(dateValue) {
 		result.push(habit);
 		date.add(1,"day")
 	}
+	console.log(result)
 	return result;
 }
 function incrementBiWeekly(lastDateValue) {
@@ -49,15 +49,16 @@ function incrementBiWeekly(lastDateValue) {
 	return getDateBiWeekly(newDate)
 }
 function decrementBiWeekly(firstDateValue) {
+	console.log(moment(firstDateValue).format("YYYY-MMMM-DD"))
 	const newDate = moment(firstDateValue || moment()).subtract(2, "weeks")
+	console.log(moment(newDate).format("YYYY-MMMM-DD"))
 	return getDateBiWeekly(newDate)
 }
 
 
 function getDateWeekly(dateValue) {
 	let dateformat = "YYYY-MM-DD";
-	let weeknumber = (moment(dateValue || moment()).week()) -1
-	let date = moment().isoWeek(weeknumber||1).startOf("week"), weeklength=7, result=[];
+	let date = moment(dateValue || moment()).startOf("week"), weeklength=7, result=[];
 	while(weeklength--) {
 		const habit = {
 			date_created: date.format(dateformat),

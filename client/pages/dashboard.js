@@ -49,11 +49,11 @@ export default function Dashboard() {
 			End_Date: newSelectedDates[newSelectedDates.length - 1]
 		})
 		if (res.data.length < 1) {
-			const formattedHabits = addHabitsToDate({habits: res.data, dateSortChoice: dateSort, startingDate: newSelectedDates[0] })
+			const formattedHabits = addHabitsToDate({habits: res.data, selectedDatesWithHabits: selectedDatesWithHabits })
 			setHabits(formattedHabits)
 			return setIsLoading(false)
 		}
-		const formattedHabits = addHabitsToDate({habits: res.data, dateSortChoice: dateSort, startingDate: newSelectedDates[0] })
+		const formattedHabits = addHabitsToDate({habits: res.data, selectedDatesWithHabits: selectedDatesWithHabits })
 
 		setHabits(formattedHabits)
 		setIsLoading(false)
@@ -79,7 +79,7 @@ export default function Dashboard() {
 			setHabits(selectedDatesWithHabits)
 			return setIsLoading(false)
 		}
-		const formattedHabits = addHabitsToDate({habits: res.data, dateSortChoice: dateSort, startingDate: newSelectedDates[0] })
+		const formattedHabits = addHabitsToDate({habits: res.data, selectedDatesWithHabits })
 		setHabits(formattedHabits)
 		setIsLoading(false)
 	}
@@ -104,7 +104,7 @@ export default function Dashboard() {
 			setHabits(selectedDatesWithHabits)
 			return setIsLoading(false)
 		}
-		const formattedHabits = addHabitsToDate({habits: res.data, dateSortChoice: dateSort, startingDate: newSelectedDates[0] })
+		const formattedHabits = addHabitsToDate({habits: res.data, selectedDatesWithHabits: selectedDatesWithHabits })
 
 		setHabits(formattedHabits)
 		setIsLoading(false)
@@ -126,6 +126,7 @@ export default function Dashboard() {
 						setIsLoading={setIsLoading}
 						incrementDate={incrementDate}
 						decrementDate={decrementDate}
+						selectedDates={selectedDates}
 					/>
 					{isLoading ?
 						<h1>Loading...</h1>
