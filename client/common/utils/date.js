@@ -43,7 +43,6 @@ function getDateBiWeekly(dateValue) {
 		result.push(habit);
 		date.add(1,"day")
 	}
-	console.log(result)
 	return result;
 }
 function incrementBiWeekly(lastDateValue) {

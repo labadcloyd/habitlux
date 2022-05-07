@@ -6,7 +6,6 @@ export function addHabitsToDate({ habits, datesWithHabits }) {
 	const habitsWithAddedDates = []
 
 	habits.forEach((habitlist) => {
-		console.log(habitlist)
 		const newHabitlist = {
 			...habitlist,
 			habits: [...datesWithHabits]

@@ -45,6 +45,7 @@ func UpdateHabit(c *fiber.Ctx) error {
 
 	//* updating the habit
 	habit := models.Habit {
+		ID:										reqData.ID,
 		Owner_ID: 						owner_id,
 		Habit_Name:						reqData.Habit_Name,
 		Date_Created: 				reqData.Date_Created,

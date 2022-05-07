@@ -52,12 +52,11 @@ export default function Dashboard() {
 			End_Date: newSelectedDates[newSelectedDates.length - 1]
 		})
 		if (res.data.length < 1) {
-			const formattedHabits = addHabitsToDate({habits: res.data, datesWithHabits: [...datesWithHabits] })
+			const formattedHabits = addHabitsToDate({habits: res.data, datesWithHabits: [...selectedDatesWithHabits] })
 			setHabits(formattedHabits)
 			return setIsLoading(false)
 		}
 		const formattedHabits = addHabitsToDate({habits: res.data, datesWithHabits: [...selectedDatesWithHabits] })
-		console.log(formattedHabits)
 		setHabits(formattedHabits)
 		setIsLoading(false)
 	}
@@ -105,6 +104,8 @@ export default function Dashboard() {
 				habit={currentHabit}
 				openHabitModal={isHabitModalOpen}
 				setOpenHabitModal={setIsHabitModalOpen}
+				habits={habits}
+				setHabits={setHabits}
 			/>
 			<div className={css.pageContainer}>
 				<div className={css.contentContainer}>

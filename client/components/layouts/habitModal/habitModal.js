@@ -1,17 +1,47 @@
 import moment from 'moment'
 import { useEffect, useState } from 'react'
+import { createUserHabit, updateUserHabit } from '../../../common/services'
 import { Close } from '../../../public/svgs'
 import { Button, TextArea } from '../../common'
 import NumberPicker from '../numberPicker'
 import css from './habitModal.module.css'
 
 export default function HabitModal(props) {
-	const { habit, openHabitModal, setOpenHabitModal } = props
+	const { habit, openHabitModal, setOpenHabitModal, habits, setHabits } = props
 
 	const [habitState, setHabitState] = useState(habit)
 
 	function markComplete() {
 		setHabitState({...habitState, repeat_count: habitState.target_repeat_count})
+	}
+	async function updateHabit() {
+		//! add error handling
+		const res = await updateUserHabit(habitState)
+	// 	if (res.status === 200) {
+	// 		setHabits((prevHabitList) => {
+	// 			const newHabitList = prevHabitList.map((habitListItem) => {
+	// 				if (habitListItem.habit_name === habitState.habit_name) {
+	// 					habitListItem.habits.map((habitItem) => {
+	// 						if (
+	// 							moment(habitItem.date_created).format("YYYY-MM-DD") === 
+	// 							moment(habitState.date_created).format("YYYY-MM-DD")
+	// 						) {
+	// 							console.log("Here: ", res.data)
+	// 							return res.data
+	// 						}
+	// 						return habitItem
+	// 					})
+	// 				}
+	// 				return habitListItem
+	// 			})
+	// 			console.log(newHabitList)
+	// 			return newHabitList
+	// 		})
+	// 	}
+	}
+	async function createHabit() {
+		//! add error handling
+		const res = await createUserHabit(habitState)
 	}
 
 	useEffect(() => {
@@ -52,10 +82,28 @@ export default function HabitModal(props) {
 						>
 							Required Target Repeat Count
 						</NumberPicker>
-						<TextArea placeholder="Write a comment"/>
+						<TextArea
+							placeholder="Write a comment"
+							value={habitState.comment}
+							updateValue={(value) => { setHabitState({...habitState, comment: value})  }}
+						/>
 						<div className={css.rowContainer}>
-							<Button id={css.greenBtn} primary={false} onClick={markComplete}>Mark As Complete</Button>
-							<Button primary={false}>Save</Button>
+							<Button 
+								id={css.greenBtn} 
+								primary={false} 
+								onClick={markComplete}
+							>
+								Mark As Complete
+							</Button>
+							<Button 
+								primary={false} 
+								onClick={() => {
+									if (habitState.habit_id) {updateHabit()}
+									if (!habitState.habit_id) {createHabit()}
+								}}
+							>
+								Save
+							</Button>
 						</div>
 					</>
 				}
