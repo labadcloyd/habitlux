@@ -17,31 +17,44 @@ export default function HabitModal(props) {
 	async function updateHabit() {
 		//! add error handling
 		const res = await updateUserHabit(habitState)
-	// 	if (res.status === 200) {
-	// 		setHabits((prevHabitList) => {
-	// 			const newHabitList = prevHabitList.map((habitListItem) => {
-	// 				if (habitListItem.habit_name === habitState.habit_name) {
-	// 					habitListItem.habits.map((habitItem) => {
-	// 						if (
-	// 							moment(habitItem.date_created).format("YYYY-MM-DD") === 
-	// 							moment(habitState.date_created).format("YYYY-MM-DD")
-	// 						) {
-	// 							console.log("Here: ", res.data)
-	// 							return res.data
-	// 						}
-	// 						return habitItem
-	// 					})
-	// 				}
-	// 				return habitListItem
-	// 			})
-	// 			console.log(newHabitList)
-	// 			return newHabitList
-	// 		})
-	// 	}
+		if (res.status === 200) {
+			
+			let newHabitList = [...habits]
+			for (let i = 0; i < newHabitList.length; i++) {
+				if (newHabitList[i].habit_name === habitState.habit_name) {
+					for( let j = 0; j < newHabitList[i].habits.length; j++) {
+						if (
+							moment(newHabitList[i].habits[j].date_created).format("YYYY-MM-DD") === 
+							moment(habitState.date_created).format("YYYY-MM-DD")
+						) {
+							newHabitList[i].habits[j] = {...res.data, habit_id: res.data.id}
+						}
+					}
+				}
+			}
+			setHabits(newHabitList)
+		}
 	}
 	async function createHabit() {
 		//! add error handling
 		const res = await createUserHabit(habitState)
+		if (res.status === 200) {
+			
+			let newHabitList = [...habits]
+			for (let i = 0; i < newHabitList.length; i++) {
+				if (newHabitList[i].habit_name === habitState.habit_name) {
+					for( let j = 0; j < newHabitList[i].habits.length; j++) {
+						if (
+							moment(newHabitList[i].habits[j].date_created).format("YYYY-MM-DD") === 
+							moment(habitState.date_created).format("YYYY-MM-DD")
+						) {
+							newHabitList[i].habits[j] = {...res.data, habit_id: res.data.id}
+						}
+					}
+				}
+			}
+			setHabits(newHabitList)
+		}
 	}
 
 	useEffect(() => {

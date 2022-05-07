@@ -56,7 +56,7 @@ export default function Dashboard() {
 			return setIsLoading(false)
 		}
 		const formattedHabits = addHabitsToDate({habits: res.data, datesWithHabits: [...selectedDatesWithHabits] })
-		setHabits(null)
+		setHabits(formattedHabits)
 		setIsLoading(false)
 	}
 
@@ -88,7 +88,7 @@ export default function Dashboard() {
 			return setIsLoading(false)
 		}
 		const formattedHabits = addHabitsToDate({habits: res.data, datesWithHabits: [...selectedDatesWithHabits] })
-		setHabits(null)
+		setHabits(formattedHabits)
 		setIsLoading(false)
 	}
 

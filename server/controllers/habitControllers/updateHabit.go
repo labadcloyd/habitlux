@@ -31,14 +31,14 @@ func UpdateHabit(c *fiber.Ctx) error {
 	owner_id := uint(u64)
 
 	//* data validation
-	reqData := new(ReqUpdateHabit)
+	reqData := ReqUpdateHabit{}
 	if err := c.BodyParser(&reqData); err != nil {
 		log.Println("err: ", err)
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
 			"message": err.Error(),
 		})
 	}
-	errors := helpers.ValidateStruct(*reqData)
+	errors := helpers.ValidateStruct(reqData)
 	if errors != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(errors)
 	}
@@ -56,7 +56,17 @@ func UpdateHabit(c *fiber.Ctx) error {
 	if err := database.DB.Model(&habit).
 		Where("Owner_ID = ?", owner_id).
 		Where("ID = ?", reqData.ID).
-		Updates(habit).Error; err != nil {
+		Updates(
+			map[string]interface{}{
+				"id": reqData.ID, 
+				"owner_id": owner_id,
+				"habit_name": reqData.Habit_Name,
+				"date_created": reqData.Date_Created,
+				"comment": reqData.Comment,
+				"target_repeat_count": reqData.Target_Repeat_Count,
+				"repeat_count": reqData.Repeat_Count,
+			},
+		).Error; err != nil {
 			return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 				"message": err.Error(),
 			})
