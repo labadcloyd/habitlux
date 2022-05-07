@@ -57,7 +57,7 @@
 	transition: .3s;
 }
 .dayContainer:hover {
-	transform: translate(-4px, -4px);
+	margin: -4px 0 0 -4px;
 	box-shadow: 2px 4px 5px rgba(0, 0, 0, 0.2);
 }
 .dayTitle {

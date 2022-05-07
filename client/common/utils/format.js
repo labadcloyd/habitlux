@@ -3,10 +3,10 @@ import { DATE_CHOICES } from "../constants/dates";
 import { getDateBiWeekly, getDateMonthly, getDateWeekly } from "./date";
 
 export function addHabitsToDate({ habits, datesWithHabits }) {
-	// console.log(datesWithHabits)
 	const habitsWithAddedDates = []
 
 	habits.forEach((habitlist) => {
+		console.log(habitlist)
 		const newHabitlist = {
 			...habitlist,
 			habits: [...datesWithHabits]
@@ -22,6 +22,7 @@ export function addHabitsToDate({ habits, datesWithHabits }) {
 					newHabitlist.habits[index] = newCurrentHabit
 					break
 				}
+				newHabitlist.habits[index].habit_name = habitlist.habit_name
 			}
 		})
 
