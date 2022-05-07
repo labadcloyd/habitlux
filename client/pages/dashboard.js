@@ -52,12 +52,11 @@ export default function Dashboard() {
 			End_Date: newSelectedDates[newSelectedDates.length - 1]
 		})
 		if (res.data.length < 1) {
-			const formattedHabits = addHabitsToDate({habits: res.data, datesWithHabits: [...selectedDatesWithHabits] })
-			setHabits(formattedHabits)
+			setHabits(null)
 			return setIsLoading(false)
 		}
 		const formattedHabits = addHabitsToDate({habits: res.data, datesWithHabits: [...selectedDatesWithHabits] })
-		setHabits(formattedHabits)
+		setHabits(null)
 		setIsLoading(false)
 	}
 
@@ -85,11 +84,11 @@ export default function Dashboard() {
 			End_Date: newSelectedDates[newSelectedDates.length - 1]
 		})
 		if (res.data.length < 1) {
-			setHabits(selectedDatesWithHabits)
+			setHabits(null)
 			return setIsLoading(false)
 		}
-		const formattedHabits = addHabitsToDate({habits: res.data, selectedDatesWithHabits })
-		setHabits(formattedHabits)
+		const formattedHabits = addHabitsToDate({habits: res.data, datesWithHabits: [...selectedDatesWithHabits] })
+		setHabits(null)
 		setIsLoading(false)
 	}
 
