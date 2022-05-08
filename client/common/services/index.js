@@ -1,4 +1,4 @@
 import { Signin, Signup } from './auth'
-import { getAllUserHabits, updateUserHabit, createUserHabit } from './habit'
+import { getAllUserHabits, updateUserHabit, createUserHabit, updateUserHabitList, createUserHabitList } from './habit'
 
-export { Signin, Signup, getAllUserHabits, updateUserHabit, createUserHabit }
+export { Signin, Signup, getAllUserHabits, updateUserHabit, createUserHabit, updateUserHabitList, createUserHabitList }

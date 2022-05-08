@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 
 import css from '../styles/dashboard.module.css'
 import { getAllUserHabits } from '../common/services/habit';
-import { DATE_CHOICES } from '../common/constants';
+import { DATE_CHOICES, DEFAULT_HABIT_LIST } from '../common/constants';
 
 import { 
 	addHabitsToDate, 
@@ -23,17 +23,22 @@ import {
 	MonthlyHabits, 
 	BiWeeklyHabits, 
 	WeeklyHabits,
-	HabitModal
+	HabitModal,
+	HabitModalList
 } from "../components/layouts";
 
 
 export default function Dashboard() {
-	const [habits, setHabits] = useState(null)
-	const [dateSort, setDateSort] = useState(DATE_CHOICES.biweekly)
 	const [isLoading, setIsLoading] = useState(true)
+	const [isHabitModalOpen, setIsHabitModalOpen] = useState(false)
+	const [isHabitModalListOpen, setIsHabitModalListOpen] = useState(false)
+
+	const [dateSort, setDateSort] = useState(DATE_CHOICES.biweekly)
+	const [habits, setHabits] = useState(null)
 	const [selectedDates, setSelectedDates] = useState([])
 	const [currentHabit, setCurrentHabit] = useState()
-	const [isHabitModalOpen, setIsHabitModalOpen] = useState(false)
+	const [currentHabitList, setCurrentHabitList] = useState(DEFAULT_HABIT_LIST)
+
 
 	async function fetchData() {
 		setIsLoading(true)
@@ -99,6 +104,13 @@ export default function Dashboard() {
 	return(
 		<div className={css.pageWrapper}>
 			<Navbar/>
+			<HabitModalList
+				habitList={currentHabitList}
+				isOpenHabitModalList={isHabitModalListOpen}
+				setOpenHabitModalList={setIsHabitModalListOpen}
+				habits={habits}
+				setHabits={setHabits}
+			/>
 			<HabitModal 
 				habit={currentHabit}
 				openHabitModal={isHabitModalOpen}
@@ -115,6 +127,7 @@ export default function Dashboard() {
 						setIsLoading={setIsLoading}
 						changeDate={changeDate}
 						selectedDates={selectedDates}
+						setIsHabitModalListOpen={setIsHabitModalListOpen}
 					/>
 					{isLoading ?
 						<h1>Loading...</h1>

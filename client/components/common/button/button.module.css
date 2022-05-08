@@ -16,7 +16,7 @@
 	transition: .3s;
 }
 .btn:hover {
-	transform: translate(-4px, -4px) !important;
+	margin: -4px 0 0 -4px;
 	box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.2) !important;
 }
 

@@ -8,7 +8,8 @@ export default function DateChanger (props) {
 	const {
 		setDateSort,
 		changeDate,
-		selectedDates
+		selectedDates,
+		setIsHabitModalListOpen
 	} = props
 
 	const [dateTitle, setDateTitle] = useState("")
@@ -44,7 +45,7 @@ export default function DateChanger (props) {
 				</div>
 				<SwitchBtn values={["Bi-Weekly", "Monthly"]} setValue={setDateSort}/>
 			</div>
-			<Button>
+			<Button onClick={() => {setIsHabitModalListOpen(true)}}>
 				<Plus/>
 				Add habit
 			</Button>

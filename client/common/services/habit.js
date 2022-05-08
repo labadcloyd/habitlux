@@ -14,10 +14,27 @@ export async function updateUserHabit(habit) {
 	)
 	return res
 }
+
 export async function createUserHabit(habit) {
 	const res = await newAxios.post(
 		HABIT_ENDPOINTS.CREATE_HABIT,
 		{ ...habit, date_created: moment(habit.date_created).format("YYYY-MM-DD") }
+	)
+	return res
+}
+
+export async function createUserHabitList(habit) {
+	const res = await newAxios.post(
+		HABIT_ENDPOINTS.CREATE_HABIT_LIST,
+		{ ...habit }
+	)
+	return res
+}
+
+export async function updateUserHabitList(habit) {
+	const res = await newAxios.post(
+		HABIT_ENDPOINTS.UPDATE_HABIT_LIST,
+		{ ...habit }
 	)
 	return res
 }

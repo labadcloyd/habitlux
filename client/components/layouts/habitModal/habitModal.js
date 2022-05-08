@@ -1,10 +1,10 @@
 import moment from 'moment'
 import { useEffect, useState } from 'react'
-import { createUserHabit, updateUserHabit } from '../../../common/services'
-import { Close } from '../../../public/svgs'
-import { Button, TextArea } from '../../common'
-import NumberPicker from '../numberPicker'
+
 import css from './habitModal.module.css'
+import { Close } from '../../../public/svgs'
+import { createUserHabit, updateUserHabit } from '../../../common/services'
+import { Button, TextArea, NumberPicker } from '../../common'
 
 export default function HabitModal(props) {
 	const { habit, openHabitModal, setOpenHabitModal, habits, setHabits } = props
@@ -18,7 +18,6 @@ export default function HabitModal(props) {
 		//! add error handling
 		const res = await updateUserHabit(habitState)
 		if (res.status === 200) {
-			
 			let newHabitList = [...habits]
 			for (let i = 0; i < newHabitList.length; i++) {
 				if (newHabitList[i].habit_name === habitState.habit_name) {
@@ -39,7 +38,6 @@ export default function HabitModal(props) {
 		//! add error handling
 		const res = await createUserHabit(habitState)
 		if (res.status === 200) {
-			
 			let newHabitList = [...habits]
 			for (let i = 0; i < newHabitList.length; i++) {
 				if (newHabitList[i].habit_name === habitState.habit_name) {
