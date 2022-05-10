@@ -14,7 +14,7 @@ export default function TextInput(props) {
 
 	useEffect(() => {
 		setInputValue(value)
-	}, [])
+	}, [value])
 
 	return (
 		<div className={css.inputWrapper}>

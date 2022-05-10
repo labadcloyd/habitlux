@@ -8,7 +8,8 @@
 
 .rowWrapper {
 	display: grid;
-	grid-template-columns: 200px 1fr;
+	grid-template-columns: 180px 1fr;
+	gap: 20px;
 }
 .contentContainer {
 	display: grid;
@@ -65,17 +66,36 @@
 }
 
 /* ICON AND TITLE */
-.rowTitle {
+.rowTitleContainer {
 	display: flex;
 	justify-content: flex-start;
+	align-items: flex-start;
+
+}
+.rowTitle {
+	display: flex;
 	align-items: center;
+	width: 100%;
 	gap: 15px;
+
+	border-radius: 10px;
+	transition: .3s;
+	cursor: pointer;
+}
+.rowTitle:hover {
+	padding: 10px;
+	box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
 }
 .rowTitle h2 {
+	display: block; 
+	overflow: hidden;
+
 	margin: 0;
 	font-size: 20px;
 	font-weight: 500;
   text-transform: capitalize;
+	text-overflow: ellipsis;
+	white-space: nowrap;
 }
 .iconContainer {
 	display: flex;

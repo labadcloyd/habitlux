@@ -4,7 +4,13 @@ import { WEEKDAYS_INITIALS } from '../../../common/constants'
 import css from './monthlyHabits.module.css'
 
 export default function MonthlyHabits(props) {
-	const { habits, setCurrentHabit, setIsHabitModalOpen } = props
+	const { 
+		habits, 
+		setCurrentHabit, 
+		setIsHabitModalOpen,
+		setIsHabitModalListOpen,
+		setCurrentHabitList
+	} = props
 
 	function updateCurrentHabit({habit, habitDay}) {
 		const newCurrentHabit = {
@@ -15,6 +21,14 @@ export default function MonthlyHabits(props) {
 		delete newCurrentHabit.habits
 		setCurrentHabit(newCurrentHabit)
 		setIsHabitModalOpen(true)
+	}
+
+	function updateCurrentHabitList({habit}) {
+		const newCurrentHabitList = {
+			...habit
+		}
+		setCurrentHabitList(newCurrentHabitList)
+		setIsHabitModalListOpen(true)
 	}
 
 	return (
@@ -35,12 +49,14 @@ export default function MonthlyHabits(props) {
 
 				{habits.map((habit, i) => (
 					<div className={css.rowWrapper} key={i}>
-						<div className={css.rowTitle}>
-							<div style={{backgroundColor: habit.color || '#62A1FF'}} className={css.iconContainer}>
+						<div className={css.rowTitleContainer}>
+							<div className={css.rowTitle} onClick={() => {updateCurrentHabitList({habit:habit})} }>
+								<div style={{backgroundColor: habit.color || '#62A1FF'}} className={css.iconContainer}>
+								</div>
+								<h2>
+									{habit.habit_name}
+								</h2>
 							</div>
-							<h2>
-								{habit.habit_name}
-							</h2>
 						</div>
 						<div className={css.contentContainer}>
 							{habit.habits.map((habitDay, i) => (

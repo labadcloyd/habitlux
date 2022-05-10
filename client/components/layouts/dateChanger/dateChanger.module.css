@@ -26,3 +26,52 @@
 	font-weight: 600;
 	font-size: 36px;
 }
+.dateContainerSmall {
+	display: none;
+	font-weight: 600;
+	font-size: 36px;
+}
+
+@media only screen and (max-width: 640px) {
+	.dateContainer { 
+		font-size: 24px;
+		font-weight: 600;
+	}
+	.wrapper {
+		gap: 20px;
+	}
+	.wrapper > button {
+		padding: 10px;
+		font-size: 14px;
+	}
+}
+@media only screen and (max-width: 440px) {
+	.dateContainer { 
+		display: none;
+	}
+	.dateContainerSmall {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+
+		text-align: center;
+		font-size: 24px;
+	}
+	.wrapper {
+		gap: 20px;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+	}
+	.wrapper > button {
+		min-width: 50px;
+		padding: 10px;
+		font-size: 14px;
+	}
+	.wrapper >div {
+		justify-content: center;
+	}
+	.arrowBtnContainer {
+		gap: 20px;
+	}
+}

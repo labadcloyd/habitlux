@@ -30,7 +30,6 @@ export function addHabitsToDate({ habits, datesWithHabits }) {
 		habitsWithAddedDates.push(newHabitlist)
 	})
 
-	console.log(habitsWithAddedDates)
 	return habitsWithAddedDates
 	
 }

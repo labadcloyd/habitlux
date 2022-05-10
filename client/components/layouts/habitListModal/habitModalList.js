@@ -1,7 +1,7 @@
 import moment from 'moment'
 import { useEffect, useState } from 'react'
 import { DEFAULT_HABIT_LIST } from '../../../common/constants'
-import { createUserHabit, updateUserHabit } from '../../../common/services'
+import { createUserHabitList, updateUserHabitList } from '../../../common/services'
 
 import { Close } from '../../../public/svgs'
 import { Button, TextInput, ColorPicker, NumberPicker } from '../../common'
@@ -19,7 +19,7 @@ export default function HabitModalList(props) {
 	const [habitListState, setHabitListState] = useState(habitList)
 
 	async function updateHabit() {
-		const res = await updateUserHabit(habitListState)
+		const res = await updateUserHabitList(habitListState)
 		if (res.status === 200) {
 			let newHabitList = [...habits]
 			for (let i = 0; i < newHabitList.length; i++) {
@@ -32,11 +32,16 @@ export default function HabitModalList(props) {
 					newHabitList[i].habit_name = habitState.habit_name
 				}
 			}
+			console.log(newHabitList)
 			setHabits(newHabitList)
 		}
+
 	}
 	async function createHabit() {
-		const res = await createUserHabit(habitListState)
+		const res = await createUserHabitList(habitListState)
+		if (res.status === 200) {
+			
+		}
 	}
 
 	useEffect(() => {

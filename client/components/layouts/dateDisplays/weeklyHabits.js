@@ -3,7 +3,13 @@ import { WEEKDAYS } from '../../../common/constants'
 import css from './weeklyHabits.module.css'
 
 export default function WeeklyHabits(props) {
-	const { habits, setCurrentHabit, setIsHabitModalOpen } = props
+	const { 
+		habits, 
+		setCurrentHabit, 
+		setIsHabitModalOpen,
+		setIsHabitModalListOpen,
+		setCurrentHabitList
+	} = props
 
 	function updateCurrentHabit({habit, habitDay}) {
 		const newCurrentHabit = {
@@ -16,6 +22,14 @@ export default function WeeklyHabits(props) {
 		setIsHabitModalOpen(true)
 	}
 
+	function updateCurrentHabitList({habit}) {
+		const newCurrentHabitList = {
+			...habit
+		}
+		setCurrentHabitList(newCurrentHabitList)
+		setIsHabitModalListOpen(true)
+	}
+
 	return (
 		<div className={css.pageWrapper}>
 			{!habits &&
@@ -24,9 +38,9 @@ export default function WeeklyHabits(props) {
 			
 			{habits && 
 				<>
-					<div className={css.rowWrapper}>
+					<div className={css.rowWrapper} id={css.mainWeekTitle}>
 						<div></div>
-						<div className={css.contentContainer} id={css.mainWeekTitle}>
+						<div className={css.contentContainer}>
 							{WEEKDAYS.map((day, i) => (
 								<h6 key={i}>{day}</h6>
 							))}
@@ -35,17 +49,24 @@ export default function WeeklyHabits(props) {
 
 					{habits && habits.map((habit, i) => (
 						<div className={css.rowWrapper} key={i}>
-							<div className={css.rowTitle}>
-								<div style={{backgroundColor: habit.color || '#62A1FF'}} className={css.iconContainer}>
+							<div className={css.rowTitleContainer}>
+								<div className={css.rowTitle} onClick={() => {updateCurrentHabitList({habit:habit})} }>
+									<div style={{backgroundColor: habit.color || '#62A1FF'}} className={css.iconContainer}>
+									</div>
+									<h2>
+										{habit.habit_name}
+									</h2>
 								</div>
-								<h2>
-									{habit.habit_name}
-								</h2>
 							</div>
 							<div className={css.contentContainer}>
 								{habit.habits.map((habitDay, i) => (
-									<div className={css.dayWrapper} key={i} onClick={() => { updateCurrentHabit({habit, habitDay}) }}>
-										<h6 className={css.dayContainer}>{moment(habitDay.date_created).format("DD")}</h6>
+									<div className={css.dayWrapper} key={i}>
+										<h6 className={css.dayTitle}>
+											{WEEKDAYS[(moment(habitDay.date_created).day())]}
+										</h6>
+										<h6	className={css.dayContainer} onClick={() => { updateCurrentHabit({habit, habitDay}) }} >
+											{moment(habitDay.date_created).format("DD")}
+										</h6>
 									</div>
 								))}
 							</div>

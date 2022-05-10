@@ -3,9 +3,11 @@ import { SwitchBtn, SmallBtn, Button } from "../../common";
 import { ArrowLeft, ArrowRight, Plus } from '../../../public/svgs';
 import { useEffect, useState } from 'react';
 import moment from 'moment';
+import { DATE_CHOICES } from '../../../common/constants';
 
 export default function DateChanger (props) {
 	const {
+		dateSort,
 		setDateSort,
 		changeDate,
 		selectedDates,
@@ -26,7 +28,7 @@ export default function DateChanger (props) {
 			}
 			return setDateTitle(`${start_date.format('MMMM D')} - ${end_date.format('MMMM D, YYYY')}`)
 		}
-	}, [selectedDates])
+	}, [selectedDates, dateSort])
 
 
 	return (
@@ -36,6 +38,9 @@ export default function DateChanger (props) {
 					<SmallBtn onClick={() => {changeDate({increment: false})}}>
 						<ArrowLeft/>
 					</SmallBtn>
+					<div className={css.dateContainerSmall}>
+						{dateTitle}
+					</div>
 					<SmallBtn onClick={() => {changeDate({increment: true})}}>
 						<ArrowRight/>
 					</SmallBtn>
@@ -43,7 +48,9 @@ export default function DateChanger (props) {
 				<div className={css.dateContainer}>
 					{dateTitle}
 				</div>
-				<SwitchBtn values={["Bi-Weekly", "Monthly"]} setValue={setDateSort}/>
+				{ dateSort !== DATE_CHOICES.weekly &&
+					<SwitchBtn values={["Bi-Weekly", "Monthly"]} setValue={setDateSort}/>
+				}
 			</div>
 			<Button onClick={() => {setIsHabitModalListOpen(true)}}>
 				<Plus/>

@@ -1,5 +1,5 @@
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import css from '../styles/dashboard.module.css'
 import { getAllUserHabits } from '../common/services/habit';
@@ -39,6 +39,7 @@ export default function Dashboard() {
 	const [currentHabit, setCurrentHabit] = useState()
 	const [currentHabitList, setCurrentHabitList] = useState(DEFAULT_HABIT_LIST)
 
+	const pageWidthRef = useRef(null)
 
 	async function fetchData() {
 		setIsLoading(true)
@@ -97,12 +98,29 @@ export default function Dashboard() {
 		setIsLoading(false)
 	}
 
+	function handleWidthChange() {
+		if (pageWidthRef.current.offsetWidth < 700) {
+			setDateSort(DATE_CHOICES.weekly)
+		}
+		if (pageWidthRef.current.offsetWidth > 700) {
+			setDateSort(DATE_CHOICES.biweekly)
+		}
+	}
+
 	useEffect(() => {
 		fetchData()
 	},[dateSort])
 
+	useEffect(() => {
+    if(pageWidthRef.current) {
+			handleWidthChange()
+			window.addEventListener('resize', handleWidthChange )
+		}
+    return ()=> { window.removeEventListener('resize', handleWidthChange ) }
+	},[])
+
 	return(
-		<div className={css.pageWrapper}>
+		<div className={css.pageWrapper} ref={pageWidthRef}>
 			<Navbar/>
 			<HabitModalList
 				habitList={currentHabitList}
@@ -123,8 +141,6 @@ export default function Dashboard() {
 					<DateChanger
 						dateSort={dateSort}
 						setDateSort={setDateSort}
-						isLoading={isLoading}
-						setIsLoading={setIsLoading}
 						changeDate={changeDate}
 						selectedDates={selectedDates}
 						setIsHabitModalListOpen={setIsHabitModalListOpen}
@@ -138,6 +154,8 @@ export default function Dashboard() {
 									habits={habits}
 									setCurrentHabit={setCurrentHabit}
 									setIsHabitModalOpen={setIsHabitModalOpen}
+									setIsHabitModalListOpen={setIsHabitModalListOpen}
+									setCurrentHabitList={setCurrentHabitList}
 								/>
 							}
 							{dateSort === DATE_CHOICES.biweekly &&
@@ -145,6 +163,8 @@ export default function Dashboard() {
 									habits={habits} 
 									setCurrentHabit={setCurrentHabit} 
 									setIsHabitModalOpen={setIsHabitModalOpen}
+									setIsHabitModalListOpen={setIsHabitModalListOpen}
+									setCurrentHabitList={setCurrentHabitList}
 								/>
 							}
 							{dateSort === DATE_CHOICES.weekly &&
@@ -152,6 +172,8 @@ export default function Dashboard() {
 									habits={habits} 
 									setCurrentHabit={setCurrentHabit} 
 									setIsHabitModalOpen={setIsHabitModalOpen}
+									setIsHabitModalListOpen={setIsHabitModalListOpen}
+									setCurrentHabitList={setCurrentHabitList}
 								/>
 							}
 						</>
