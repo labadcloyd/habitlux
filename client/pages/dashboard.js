@@ -128,6 +128,7 @@ export default function Dashboard() {
 				setOpenHabitModalList={setIsHabitModalListOpen}
 				habits={habits}
 				setHabits={setHabits}
+				dateSort={dateSort}
 			/>
 			<HabitModal 
 				habit={currentHabit}
@@ -139,6 +140,7 @@ export default function Dashboard() {
 			<div className={css.pageContainer}>
 				<div className={css.contentContainer}>
 					<DateChanger
+						setCurrentHabitList={setCurrentHabitList}
 						dateSort={dateSort}
 						setDateSort={setDateSort}
 						changeDate={changeDate}

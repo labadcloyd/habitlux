@@ -32,7 +32,7 @@ export async function createUserHabitList(habit) {
 }
 
 export async function updateUserHabitList(habit) {
-	const res = await newAxios.post(
+	const res = await newAxios.put(
 		HABIT_ENDPOINTS.UPDATE_HABIT_LIST,
 		{ ...habit }
 	)

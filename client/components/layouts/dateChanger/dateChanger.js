@@ -3,7 +3,7 @@ import { SwitchBtn, SmallBtn, Button } from "../../common";
 import { ArrowLeft, ArrowRight, Plus } from '../../../public/svgs';
 import { useEffect, useState } from 'react';
 import moment from 'moment';
-import { DATE_CHOICES } from '../../../common/constants';
+import { DATE_CHOICES, DEFAULT_HABIT_LIST } from '../../../common/constants';
 
 export default function DateChanger (props) {
 	const {
@@ -11,7 +11,8 @@ export default function DateChanger (props) {
 		setDateSort,
 		changeDate,
 		selectedDates,
-		setIsHabitModalListOpen
+		setIsHabitModalListOpen,
+		setCurrentHabitList
 	} = props
 
 	const [dateTitle, setDateTitle] = useState("")
@@ -52,7 +53,7 @@ export default function DateChanger (props) {
 					<SwitchBtn values={["Bi-Weekly", "Monthly"]} setValue={setDateSort}/>
 				}
 			</div>
-			<Button onClick={() => {setIsHabitModalListOpen(true)}}>
+			<Button onClick={() => {setIsHabitModalListOpen(true); setCurrentHabitList(DEFAULT_HABIT_LIST);}}>
 				<Plus/>
 				Add habit
 			</Button>

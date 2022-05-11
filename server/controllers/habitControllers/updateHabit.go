@@ -73,5 +73,5 @@ func UpdateHabit(c *fiber.Ctx) error {
 	}
 
 	log.Println("Successfully updated habbit")
-	return c.JSON(habit)
+	return c.Status(fiber.StatusOK).JSON(habit)
 }

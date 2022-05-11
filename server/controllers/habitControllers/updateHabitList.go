@@ -57,15 +57,24 @@ func UpdateHabitList(c *fiber.Ctx) error {
 	}
 	newHabitList := models.HabitList {
 		Owner_ID: 						owner_id,
+		Habit_Name: 					reqData.Habit_Name,
 		Icon_Url: 						reqData.Icon_Url,
 		Color: 								reqData.Color,
 		Default_Repeat_Count: reqData.Default_Repeat_Count,
 	}
 	// updating habit list name
-	if err := database.DB.Model(&models.HabitList{}).
+	if err := database.DB.Model(&newHabitList).
 		Where("Owner_ID = ?", owner_id).
 		Where("ID = ?", reqData.ID).
-		Updates(newHabitList).Error; err != nil {
+		Updates(
+			map[string]interface{}{
+				"owner_id": owner_id,
+				"habit_name": reqData.Habit_Name,
+				"icon_url": reqData.Icon_Url,
+				"color": reqData.Color,
+				"default_repeat_count": reqData.Default_Repeat_Count,
+			},
+		).Error; err != nil {
 			return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 				"message": err.Error(),
 			})
@@ -82,7 +91,5 @@ func UpdateHabitList(c *fiber.Ctx) error {
 	}
 
 	log.Println("Successfully updated habit List and its habits")
-	return c.Status(fiber.StatusAccepted).JSON(fiber.Map{
-		"message": "Successfully updated habit List and its habits",
-	})
+	return c.Status(fiber.StatusOK).JSON(newHabitList)
 }

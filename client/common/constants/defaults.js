@@ -1,5 +1,5 @@
 export const DEFAULT_HABIT_LIST = {
-	color:"",
+	color: "#62A1FF",
 	default_repeat_count: 0,
 	habit_name: "",
 	icon_url: "",

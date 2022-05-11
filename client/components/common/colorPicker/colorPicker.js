@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { DEFAULT_COLOR_LIST } from '../../../common/constants/defaults'
 import { useOutsideAlerter } from '../../../common/utils'
 import css from './colorPicker.module.css'
@@ -25,6 +25,10 @@ export default function ColorPicker(props) {
 		setIsOpen(false)
 	}
 
+	useEffect(() => {
+		setCurrentColor(value)
+	},[value])
+
 	return (
 		<div className={css.wrapper}>
 			<div className={css.titleWrapper}>
@@ -38,8 +42,9 @@ export default function ColorPicker(props) {
 
 			{isOpen &&
 				<div className={css.colorPickerWrapper} ref={colorPickerRef}>
-					{DEFAULT_COLOR_LIST.map((color) => (
-						<div 
+					{DEFAULT_COLOR_LIST.map((color, i) => (
+						<div
+							key={i}
 							className={css.colorContainer} 
 							style={{backgroundColor: color}}
 							onClick={() => handleChange(color)}						
