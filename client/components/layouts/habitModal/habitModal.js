@@ -56,6 +56,7 @@ export default function HabitModal(props) {
 	}
 
 	useEffect(() => {
+		console.log(habit)
 		setHabitState(habit)
 	}, [habit])
 
@@ -88,7 +89,7 @@ export default function HabitModal(props) {
 						</NumberPicker>
 						<NumberPicker
 							id={css.requiredCountContainer}
-							value={habitState.target_repeat_count || habitState.default_repeat_count}
+							value={habitState.target_repeat_count}
 							setState={ (value) => { setHabitState({...habitState, target_repeat_count: value}) } } 
 						>
 							Required Target Repeat Count

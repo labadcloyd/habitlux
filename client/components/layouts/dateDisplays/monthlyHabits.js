@@ -1,7 +1,8 @@
 import { useEffect } from 'react'
 import moment from 'moment'
-import { WEEKDAYS_INITIALS } from '../../../common/constants'
+import { WEEKDAYS_INITIALS, DEFAULT_HABIT_LIST } from '../../../common/constants'
 import css from './monthlyHabits.module.css'
+import { HabitDay } from '../../common'
 
 export default function MonthlyHabits(props) {
 	const { 
@@ -9,7 +10,8 @@ export default function MonthlyHabits(props) {
 		setCurrentHabit, 
 		setIsHabitModalOpen,
 		setIsHabitModalListOpen,
-		setCurrentHabitList
+		setCurrentHabitList,
+		dateSort
 	} = props
 
 	function updateCurrentHabit({habit, habitDay}) {
@@ -17,6 +19,7 @@ export default function MonthlyHabits(props) {
 			...habitDay,
 			...habit,
 		}
+		newCurrentHabit.target_repeat_count = (newCurrentHabit.target_repeat_count || newCurrentHabit.default_repeat_count)
 		delete newCurrentHabit.id
 		delete newCurrentHabit.habits
 		setCurrentHabit(newCurrentHabit)
@@ -51,7 +54,10 @@ export default function MonthlyHabits(props) {
 					<div className={css.rowWrapper} key={i}>
 						<div className={css.rowTitleContainer}>
 							<div className={css.rowTitle} onClick={() => {updateCurrentHabitList({habit:habit})} }>
-								<div style={{backgroundColor: habit.color || '#62A1FF'}} className={css.iconContainer}>
+								<div 
+									style={{backgroundColor: `rgb(${habit.color})` || `rgb(${DEFAULT_HABIT_LIST.color})` }} 
+									className={css.iconContainer}
+								>
 								</div>
 								<h2>
 									{habit.habit_name}
@@ -64,9 +70,12 @@ export default function MonthlyHabits(props) {
 									<h6 className={css.dayTitle}>
 										{WEEKDAYS_INITIALS[(moment(habitDay.date_created).day())]}
 									</h6>
-									<h6	className={css.dayContainer} onClick={() => { updateCurrentHabit({habit, habitDay}) }} >
-										{moment(habitDay.date_created).format("DD")}
-									</h6>
+									<HabitDay
+										dateSort={dateSort}
+										updateCurrentHabit={updateCurrentHabit}
+										habit={habit}
+										habitDay={habitDay}
+									/>
 								</div>
 							))}
 						</div>

@@ -153,6 +153,7 @@ export default function Dashboard() {
 						<>
 							{dateSort === DATE_CHOICES.monthly &&
 								<MonthlyHabits
+									dateSort={dateSort}
 									habits={habits}
 									setCurrentHabit={setCurrentHabit}
 									setIsHabitModalOpen={setIsHabitModalOpen}
@@ -162,6 +163,7 @@ export default function Dashboard() {
 							}
 							{dateSort === DATE_CHOICES.biweekly &&
 								<BiWeeklyHabits 
+									dateSort={dateSort}
 									habits={habits} 
 									setCurrentHabit={setCurrentHabit} 
 									setIsHabitModalOpen={setIsHabitModalOpen}
@@ -171,6 +173,7 @@ export default function Dashboard() {
 							}
 							{dateSort === DATE_CHOICES.weekly &&
 								<WeeklyHabits 
+									dateSort={dateSort}
 									habits={habits} 
 									setCurrentHabit={setCurrentHabit} 
 									setIsHabitModalOpen={setIsHabitModalOpen}

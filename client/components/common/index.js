@@ -5,5 +5,6 @@ import SmallBtn from "./smallBtn";
 import TextArea from "./textArea/textArea";
 import ColorPicker from "./colorPicker/colorPicker";
 import NumberPicker from "./numberPicker/numberPicker";
+import HabitDay from "./habitDay";
 
-export { TextInput, Button, SwitchBtn, SmallBtn, TextArea, ColorPicker, NumberPicker }
+export { TextInput, Button, SwitchBtn, SmallBtn, TextArea, ColorPicker, NumberPicker, HabitDay }

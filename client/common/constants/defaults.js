@@ -1,5 +1,5 @@
 export const DEFAULT_HABIT_LIST = {
-	color: "#62A1FF",
+	color: "98 161 255",
 	default_repeat_count: 0,
 	habit_name: "",
 	icon_url: "",
@@ -7,11 +7,11 @@ export const DEFAULT_HABIT_LIST = {
 }
 
 export const DEFAULT_COLOR_LIST = [
-	"#FF62DC",
-	"#62E3FF",
-	"#FF6262",
-	"#62A1FF",
-	"#7862FF",
-	"#FFAD62",
-	"#65FF62"
+	"255 98 220",
+	"98 227 255",
+	"255 98 98",
+	"98 161 255",
+	"135 115 255",
+	"255 173 98",
+	"101 255 98"
 ]

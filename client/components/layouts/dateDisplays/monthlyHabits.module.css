@@ -19,7 +19,7 @@
 
 /* DAYS AND HABITS */
 .contentContainer h6 {
-	color: #777777;
+	color: #4d4d4d;
 	font-size: 12px;
 	font-weight: 400;
 	text-align: center;
@@ -35,32 +35,6 @@
 	gap: 5px;
 	width: 100%;
 	height: 100%;
-}
-.dayContainer {
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	padding: 5px;
-	aspect-ratio: 1/1;
-
-	min-width: 20px;
-	min-height: 20px;
-
-	font-size: 12px !important;
-	line-height: 15px;
-	font-weight: 400;
-	text-align: center;
-	
-	background-color: #fff;
-	box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.15);
-	border-radius: 5px;
-
-	cursor: pointer;
-	transition: .3s;
-}
-.dayContainer:hover {
-	margin: -4px 0 0 -4px;
-	box-shadow: 2px 4px 5px rgba(0, 0, 0, 0.2);
 }
 .dayTitle {
 	display: none;

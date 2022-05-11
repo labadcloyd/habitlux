@@ -65,7 +65,6 @@ export default function HabitModalList(props) {
 	}
 
 	useEffect(() => {
-		console.log(habitList)
 		setHabitListState(habitList)
 		setOldHabitName(habitList.habit_name)
 	}, [habitList])

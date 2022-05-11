@@ -11,7 +11,7 @@ import {
 	decrementWeekly
 } from "./date"
 import { addHabitsToDate } from "./format";
-import { useOutsideAlerter } from "./helper";
+import { useOutsideAlerter, calcBgColor } from "./helper";
 
 export {
 	newAxios,
@@ -25,5 +25,6 @@ export {
 	incrementWeekly,
 	decrementWeekly,
 	addHabitsToDate,
-	useOutsideAlerter
+	useOutsideAlerter,
+	calcBgColor
 }

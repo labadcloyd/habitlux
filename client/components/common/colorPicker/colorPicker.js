@@ -9,7 +9,7 @@ export default function ColorPicker(props) {
 	const colorPickerRef = useRef(null)
 
 	const [isOpen, setIsOpen] = useState(false)
-	const [currentColor, setCurrentColor] = useState(value || "#62A1FF")
+	const [currentColor, setCurrentColor] = useState(value || "98 161 255")
 
 	
 	function handleClickOutside(event) {
@@ -34,7 +34,7 @@ export default function ColorPicker(props) {
 			<div className={css.titleWrapper}>
 				<div 
 					className={css.colorContainer} 
-					style={{backgroundColor: currentColor}} 
+					style={{backgroundColor: `rgb(${currentColor})`}} 
 					onClick={() => (setIsOpen(true))}
 				/>
 				<div className={css.titleContainer}>{children}</div>
@@ -46,7 +46,7 @@ export default function ColorPicker(props) {
 						<div
 							key={i}
 							className={css.colorContainer} 
-							style={{backgroundColor: color}}
+							style={{backgroundColor: `rgb(${color})`}}
 							onClick={() => handleChange(color)}						
 						/>
 					))}

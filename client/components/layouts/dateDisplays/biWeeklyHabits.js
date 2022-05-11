@@ -1,5 +1,7 @@
 import moment from 'moment'
-import { WEEKDAYS } from '../../../common/constants'
+import { DEFAULT_HABIT_LIST, WEEKDAYS } from '../../../common/constants'
+import { calcBgColor } from '../../../common/utils'
+import { HabitDay } from '../../common'
 import css from './biWeeklyHabits.module.css'
 
 export default function BiWeeklyHabits(props) {
@@ -8,7 +10,8 @@ export default function BiWeeklyHabits(props) {
 		setCurrentHabit, 
 		setIsHabitModalOpen,
 		setIsHabitModalListOpen,
-		setCurrentHabitList
+		setCurrentHabitList,
+		dateSort
 	} = props
 	const biWeeklyDays = [...WEEKDAYS, ...WEEKDAYS]
 
@@ -17,6 +20,7 @@ export default function BiWeeklyHabits(props) {
 			...habitDay,
 			...habit,
 		}
+		newCurrentHabit.target_repeat_count = (newCurrentHabit.target_repeat_count || newCurrentHabit.default_repeat_count)
 		delete newCurrentHabit.id
 		delete newCurrentHabit.habits
 		setCurrentHabit(newCurrentHabit)
@@ -51,7 +55,9 @@ export default function BiWeeklyHabits(props) {
 						<div className={css.rowWrapper} key={i}>
 							<div className={css.rowTitleContainer}>
 								<div className={css.rowTitle} onClick={() => {updateCurrentHabitList({habit:habit})} }>
-									<div style={{backgroundColor: habit.color || '#62A1FF'}} className={css.iconContainer}>
+									<div 
+										style={{backgroundColor: `rgb(${habit.color})` || `rgb(${DEFAULT_HABIT_LIST.color})` }} 
+										className={css.iconContainer}>
 									</div>
 									<h2>
 										{habit.habit_name}
@@ -64,9 +70,12 @@ export default function BiWeeklyHabits(props) {
 										<h6 className={css.dayTitle}>
 											{WEEKDAYS[(moment(habitDay.date_created).day())]}
 										</h6>
-										<h6 className={css.dayContainer} onClick={() => { updateCurrentHabit({habit, habitDay}) }} >
-											{moment(habitDay.date_created).format("DD")}
-										</h6>
+										<HabitDay
+											dateSort={dateSort}
+											updateCurrentHabit={updateCurrentHabit}
+											habit={habit}
+											habitDay={habitDay}
+										/>
 									</div>
 								))}
 							</div>
