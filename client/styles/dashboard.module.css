@@ -9,13 +9,14 @@
 	flex-direction: column;
 	
 	width: 100%;
-	max-width: 1080px;	
 	height: 100%;
 
-	padding: 80px 15px 0 15px;
+	padding: 55px 0 0 0;
 }
 
 .contentContainer {
 	display: flex;
 	flex-direction: column;
+	align-items: center;
+	width: 100%;
 }

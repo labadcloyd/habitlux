@@ -34,29 +34,31 @@ export default function DateChanger (props) {
 
 	return (
 		<div className={css.wrapper}>
-			<div>
-				<div className={css.arrowBtnContainer}>
-					<SmallBtn onClick={() => {changeDate({increment: false})}}>
-						<ArrowLeft/>
-					</SmallBtn>
-					<div className={css.dateContainerSmall}>
+			<div className={css.container}>
+				<div>
+					<div className={css.arrowBtnContainer}>
+						<SmallBtn onClick={() => {changeDate({increment: false})}}>
+							<ArrowLeft/>
+						</SmallBtn>
+						<div className={css.dateContainerSmall}>
+							{dateTitle}
+						</div>
+						<SmallBtn onClick={() => {changeDate({increment: true})}}>
+							<ArrowRight/>
+						</SmallBtn>
+					</div>
+					<div className={css.dateContainer}>
 						{dateTitle}
 					</div>
-					<SmallBtn onClick={() => {changeDate({increment: true})}}>
-						<ArrowRight/>
-					</SmallBtn>
+					{ dateSort !== DATE_CHOICES.weekly &&
+						<SwitchBtn values={["Bi-Weekly", "Monthly"]} setValue={setDateSort}/>
+					}
 				</div>
-				<div className={css.dateContainer}>
-					{dateTitle}
-				</div>
-				{ dateSort !== DATE_CHOICES.weekly &&
-					<SwitchBtn values={["Bi-Weekly", "Monthly"]} setValue={setDateSort}/>
-				}
+				<Button onClick={() => {setIsHabitModalListOpen(true); setCurrentHabitList(DEFAULT_HABIT_LIST);}}>
+					<Plus/>
+					Add habit
+				</Button>
 			</div>
-			<Button onClick={() => {setIsHabitModalListOpen(true); setCurrentHabitList(DEFAULT_HABIT_LIST);}}>
-				<Plus/>
-				Add habit
-			</Button>
 		</div>
 	)
 }

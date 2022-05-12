@@ -13,6 +13,9 @@
 	align-items: center;
 	gap: 10px;
 }
+.btnsWrapper button svg {
+	fill: rgb(88, 88, 88);
+}
 .counterContainer {
 	display: flex;
 	justify-content: center;

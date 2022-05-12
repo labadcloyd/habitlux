@@ -5,6 +5,7 @@ import css from './habitModal.module.css'
 import { Close } from '../../../public/svgs'
 import { createUserHabit, updateUserHabit } from '../../../common/services'
 import { Button, TextArea, NumberPicker } from '../../common'
+import { DEFAULT_HABIT_LIST } from '../../../common/constants'
 
 export default function HabitModal(props) {
 	const { habit, openHabitModal, setOpenHabitModal, habits, setHabits } = props
@@ -67,7 +68,7 @@ export default function HabitModal(props) {
 					<>
 						<div className={css.headerWrapper}>
 							<div className={css.headerContainer}>
-								<div className={css.iconContainer} style={{backgroundColor: habitState.color || "#62A1FF"}}>
+								<div className={css.iconContainer} style={{backgroundColor: `rgb(${habitState.color})` || `rgb(${DEFAULT_HABIT_LIST.color})`}}>
 								</div>
 								<div className={css.titleContainer}>
 									<h1>{moment(habitState.date_created).format("MMMM DD, YYYY")}</h1>

@@ -7,12 +7,13 @@ export default function HabitDay(props) {
 	const {updateCurrentHabit, habit, habitDay, dateSort} = props
 
 	const backgroundColor = calcBgColor(habitDay.repeat_count/habitDay.target_repeat_count, habit.color)
+	const ratio = (habitDay.repeat_count/habitDay.target_repeat_count)
 
 	return (
 		<h6 
 			className={dateSort === DATE_CHOICES.monthly ? css.monthlyDayContainer : css.dayContainer} 
 			onClick={() => { updateCurrentHabit({habit, habitDay}) }} 
-			style={{backgroundColor: backgroundColor }}
+			style={{backgroundColor: backgroundColor, color: ratio > 0.7 && "#fff" }}
 		>
 			{moment(habitDay.date_created).format("DD")}
 		</h6>

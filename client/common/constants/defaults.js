@@ -8,7 +8,7 @@ export const DEFAULT_HABIT_LIST = {
 
 export const DEFAULT_COLOR_LIST = [
 	"255 98 220",
-	"98 227 255",
+	"53 219 255",
 	"255 98 98",
 	"98 161 255",
 	"135 115 255",
