@@ -47,19 +47,17 @@
 .rowTitleContainer {
 	display: flex;
 	justify-content: flex-start;
-	align-items: center;
-
+	align-items: flex-start;
 }
 .rowTitle {
 	display: flex;
 	align-items: center;
 	width: 100%;
-	gap: 15px;
 
-	border-radius: 10px;
+	padding: 10px;
+	border-radius: 8px;
 	transition: .3s;
 	cursor: pointer;
-	padding: 10px;
 	box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
 }
 .rowTitle:hover {
@@ -71,27 +69,18 @@
 	overflow: hidden;
 
 	margin: 0;
-	font-size: 20px;
+	color: #fff;
+	font-size: 16px;
 	font-weight: 500;
   text-transform: capitalize;
 	text-overflow: ellipsis;
 	white-space: nowrap;
 }
-.iconContainer {
-	display: flex;
-	justify-content: center;
-	align-items: center;
-
-	min-width: 40px;
-	min-height: 40px;
-	max-width: 50px;
-	max-height: 50px;
-	width: auto;
-
-	border-radius: 10px;
-}
 
 @media only screen and (max-width: 1080px) {
+	.rowTitleContainer {
+		padding-top: 20px;
+	}
 	#mainWeekTitle {
 		display: none;
 	}

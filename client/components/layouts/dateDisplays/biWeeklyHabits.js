@@ -54,11 +54,11 @@ export default function BiWeeklyHabits(props) {
 					{habits && habits.map((habit, i) => (
 						<div className={css.rowWrapper} key={i}>
 							<div className={css.rowTitleContainer}>
-								<div className={css.rowTitle} onClick={() => {updateCurrentHabitList({habit:habit})} }>
-									<div 
-										style={{backgroundColor: `rgb(${habit.color})` || `rgb(${DEFAULT_HABIT_LIST.color})` }} 
-										className={css.iconContainer}>
-									</div>
+								<div 
+									className={css.rowTitle} 
+									onClick={() => {updateCurrentHabitList({habit:habit})} }
+									style={{backgroundColor: `rgb(${habit.color})` || `rgb(${DEFAULT_HABIT_LIST.color})` }} 
+								>
 									<h2>
 										{habit.habit_name}
 									</h2>
