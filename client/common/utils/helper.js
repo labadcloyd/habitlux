@@ -14,8 +14,8 @@ export function useOutsideAlerter({ref, handleEvent}) {
 
 export function calcBgColor(ratio, color) {
   if(isNaN(ratio)) { return `rgb(${color} / 0%)` }
-  if (ratio >= 0.8) { return `rgb(${color} / 100%)` }
-  if (ratio >= 0.5) { return `rgb(${color} / 50%)` }
+  if (ratio >= 1) { return `rgb(${color} / 100%)` }
+  if (ratio >= 0.5) { return `rgb(${color} / 60%)` }
   if (ratio >= 0.1) { return `rgb(${color} / 30%)` }
   if (ratio < 0.1) { return `rgb(${color} / 0%)` }
 }

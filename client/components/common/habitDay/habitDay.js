@@ -13,9 +13,9 @@ export default function HabitDay(props) {
 		<h6 
 			className={dateSort === DATE_CHOICES.monthly ? css.monthlyDayContainer : css.dayContainer} 
 			onClick={() => { updateCurrentHabit({habit, habitDay}) }} 
-			style={{backgroundColor: backgroundColor, color: ratio > 0.7 && "#fff" }}
+			style={{backgroundColor: backgroundColor, color: ratio >= 1 && "#fff" }}
 		>
-			{moment(habitDay.date_created).format("DD")}
+			{moment(habitDay.date_created).format("D")}
 		</h6>
 	)
 }
