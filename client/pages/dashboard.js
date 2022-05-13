@@ -24,12 +24,16 @@ import {
 	HabitModal,
 	HabitModalList
 } from "../components/layouts";
+import { NotifModal } from '../components/common';
 
 
 export default function Dashboard() {
 	const [isLoading, setIsLoading] = useState(true)
 	const [isHabitModalOpen, setIsHabitModalOpen] = useState(false)
 	const [isHabitModalListOpen, setIsHabitModalListOpen] = useState(false)
+
+	const [isNotifModalOpen, setNotifModalOpen] = useState(false)
+	const [notifModalContent, setNotifModalContent] = useState({msg: "", error: false})
 
 	const [dateSort, setDateSort] = useState(DATE_CHOICES.biweekly)
 	const [habits, setHabits] = useState(null)
@@ -51,17 +55,24 @@ export default function Dashboard() {
 
 		setSelectedDates(newSelectedDates)
 	
-		const res = await getAllUserHabits({ 
-			Start_Date: newSelectedDates[0],
-			End_Date: newSelectedDates[newSelectedDates.length - 1]
-		})
-		if (res.data.length < 1) {
-			setHabits(null)
+		try {
+			const res = await getAllUserHabits({ 
+				Start_Date: newSelectedDates[0],
+				End_Date: newSelectedDates[newSelectedDates.length - 1]
+			})
+			if (res.data.length < 1) {
+				setHabits(null)
+				return setIsLoading(false)
+			}
+			const formattedHabits = addHabitsToDate({habits: res.data, datesWithHabits: [...selectedDatesWithHabits] })
+			setHabits(formattedHabits)
+			setIsLoading(false)
+		} catch(err) {
+			setNotifModalOpen(true)
+			setNotifModalContent({msg: "An error occurred in fetching the data", error: true})	
 			return setIsLoading(false)
 		}
-		const formattedHabits = addHabitsToDate({habits: res.data, datesWithHabits: [...selectedDatesWithHabits] })
-		setHabits(formattedHabits)
-		setIsLoading(false)
+		
 	}
 
 	async function changeDate({increment}) {
@@ -127,6 +138,8 @@ export default function Dashboard() {
 				setHabits={setHabits}
 				dateSort={dateSort}
 				selectedDates={selectedDates}
+				setNotifModalOpen={setNotifModalOpen}
+				setNotifModalContent={setNotifModalContent}
 			/>
 			<HabitModal 
 				habit={currentHabit}
@@ -134,6 +147,14 @@ export default function Dashboard() {
 				setOpenHabitModal={setIsHabitModalOpen}
 				habits={habits}
 				setHabits={setHabits}
+				setNotifModalOpen={setNotifModalOpen}
+				setNotifModalContent={setNotifModalContent}
+			/>
+			<NotifModal
+				modalOpen={isNotifModalOpen}
+				setModalOpen={setNotifModalOpen}
+				content={notifModalContent}
+				setContent={setNotifModalContent}
 			/>
 			<div className={css.pageContainer}>
 				<div className={css.contentContainer}>

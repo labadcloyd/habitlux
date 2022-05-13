@@ -9,7 +9,15 @@ import { Button, TextArea, NumberPicker } from '../../common'
 import { DEFAULT_HABIT_LIST } from '../../../common/constants'
 
 export default function HabitModal(props) {
-	const { habit, openHabitModal, setOpenHabitModal, habits, setHabits } = props
+	const {
+		habit,
+		openHabitModal,
+		setOpenHabitModal,
+		habits,
+		setHabits,
+		setNotifModalOpen,
+		setNotifModalContent
+	} = props
 
 	const [habitState, setHabitState] = useState(habit)
 
@@ -34,6 +42,12 @@ export default function HabitModal(props) {
 				}
 			}
 			setHabits(newHabitList)
+			setNotifModalOpen(true)
+			setNotifModalContent({msg: "Successfully udpated habit", error: false})	
+			setOpenHabitModal(false)
+		} else {
+			setNotifModalOpen(true)
+			setNotifModalContent({msg: "An error occurred in updating habit", error: true})	
 		}
 	}
 	async function createHabit() {
@@ -54,6 +68,12 @@ export default function HabitModal(props) {
 				}
 			}
 			setHabits(newHabitList)
+			setNotifModalOpen(true)
+			setNotifModalContent({msg: "Successfully created habit", error: false})	
+			setOpenHabitModal(false)
+		} else {
+			setNotifModalOpen(true)
+			setNotifModalContent({msg: "An error occurred in creating habit", error: true})	
 		}
 	}
 

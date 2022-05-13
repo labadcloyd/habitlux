@@ -6,5 +6,16 @@ import TextArea from "./textArea/textArea";
 import ColorPicker from "./colorPicker/colorPicker";
 import NumberPicker from "./numberPicker/numberPicker";
 import HabitDay from "./habitDay";
+import NotifModal from "./notifModal";
 
-export { TextInput, Button, SwitchBtn, SmallBtn, TextArea, ColorPicker, NumberPicker, HabitDay }
+export { 
+	TextInput, 
+	Button, 
+	SwitchBtn, 
+	SmallBtn, 
+	TextArea, 
+	ColorPicker, 
+	NumberPicker, 
+	HabitDay,
+	NotifModal
+}

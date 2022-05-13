@@ -1,0 +1,36 @@
+.wrapper {
+	position: fixed;
+	bottom: 5%;
+	right: 5%;
+
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	gap: 10px;
+
+	border-radius: 10px;
+	padding: 10px;
+	background-color: #fff;
+	
+	box-shadow: rgb(0 0 0 / 10%) 0px 2px 5px 0px;
+}
+.wrapper > button {
+	background-color: #535353;
+	box-shadow: none !important;
+
+	border-radius: 0;
+	border-left: 1px solid #00000018;
+}
+.wrapper > button > svg path{
+	stroke: #535353 !important;
+}
+.iconContainer {
+	width: 30px;
+	height: 30px;
+	
+	padding: 5px;
+	border-radius:7px;
+}
+.iconContainer > svg {
+	fill: #fff;
+}

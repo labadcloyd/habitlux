@@ -16,7 +16,9 @@ export default function HabitModalList(props) {
 		habits, 
 		setHabits,
 		dateSort,
-		selectedDates
+		selectedDates,
+		setNotifModalOpen,
+		setNotifModalContent
 	} = props
 
 	const [habitListState, setHabitListState] = useState(habitList)
@@ -45,6 +47,13 @@ export default function HabitModalList(props) {
 				}
 			}
 			setHabits(newHabitList)
+			setNotifModalOpen(true)
+			setNotifModalContent({msg: "Successfully udpated habit list", error: false})	
+
+			setOpenHabitModalList(false)
+		} else {
+			setNotifModalOpen(true)
+			setNotifModalContent({msg: "An error occurred in updating habit list", error: true})	
 		}
 
 	}
@@ -63,6 +72,12 @@ export default function HabitModalList(props) {
 				newHabitListState.id = res.data.id
 			}
 			setHabits([...habits ,newHabitListState])
+			setNotifModalOpen(true)
+			setNotifModalContent({msg: "Successfully created habit list", error: false})	
+			setOpenHabitModalList(false)
+		} else {
+			setNotifModalOpen(true)
+			setNotifModalContent({msg: "An error occurred in creating habit list", error: true})	
 		}
 	}
 
