@@ -60,6 +60,7 @@ export default function HabitModalList(props) {
 			for (let i = 0; i < newHabitListState.habits.length; i++) {
 				newHabitListState.habits[i].target_repeat_count = res.data.default_repeat_count 
 				newHabitListState.habits[i].habit_name = res.data.habit_name
+				newHabitListState.id = res.data.id
 			}
 			setHabits([...habits ,newHabitListState])
 		}
