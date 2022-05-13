@@ -126,6 +126,7 @@ export default function Dashboard() {
 				habits={habits}
 				setHabits={setHabits}
 				dateSort={dateSort}
+				selectedDates={selectedDates}
 			/>
 			<HabitModal 
 				habit={currentHabit}

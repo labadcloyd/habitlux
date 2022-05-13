@@ -15,7 +15,8 @@ export default function HabitModalList(props) {
 		setOpenHabitModalList, 
 		habits, 
 		setHabits,
-		dateSort
+		dateSort,
+		selectedDates
 	} = props
 
 	const [habitListState, setHabitListState] = useState(habitList)
@@ -52,9 +53,9 @@ export default function HabitModalList(props) {
 		
 		if (res.status === 200) {
 			let newHabits = []
-			if (dateSort === DATE_CHOICES.weekly) {newHabits = getDateWeekly()}
-			if (dateSort === DATE_CHOICES.biweekly) {newHabits = getDateBiWeekly()}
-			if (dateSort === DATE_CHOICES.monthly) {newHabits = getDateMonthly()}
+			if (dateSort === DATE_CHOICES.weekly) {newHabits = getDateWeekly(selectedDates[0])}
+			if (dateSort === DATE_CHOICES.biweekly) {newHabits = getDateBiWeekly(selectedDates[0])}
+			if (dateSort === DATE_CHOICES.monthly) {newHabits = getDateMonthly(selectedDates[0])}
 			const newHabitListState = {...habitListState, habits: [...newHabits]}
 			for (let i = 0; i < newHabitListState.habits.length; i++) {
 				newHabitListState.habits[i].target_repeat_count = res.data.default_repeat_count 
