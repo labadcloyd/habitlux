@@ -17,11 +17,6 @@
 	border-radius: 6px;
 
 	cursor: pointer;
-	transition: .3s;
-}
-.dayContainer:hover {
-	margin: -4px 0 0 -4px;
-	box-shadow: 2px 4px 5px rgba(0, 0, 0, 0.2);
 }
 
 .monthlyDayContainer {
@@ -44,9 +39,4 @@
 	border-radius: 5px;
 
 	cursor: pointer;
-	transition: .3s;
-}
-.monthlyDayContainer:hover {
-	margin: -4px 0 0 -4px;
-	box-shadow: 2px 4px 5px rgba(0, 0, 0, 0.2);
 }

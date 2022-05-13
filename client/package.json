@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "axios": "^0.27.2",
+    "framer-motion": "^6.3.3",
     "moment": "^2.29.3",
     "next": "12.1.5",
     "react": "18.1.0",

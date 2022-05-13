@@ -1,5 +1,6 @@
 import moment from 'moment'
 import { useEffect, useState } from 'react'
+import { AnimatePresence, motion } from 'framer-motion'
 
 import css from './habitModal.module.css'
 import { Close } from '../../../public/svgs'
@@ -57,70 +58,85 @@ export default function HabitModal(props) {
 	}
 
 	useEffect(() => {
-		console.log(habit)
 		setHabitState(habit)
 	}, [habit])
 
 	return(
-		<div className={css.wrapper} style={{display: openHabitModal ? "flex" : "none"}}>
-			<div className={css.container}>
-				{habitState && 
-					<>
-						<div className={css.headerWrapper}>
-							<div className={css.headerContainer}>
-								<div className={css.iconContainer} style={{backgroundColor: `rgb(${habitState.color})` || `rgb(${DEFAULT_HABIT_LIST.color})`}}>
-								</div>
-								<div className={css.titleContainer}>
-									<h1>{moment(habitState.date_created).format("MMMM DD, YYYY")}</h1>
-									<span>{habitState.habit_name}</span>
-								</div>
-							</div>
-							<Button onClick={ ()=> {setOpenHabitModal(false); setHabitState(null)} }>
-								<Close/>
-							</Button>
-							
-						</div>
+		<AnimatePresence>
+		{openHabitModal &&
+			<motion.div
+				onClick={() => (setOpenHabitModal(false))}
 
-						<NumberPicker 
-							setState={ (value) => { setHabitState({...habitState, repeat_count: value}) } } 
-							value={habitState.repeat_count} 
-							maxValue={habitState.target_repeat_count || habitState.default_repeat_count}
-						>
-							This day's Repeat Count
-						</NumberPicker>
-						<NumberPicker
-							id={css.requiredCountContainer}
-							value={habitState.target_repeat_count}
-							setState={ (value) => { setHabitState({...habitState, target_repeat_count: value}) } } 
-						>
-							Required Target Repeat Count
-						</NumberPicker>
-						<TextArea
-							placeholder="Write a comment"
-							value={habitState.comment}
-							updateValue={(value) => { setHabitState({...habitState, comment: value})  }}
-						/>
-						<div className={css.rowContainer}>
-							<Button 
-								id={css.greenBtn} 
-								primary={false} 
-								onClick={markComplete}
+				className={css.wrapper}
+			> 
+				<motion.div 
+					initial={{opacity: 1, scale: 0}}
+					animate={{opacity: 1, scale: 1}}
+					transition={{ type: 'spring', duration: 0.3 }}
+					exit={{opacity: 1, scale: 0}}
+					layout
+					onClick={(e) => e.stopPropagation()}
+					className={css.container}
+				>
+					{habitState && 
+						<>
+							<div className={css.headerWrapper}>
+								<div className={css.headerContainer}>
+									<div className={css.iconContainer} style={{backgroundColor: `rgb(${habitState.color})` || `rgb(${DEFAULT_HABIT_LIST.color})`}}>
+									</div>
+									<div className={css.titleContainer}>
+										<h1>{moment(habitState.date_created).format("MMMM DD, YYYY")}</h1>
+										<span>{habitState.habit_name}</span>
+									</div>
+								</div>
+								<Button onClick={ ()=> {setOpenHabitModal(false); setHabitState(null)} }>
+									<Close/>
+								</Button>
+								
+							</div>
+
+							<NumberPicker 
+								setState={ (value) => { setHabitState({...habitState, repeat_count: value}) } } 
+								value={habitState.repeat_count} 
+								maxValue={habitState.target_repeat_count || habitState.default_repeat_count}
 							>
-								Mark As Complete
-							</Button>
-							<Button 
-								primary={false} 
-								onClick={() => {
-									if (habitState.habit_id) {updateHabit()}
-									if (!habitState.habit_id) {createHabit()}
-								}}
+								This day's Repeat Count
+							</NumberPicker>
+							<NumberPicker
+								id={css.requiredCountContainer}
+								value={habitState.target_repeat_count}
+								setState={ (value) => { setHabitState({...habitState, target_repeat_count: value}) } } 
 							>
-								Save
-							</Button>
-						</div>
-					</>
-				}
-			</div>
-		</div>
+								Required Target Repeat Count
+							</NumberPicker>
+							<TextArea
+								placeholder="Write a comment"
+								value={habitState.comment}
+								updateValue={(value) => { setHabitState({...habitState, comment: value})  }}
+							/>
+							<div className={css.rowContainer}>
+								<Button 
+									id={css.greenBtn} 
+									primary={false} 
+									onClick={markComplete}
+								>
+									Mark As Complete
+								</Button>
+								<Button 
+									primary={false} 
+									onClick={() => {
+										if (habitState.habit_id) {updateHabit()}
+										if (!habitState.habit_id) {createHabit()}
+									}}
+								>
+									Save
+								</Button>
+							</div>
+						</>
+					}
+				</motion.div>
+			</motion.div>
+		}
+		</AnimatePresence>
 	)
 }

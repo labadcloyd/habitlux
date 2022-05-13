@@ -13,14 +13,8 @@
 	padding: 10px;
 	border-radius: 7px;
 	
-	transition: .3s;
 	cursor: pointer;
 }
-.wrapper div:hover {
-	box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
-	transform: translate(-2px, -2px);
-}
-
 .container {
 	background-color: rgba(255, 255, 255);
 	color: rgb(104, 104, 104);

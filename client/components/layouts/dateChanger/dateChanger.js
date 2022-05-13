@@ -1,8 +1,10 @@
+import { motion } from "framer-motion"
+import { useEffect, useState } from 'react';
+import moment from 'moment';
+
 import css from './dateChanger.module.css'
 import { SwitchBtn, SmallBtn, Button } from "../../common";
 import { ArrowLeft, ArrowRight, Plus } from '../../../public/svgs';
-import { useEffect, useState } from 'react';
-import moment from 'moment';
 import { DATE_CHOICES, DEFAULT_HABIT_LIST } from '../../../common/constants';
 
 export default function DateChanger (props) {
@@ -40,9 +42,16 @@ export default function DateChanger (props) {
 						<SmallBtn onClick={() => {changeDate({increment: false})}}>
 							<ArrowLeft/>
 						</SmallBtn>
-						<div className={css.dateContainerSmall}>
+						<motion.div
+							initial={{opacity: 0}}
+							animate={{opacity: 1}}
+							exit={{opacity: 0}}
+							transition={{ duration: 0.3 }}
+
+							className={css.dateContainerSmall}
+						>
 							{dateTitle}
-						</div>
+						</motion.div>
 						<SmallBtn onClick={() => {changeDate({increment: true})}}>
 							<ArrowRight/>
 						</SmallBtn>

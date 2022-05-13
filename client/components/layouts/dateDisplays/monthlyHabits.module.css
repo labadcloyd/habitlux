@@ -56,7 +56,6 @@
 
 	padding: 4px 10px;
 	border-radius: 8px;
-	transition: .3s;
 	cursor: pointer;
 	box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
 }

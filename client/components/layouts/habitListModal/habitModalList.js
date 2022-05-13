@@ -1,11 +1,11 @@
-import moment from 'moment'
+import { AnimatePresence, motion } from "framer-motion"
 import { useEffect, useState } from 'react'
+
 import { DATE_CHOICES, DEFAULT_HABIT_LIST } from '../../../common/constants'
 import { createUserHabitList, updateUserHabitList } from '../../../common/services'
 import { getDateBiWeekly, getDateMonthly, getDateWeekly } from '../../../common/utils'
-
-import { Close } from '../../../public/svgs'
 import { Button, TextInput, ColorPicker, NumberPicker } from '../../common'
+import { Close } from '../../../public/svgs'
 import css from './habitModalList.module.css'
 
 export default function HabitModalList(props) {
@@ -70,53 +70,68 @@ export default function HabitModalList(props) {
 	}, [habitList])
 
 	return(
-		<div className={css.wrapper} style={{display: isOpenHabitModalList ? "flex" : "none"}}>
-			<div className={css.container}>
-				{isOpenHabitModalList && 
-					<>
-						<div className={css.headerWrapper}>
-							<div className={css.titleContainer}>
-								<h1>{!habitList.id ? "Create Habit" : "Edit Habit"}</h1>
-							</div>
-							<Button onClick={ ()=> {setOpenHabitModalList(false); setHabitListState(DEFAULT_HABIT_LIST);} }>
-								<Close/>
-							</Button>
-							
-						</div>
-						<TextInput
-							value={habitListState.habit_name || ""}
-							setValue={ (value) => { setHabitListState({...habitListState, habit_name: value}) } }
-							placeholder="Habit name"
-						/>
-						<NumberPicker
-							id={css.requiredCountContainer}
-							value={habitListState.default_repeat_count || 0}
-							setState={ (value) => { setHabitListState({...habitListState, default_repeat_count: value}) } } 
-						>
-							Default Target Repeat Count
-						</NumberPicker>
-						<ColorPicker
-							value={habitListState.color || ""}
-							setValue={(value) => { setHabitListState({...habitListState, color: value}) }}
-						> 
-						Default Color
-						</ColorPicker> 
-							
-						
-						<div className={css.rowContainer}>
-							<Button 
-								primary={false} 
-								onClick={() => {
-									if (habitListState.id) {updateHabit()}
-									if (!habitListState.id) {createHabit()}
-								}}
+		<AnimatePresence>
+			{isOpenHabitModalList && 
+			<motion.div
+				onClick={() => (setOpenHabitModalList(false))}
+
+				className={css.wrapper}
+			>
+				<motion.div 
+					initial={{opacity: 1, scale: 0}}
+					animate={{opacity: 1, scale: 1}}
+					transition={{ type: 'spring', duration: 0.3 }}
+					exit={{opacity: 1, scale: 0}}
+					layout
+					onClick={(e) => e.stopPropagation()}
+
+					className={css.container}
+				>
+						<>
+							<motion.div className={css.headerWrapper}>
+								<motion.div className={css.titleContainer}>
+									<motion.h1>{!habitList.id ? "Create Habit" : "Edit Habit"}</motion.h1>
+								</motion.div>
+								<Button onClick={ ()=> {setOpenHabitModalList(false); setHabitListState(DEFAULT_HABIT_LIST);} }>
+									<Close/>
+								</Button>
+								
+							</motion.div>
+							<TextInput
+								value={habitListState.habit_name || ""}
+								setValue={ (value) => { setHabitListState({...habitListState, habit_name: value}) } }
+								placeholder="Habit name"
+							/>
+							<NumberPicker
+								id={css.requiredCountContainer}
+								value={habitListState.default_repeat_count || 0}
+								setState={ (value) => { setHabitListState({...habitListState, default_repeat_count: value}) } } 
 							>
-								Save
-							</Button>
-						</div>
-					</>
-				}
-			</div>
-		</div>
+								Default Target Repeat Count
+							</NumberPicker>
+							<ColorPicker
+								value={habitListState.color || ""}
+								setValue={(value) => { setHabitListState({...habitListState, color: value}) }}
+							> 
+							Default Color
+							</ColorPicker> 
+								
+							
+							<motion.div className={css.rowContainer}>
+								<Button 
+									primary={false} 
+									onClick={() => {
+										if (habitListState.id) {updateHabit()}
+										if (!habitListState.id) {createHabit()}
+									}}
+								>
+									Save
+								</Button>
+							</motion.div>
+						</>
+				</motion.div>
+			</motion.div>
+			} 
+		</AnimatePresence>
 	)
 }
