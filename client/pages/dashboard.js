@@ -20,9 +20,7 @@ import {
 import { 
 	Navbar,
 	DateChanger, 
-	MonthlyHabits, 
-	BiWeeklyHabits, 
-	WeeklyHabits,
+	DateHabits, 
 	HabitModal,
 	HabitModalList
 } from "../components/layouts";
@@ -100,10 +98,9 @@ export default function Dashboard() {
 
 	function handleWidthChange() {
 		if (pageWidthRef.current.offsetWidth < 700) {
-			setDateSort(DATE_CHOICES.weekly)
-		}
-		if (pageWidthRef.current.offsetWidth > 700) {
-			setDateSort(DATE_CHOICES.biweekly)
+			if (dateSort !== DATE_CHOICES.biweekly) {
+				setDateSort(DATE_CHOICES.biweekly)
+			}
 		}
 	}
 
@@ -150,38 +147,15 @@ export default function Dashboard() {
 					{isLoading ?
 						<h1>Loading...</h1>
 					:
-						<>
-							{dateSort === DATE_CHOICES.monthly &&
-								<MonthlyHabits
-									dateSort={dateSort}
-									habits={habits}
-									setCurrentHabit={setCurrentHabit}
-									setIsHabitModalOpen={setIsHabitModalOpen}
-									setIsHabitModalListOpen={setIsHabitModalListOpen}
-									setCurrentHabitList={setCurrentHabitList}
-								/>
-							}
-							{dateSort === DATE_CHOICES.biweekly &&
-								<BiWeeklyHabits 
-									dateSort={dateSort}
-									habits={habits} 
-									setCurrentHabit={setCurrentHabit} 
-									setIsHabitModalOpen={setIsHabitModalOpen}
-									setIsHabitModalListOpen={setIsHabitModalListOpen}
-									setCurrentHabitList={setCurrentHabitList}
-								/>
-							}
-							{dateSort === DATE_CHOICES.weekly &&
-								<WeeklyHabits 
-									dateSort={dateSort}
-									habits={habits} 
-									setCurrentHabit={setCurrentHabit} 
-									setIsHabitModalOpen={setIsHabitModalOpen}
-									setIsHabitModalListOpen={setIsHabitModalListOpen}
-									setCurrentHabitList={setCurrentHabitList}
-								/>
-							}
-						</>
+						<DateHabits 
+							dateSort={dateSort}
+							habits={habits} 
+							selectedDates={selectedDates}
+							setCurrentHabit={setCurrentHabit} 
+							setIsHabitModalOpen={setIsHabitModalOpen}
+							setIsHabitModalListOpen={setIsHabitModalListOpen}
+							setCurrentHabitList={setCurrentHabitList}
+						/>
 					}
 				</div>
 			</div>

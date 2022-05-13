@@ -1,21 +1,22 @@
 import { motion } from "framer-motion"
 import moment from 'moment'
+import { useEffect, useState } from "react"
 
-import { DEFAULT_HABIT_LIST, WEEKDAYS } from '../../../common/constants'
-import { calcBgColor } from '../../../common/utils'
+import { DATE_CHOICES, DEFAULT_HABIT_LIST, WEEKDAYS, WEEKDAYS_INITIALS } from '../../../common/constants'
 import { HabitDay } from '../../common'
-import css from './biWeeklyHabits.module.css'
+import css from './dateHabits.module.css'
 
-export default function BiWeeklyHabits(props) {
+export default function DateHabits(props) {
 	const { 
 		habits, 
 		setCurrentHabit, 
 		setIsHabitModalOpen,
 		setIsHabitModalListOpen,
 		setCurrentHabitList,
-		dateSort
+		dateSort,
+		selectedDates
 	} = props
-	const biWeeklyDays = [...WEEKDAYS, ...WEEKDAYS]
+	const [selectedDays, setSelectedDays] = useState([])
 
 	function updateCurrentHabit({habit, habitDay}) {
 		const newCurrentHabit = {
@@ -37,6 +38,18 @@ export default function BiWeeklyHabits(props) {
 		setIsHabitModalListOpen(true)
 	}
 
+	useEffect(() => {
+		let newSelectedDays = []
+		selectedDates.forEach((day) => {
+			if (dateSort === DATE_CHOICES.monthly) {
+				newSelectedDays.push(WEEKDAYS_INITIALS[moment(day).day()])
+			} else {
+				newSelectedDays.push(WEEKDAYS[moment(day).day()])
+			}
+		})
+		setSelectedDays(newSelectedDays)
+	}, [])
+
 	return (
 		<div className={css.pageWrapper}>
 			{!habits &&
@@ -44,10 +57,15 @@ export default function BiWeeklyHabits(props) {
 			}
 			{ habits && 
 				<>
-					<div className={css.rowWrapper}>
+					<div
+						id={css.mainWeekTitle}
+						className={ dateSort === DATE_CHOICES.monthly ? css.monthlyWrapper : css.rowWrapper }
+					>
 						<div></div>
-						<div className={css.contentContainer} id={css.mainWeekTitle}>
-							{biWeeklyDays.map((day, i) => (
+						<div 
+							className={ dateSort === DATE_CHOICES.monthly ? css.monthlyContainer : css.contentContainer }
+						>
+							{selectedDays && selectedDays.map((day, i) => (
 								<h6 key={i}>{day}</h6>
 							))}
 						</div>
@@ -55,8 +73,8 @@ export default function BiWeeklyHabits(props) {
 
 					{habits && habits.map((habit, i) => (
 						<motion.div
-							className={css.rowWrapper} 
 							key={i} 
+							className={ dateSort === DATE_CHOICES.monthly ? css.monthlyWrapper : css.rowWrapper }
 						>
 							<motion.div className={css.rowTitleContainer}>
 								<motion.div
@@ -70,6 +88,7 @@ export default function BiWeeklyHabits(props) {
 									transition={{ duration: 0.1, delay: 0 }}
 
 									className={css.rowTitle} 
+									id={dateSort === DATE_CHOICES.monthly ? css.monthlyTitle : css.weeklyTitle}
 									onClick={() => {updateCurrentHabitList({habit:habit})} }
 									style={{backgroundColor: `rgb(${habit.color})` || `rgb(${DEFAULT_HABIT_LIST.color})` }} 
 								>
@@ -78,7 +97,9 @@ export default function BiWeeklyHabits(props) {
 									</h2>
 								</motion.div>
 							</motion.div>
-							<motion.div className={css.contentContainer}>
+							<motion.div
+								className={ dateSort === DATE_CHOICES.monthly ? css.monthlyContainer : css.contentContainer }
+							>
 								{habit.habits.map((habitDay, i) => (
 									<motion.div
 										initial={{opacity: 0}}
@@ -91,7 +112,11 @@ export default function BiWeeklyHabits(props) {
 										key={i}
 									>
 										<h6 className={css.dayTitle}>
-											{WEEKDAYS[(moment(habitDay.date_created).day())]}
+											{ dateSort === DATE_CHOICES.monthly?
+												WEEKDAYS_INITIALS[(moment(habitDay.date_created).day())]
+											:
+												WEEKDAYS[(moment(habitDay.date_created).day())]
+											}
 										</h6>
 										<HabitDay
 											dateSort={dateSort}

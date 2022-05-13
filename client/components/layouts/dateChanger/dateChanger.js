@@ -59,9 +59,9 @@ export default function DateChanger (props) {
 					<div className={css.dateContainer}>
 						{dateTitle}
 					</div>
-					{ dateSort !== DATE_CHOICES.weekly &&
+					<div className={css.dateChoiceWrapper}>
 						<SwitchBtn values={["Bi-Weekly", "Monthly"]} setValue={setDateSort}/>
-					}
+					</div>
 				</div>
 				<Button onClick={() => {setIsHabitModalListOpen(true); setCurrentHabitList(DEFAULT_HABIT_LIST);}}>
 					<Plus/>

@@ -58,6 +58,15 @@
 	font-size: 36px;
 	color: #fff;
 }
+.dateChoiceWrapper{
+	display: block;
+}
+
+@media only screen and (max-width: 740px) {
+	.dateChoiceWrapper {
+		display: none;
+	}
+}
 
 @media only screen and (max-width: 640px) {
 	.dateContainer { 
