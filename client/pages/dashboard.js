@@ -26,6 +26,7 @@ import {
 } from "../components/layouts";
 import { NotifModal } from '../components/common';
 import LoaderPage from '../components/layouts/loaderPage/loaderPage';
+import { AnimatePresence } from 'framer-motion';
 
 
 export default function Dashboard() {
@@ -171,16 +172,18 @@ export default function Dashboard() {
 					{isLoading ?
 						<LoaderPage />
 					:
-						<DateHabits 
-							isLoading={isLoading}
-							dateSort={dateSort}
-							habits={habits} 
-							selectedDates={selectedDates}
-							setCurrentHabit={setCurrentHabit} 
-							setIsHabitModalOpen={setIsHabitModalOpen}
-							setIsHabitModalListOpen={setIsHabitModalListOpen}
-							setCurrentHabitList={setCurrentHabitList}
-						/>
+						<AnimatePresence>
+							<DateHabits 
+								isLoading={isLoading}
+								dateSort={dateSort}
+								habits={habits} 
+								selectedDates={selectedDates}
+								setCurrentHabit={setCurrentHabit} 
+								setIsHabitModalOpen={setIsHabitModalOpen}
+								setIsHabitModalListOpen={setIsHabitModalListOpen}
+								setCurrentHabitList={setCurrentHabitList}
+							/>
+						</AnimatePresence>
 					}
 				</div>
 			</div>
