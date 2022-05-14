@@ -83,8 +83,12 @@ func UpdateHabitList(c *fiber.Ctx) error {
 	if err := database.DB.Model(&models.Habit{}).
 		Where("Owner_ID = ?", owner_id).
 		Where("Habit_Name = ?", oldHabitList.Habit_Name).
-		Select("Habit_Name").
-		Updates(models.Habit{Habit_Name: reqData.Habit_Name}).Error; err != nil {
+		Updates(
+			map[string]interface{} {
+				"habit_name": reqData.Habit_Name,
+				"target_repeat_count": reqData.Default_Repeat_Count,
+			},
+		).Error; err != nil {
 			return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 				"message": err.Error(),
 			})

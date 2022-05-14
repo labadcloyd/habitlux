@@ -29,7 +29,7 @@ type ReqDeleteHabit struct {
 type ReqCreateHabitList struct {
 	Habit_Name						string  						`json:"habit_name" validate:"required,min=1,max=32"`
 	Icon_Url							string							`json:"icon_url"`
-	Color									string							`json:"color"`
+	Color									string							`json:"color" validate:"required"`
 	Default_Repeat_Count	uint								`json:"default_repeat_count"`
 }
 
