@@ -7,6 +7,7 @@ import ColorPicker from "./colorPicker/colorPicker";
 import NumberPicker from "./numberPicker/numberPicker";
 import HabitDay from "./habitDay";
 import NotifModal from "./notifModal";
+import Loader from "./loader";
 
 export { 
 	TextInput, 
@@ -17,5 +18,6 @@ export {
 	ColorPicker, 
 	NumberPicker, 
 	HabitDay,
-	NotifModal
+	NotifModal,
+	Loader
 }

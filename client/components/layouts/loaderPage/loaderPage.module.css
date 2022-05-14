@@ -1,0 +1,19 @@
+.wrapper {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-direction: column;
+
+	position: fixed;
+	top: 0;
+	width: 100vw;
+	height: 100vh;
+	gap: 30px;
+}
+
+.logoContainer {
+	max-width: 50px;
+	max-height: 50px;
+	height: 100%;
+	width: 100%;
+}

@@ -25,6 +25,7 @@ import {
 	HabitModalList
 } from "../components/layouts";
 import { NotifModal } from '../components/common';
+import LoaderPage from '../components/layouts/loaderPage/loaderPage';
 
 
 export default function Dashboard() {
@@ -168,7 +169,7 @@ export default function Dashboard() {
 						setIsHabitModalListOpen={setIsHabitModalListOpen}
 					/>
 					{isLoading ?
-						<h1>Loading...</h1>
+						<LoaderPage />
 					:
 						<DateHabits 
 							isLoading={isLoading}

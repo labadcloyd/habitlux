@@ -1,0 +1,29 @@
+.loadingBox{
+	position: relative;
+	width: 200px;
+	height: 5px;
+	border-radius: 50px;
+	border: none;
+	overflow: hidden;
+
+	background-color: #fff;
+	box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+}
+.loader{
+	width: 70%;
+	height: 100%;
+	position: absolute;
+	border-radius: 50px;
+	background: linear-gradient(90deg,#62e3ff,#ff62dc);
+	left: -100%;
+	animation: load 1s linear infinite;
+}
+
+@keyframes load{
+	0%{
+			left: -100%;
+	}
+	100%{
+			left: 100%;
+	}
+}
