@@ -14,7 +14,8 @@ export default function DateChanger (props) {
 		changeDate,
 		selectedDates,
 		setIsHabitModalListOpen,
-		setCurrentHabitList
+		setCurrentHabitList,
+		setIsLoading
 	} = props
 
 	const [dateTitle, setDateTitle] = useState("")
@@ -39,7 +40,7 @@ export default function DateChanger (props) {
 			<div className={css.container}>
 				<div>
 					<div className={css.arrowBtnContainer}>
-						<SmallBtn onClick={() => {changeDate({increment: false})}}>
+						<SmallBtn onClick={() => {setIsLoading(true); changeDate({increment: false})}}>
 							<ArrowLeft/>
 						</SmallBtn>
 						<motion.div
@@ -52,7 +53,7 @@ export default function DateChanger (props) {
 						>
 							{dateTitle}
 						</motion.div>
-						<SmallBtn onClick={() => {changeDate({increment: true})}}>
+						<SmallBtn onClick={() => {setIsLoading(true); changeDate({increment: true})}}>
 							<ArrowRight/>
 						</SmallBtn>
 					</div>
@@ -60,7 +61,7 @@ export default function DateChanger (props) {
 						{dateTitle}
 					</div>
 					<div className={css.dateChoiceWrapper}>
-						<SwitchBtn values={["Bi-Weekly", "Monthly"]} setValue={setDateSort}/>
+						<SwitchBtn values={["Bi-Weekly", "Monthly"]} setValue={setDateSort} setIsLoading={setIsLoading}/>
 					</div>
 				</div>
 				<Button onClick={() => {setIsHabitModalListOpen(true); setCurrentHabitList(DEFAULT_HABIT_LIST);}}>

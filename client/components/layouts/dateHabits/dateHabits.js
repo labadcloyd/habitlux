@@ -14,7 +14,8 @@ export default function DateHabits(props) {
 		setIsHabitModalListOpen,
 		setCurrentHabitList,
 		dateSort,
-		selectedDates
+		selectedDates,
+		isLoading
 	} = props
 	const [selectedDays, setSelectedDays] = useState([])
 
@@ -55,7 +56,7 @@ export default function DateHabits(props) {
 			{!habits &&
 				<h1>No habits created yet</h1>
 			}
-			{ habits && 
+			{ (habits && isLoading === false) && 
 				<>
 					<div
 						id={css.mainWeekTitle}
@@ -90,8 +91,12 @@ export default function DateHabits(props) {
 									className={css.rowTitle} 
 									id={dateSort === DATE_CHOICES.monthly ? css.monthlyTitle : css.weeklyTitle}
 									onClick={() => {updateCurrentHabitList({habit:habit})} }
-									style={{backgroundColor: `rgb(${habit.color})` || `rgb(${DEFAULT_HABIT_LIST.color})` }} 
 								>
+									<div
+										className={css.iconContainer}
+										id={dateSort === DATE_CHOICES.monthly ? css.monthlyIcon : css.weeklyIcon}
+										style={{backgroundColor: `rgb(${habit.color})` || `rgb(${DEFAULT_HABIT_LIST.color})` }} 
+									/>
 									<h2>
 										{habit.habit_name}
 									</h2>

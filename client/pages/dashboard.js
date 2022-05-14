@@ -159,6 +159,7 @@ export default function Dashboard() {
 			<div className={css.pageContainer}>
 				<div className={css.contentContainer}>
 					<DateChanger
+						setIsLoading={setIsLoading}
 						setCurrentHabitList={setCurrentHabitList}
 						dateSort={dateSort}
 						setDateSort={setDateSort}
@@ -170,6 +171,7 @@ export default function Dashboard() {
 						<h1>Loading...</h1>
 					:
 						<DateHabits 
+							isLoading={isLoading}
 							dateSort={dateSort}
 							habits={habits} 
 							selectedDates={selectedDates}

@@ -3,11 +3,12 @@ import { useState } from 'react'
 import css from './switchBtn.module.css'
 
 export default function SwitchBtn(props) {
-	const { values, setValue } = props
+	const { values, setValue, setIsLoading } = props
 
 	const [currentValue, setCurrentValue] = useState(values[0] || "")
 
 	function changeValue(clickedValue) {
+		setIsLoading(true)
 		setValue(clickedValue)
 		setCurrentValue(clickedValue)
 	}
