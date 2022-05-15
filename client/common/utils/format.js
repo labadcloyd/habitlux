@@ -42,7 +42,11 @@ export function getTodaysHabits(habits) {
 	newHabitlist.forEach((habitlist, i) => {
 		habitlist.habits.forEach((habit) => {
 			if (moment(habit.date_created).format("YYYY-MM-DD") === currentDate) {
-				const newHabit = {...habit, color: habitlist.color}
+				const newHabit = {
+					...habit, 
+					color: habitlist.color, 
+					target_repeat_count: habit.target_repeat_count || habitlist.default_repeat_count
+				}
 				habitsToday.push(newHabit)
 			}
 		})
