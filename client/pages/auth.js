@@ -46,7 +46,8 @@ export default function Auth() {
 		return currentErrors.length
 	}
 
-	async function submitData () {
+	async function submitData (e) {
+		e?.preventDefault()
 		const data = { username, password }
 		if (isSignup) {
 			const errLength = validateForm()
@@ -101,15 +102,15 @@ export default function Auth() {
 
 	return (
 		<div className={css.pageWrapper}>
-				{isLoading ?
-					<LoaderPage />
-				:
+			{isLoading ?
+				<LoaderPage />
+			:
 				<div className={css.pageContainer}>
 					<a className={css.logoContainer} href="/">
 						<MediumLogo/>
 					</a>
 					<div className={css.formWrapper}>
-						<div className={css.formContainer}>
+						<form className={css.formContainer} onSubmit={submitData}>
 							<h2>{!isSignup ? "Sign in to your account" : "Register an account"}</h2>
 							
 							{(errorMsgs.length > 0) &&
@@ -142,7 +143,7 @@ export default function Auth() {
 								</p>
 							</div>
 							<Button primary={true} onClick={submitData}>Continue</Button>
-						</div>
+						</form>
 					</div>
 				</div>
 			}
