@@ -1,4 +1,5 @@
 import { motion } from "framer-motion"
+import moment from "moment";
 import css from './habitsToday.module.css'
 
 export default function HabitsToday(props) {
@@ -6,7 +7,7 @@ export default function HabitsToday(props) {
 
 	return (
 		<div className={css.wrapper}>
-			<h1>Habits for today</h1>
+			<h1>Habits for today {`(${moment().format("MMMM D, YYYY")})`}</h1>
 			<div className={css.habitWrapper}>
 				{habitsToday.map((habit, i) => (
 					<motion.div

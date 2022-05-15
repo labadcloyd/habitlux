@@ -135,6 +135,11 @@
 		gap: 15px;
 		padding: 20px 0;
 	}
+	.monthlyWrapper {
+		grid-template-columns: 1fr;
+		gap: 15px;
+		padding: 20px 0;
+	}
 	.pageWrapper {
 		margin-top: 20px;
 	}
