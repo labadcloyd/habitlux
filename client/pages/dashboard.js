@@ -26,7 +26,8 @@ import {
 	DateChanger, 
 	DateHabits, 
 	HabitModal,
-	HabitModalList
+	HabitModalList,
+	Footer
 } from "../components/layouts";
 import { NotifModal } from '../components/common';
 import LoaderPage from '../components/layouts/loaderPage/loaderPage';
@@ -221,6 +222,7 @@ export default function Dashboard() {
 								setIsHabitModalOpen={setIsHabitModalOpen}
 								key={1}
 							/>
+							<Footer/>
 						</AnimatePresence>
 					}
 				</div>

@@ -88,6 +88,20 @@
   filter: blur(5px);
   animation: enlarge 1.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) infinite alternate-reverse both;
 }
+
+
+/* Footer */
+.footer {
+  position: fixed;
+  bottom: 20px;
+}
+.footer h6 {
+	color: #62a1ff;
+	margin: 0;
+	font-size: 12px;
+	font-weight: 500;
+}
+
 @keyframes slide-top {
   0% { transform: translateY(0) skew(20deg, -20deg); }
   100% { transform: translateY(-40px) skew(20deg, -20deg); }
