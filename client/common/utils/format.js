@@ -33,3 +33,20 @@ export function addHabitsToDate({ habits, datesWithHabits }) {
 	return habitsWithAddedDates
 	
 }
+
+export function getTodaysHabits(habits) {
+	const newHabitlist = [...habits]
+	let habitsToday = []
+	const currentDate = moment().format("YYYY-MM-DD")
+
+	newHabitlist.forEach((habitlist, i) => {
+		habitlist.habits.forEach((habit) => {
+			if (moment(habit.date_created).format("YYYY-MM-DD") === currentDate) {
+				const newHabit = {...habit, color: habitlist.color}
+				habitsToday.push(newHabit)
+			}
+		})
+	})
+
+	return habitsToday
+}

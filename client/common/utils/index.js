@@ -10,7 +10,7 @@ import {
 	incrementWeekly,
 	decrementWeekly
 } from "./date"
-import { addHabitsToDate } from "./format";
+import { addHabitsToDate, getTodaysHabits } from "./format";
 import { useOutsideAlerter, calcBgColor } from "./helper";
 
 export {
@@ -26,5 +26,6 @@ export {
 	decrementWeekly,
 	addHabitsToDate,
 	useOutsideAlerter,
-	calcBgColor
+	calcBgColor,
+	getTodaysHabits
 }

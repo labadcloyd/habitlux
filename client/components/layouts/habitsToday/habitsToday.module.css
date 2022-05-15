@@ -1,0 +1,51 @@
+.wrapper {
+	display: flex;
+	flex-direction: column;
+	grid-gap: 20px;
+	gap: 20px;
+
+	margin-top: 50px;
+	max-width: 1080px;
+	width: 100%;
+	padding: 0 20px;
+	color: rgb(36, 36, 36);
+}
+
+.wrapper h1 {
+	font-size: 30px;
+	font-weight: 600;
+}
+.habitWrapper {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+	gap: 25px;
+}
+.habitContainer {
+	display: flex;
+	gap: 15px;
+
+	background-color: #fff;
+	border-radius: 10px;
+	box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.1);
+
+	cursor: pointer;
+}
+.habitTitle {
+	padding: 15px 0;
+}
+.habitTitle h2 {
+	font-size: 20px;
+	font-weight: 400;
+	text-transform: capitalize;
+
+	margin: 0;
+}
+.habitTitle span {
+	font-size: 12px;
+}
+.iconContainer {
+	height: 100%;
+	width: 30px;
+	border-radius: 10px 0 0 10px;
+	background-color: aqua;
+}

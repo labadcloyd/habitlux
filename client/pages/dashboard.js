@@ -1,5 +1,5 @@
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import css from '../styles/dashboard.module.css'
 import { getAllUserHabits } from '../common/services/habit';
@@ -15,7 +15,8 @@ import {
 	incrementWeekly, 
 	decrementBiWeekly, 
 	decrementMonthly, 
-	decrementWeekly
+	decrementWeekly,
+	getTodaysHabits
 } from '../common/utils';
 import { 
 	Navbar,
@@ -27,6 +28,7 @@ import {
 import { NotifModal } from '../components/common';
 import LoaderPage from '../components/layouts/loaderPage/loaderPage';
 import { AnimatePresence } from 'framer-motion';
+import HabitsToday from '../components/layouts/habitsToday';
 
 
 export default function Dashboard() {
@@ -42,8 +44,7 @@ export default function Dashboard() {
 	const [selectedDates, setSelectedDates] = useState([])
 	const [currentHabit, setCurrentHabit] = useState()
 	const [currentHabitList, setCurrentHabitList] = useState(DEFAULT_HABIT_LIST)
-
-	const pageWidthRef = useRef(null)
+	const [habitsToday, setHabitsToday] = useState([])
 
 	async function fetchData() {
 		setIsLoading(true)
@@ -109,28 +110,28 @@ export default function Dashboard() {
 		setIsLoading(false)
 	}
 
-	function handleWidthChange() {
-		if (pageWidthRef.current.offsetWidth < 700) {
-			if (dateSort !== DATE_CHOICES.biweekly) {
-				setDateSort(DATE_CHOICES.biweekly)
-			}
-		}
-	}
-
 	useEffect(() => {
 		fetchData()
 	},[dateSort])
 
 	useEffect(() => {
-    if(pageWidthRef.current) {
-			handleWidthChange()
-			window.addEventListener('resize', handleWidthChange )
+		if (habits !== null) {
+			//setting current habits
+			if (habitsToday.length < 1) {
+				const newHabitsToday = getTodaysHabits(habits)
+				setHabitsToday(newHabitsToday)
+			} else if (habitsToday.length > 0) {
+				const newHabitsToday = getTodaysHabits(habits)
+				if (newHabitsToday.length === habitsToday.length) {
+					setHabitsToday(newHabitsToday)
+				}
+			}
 		}
-    return ()=> { window.removeEventListener('resize', handleWidthChange ) }
-	},[])
+	},[habits])
+
 
 	return(
-		<div className={css.pageWrapper} ref={pageWidthRef}>
+		<div className={css.pageWrapper}>
 			<Navbar/>
 			<HabitModalList
 				habitList={currentHabitList}
@@ -176,12 +177,19 @@ export default function Dashboard() {
 							<DateHabits 
 								isLoading={isLoading}
 								dateSort={dateSort}
-								habits={habits} 
+								habits={habits}
 								selectedDates={selectedDates}
-								setCurrentHabit={setCurrentHabit} 
+								setCurrentHabit={setCurrentHabit}
 								setIsHabitModalOpen={setIsHabitModalOpen}
 								setIsHabitModalListOpen={setIsHabitModalListOpen}
 								setCurrentHabitList={setCurrentHabitList}
+								key={0}
+							/>
+							<HabitsToday
+								habitsToday={habitsToday} 
+								setCurrentHabit={setCurrentHabit}
+								setIsHabitModalOpen={setIsHabitModalOpen}
+								key={1}
 							/>
 						</AnimatePresence>
 					}
