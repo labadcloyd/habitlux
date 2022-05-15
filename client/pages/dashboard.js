@@ -1,5 +1,6 @@
 
 import { useEffect, useState } from 'react';
+import { useRouter } from 'next/router'
 
 import css from '../styles/dashboard.module.css'
 import { getAllUserHabits } from '../common/services/habit';
@@ -16,7 +17,9 @@ import {
 	decrementBiWeekly, 
 	decrementMonthly, 
 	decrementWeekly,
-	getTodaysHabits
+	getTodaysHabits,
+	localLogout,
+	isLoggedIn
 } from '../common/utils';
 import { 
 	Navbar,
@@ -46,6 +49,8 @@ export default function Dashboard() {
 	const [currentHabitList, setCurrentHabitList] = useState(DEFAULT_HABIT_LIST)
 	const [habitsToday, setHabitsToday] = useState([])
 
+	const router = useRouter()
+
 	async function fetchData() {
 		setIsLoading(true)
 		let selectedDatesWithHabits = [], newSelectedDates = []
@@ -71,6 +76,10 @@ export default function Dashboard() {
 			setHabits(formattedHabits)
 			setIsLoading(false)
 		} catch(err) {
+			if (err.response.status === 401) {
+				localLogout()
+				return router.push('/auth')
+			}
 			setNotifModalOpen(true)
 			setNotifModalContent({msg: "An error occurred in fetching the data", error: true})	
 			return setIsLoading(false)
@@ -97,18 +106,39 @@ export default function Dashboard() {
 
 		setSelectedDates(newSelectedDates)
 	
-		const res = await getAllUserHabits({ 
-			Start_Date: newSelectedDates[0],
-			End_Date: newSelectedDates[newSelectedDates.length - 1]
-		})
-		if (res.data.length < 1) {
-			setHabits(null)
+		try {
+			const res = await getAllUserHabits({ 
+				Start_Date: newSelectedDates[0],
+				End_Date: newSelectedDates[newSelectedDates.length - 1]
+			})
+			if (res.data.length < 1) {
+				setHabits(null)
+				return setIsLoading(false)
+			}
+			const formattedHabits = addHabitsToDate({habits: res.data, datesWithHabits: [...selectedDatesWithHabits] })
+			setHabits(formattedHabits)
+			return setIsLoading(false)
+		} catch(err) {
+			if (err.response.status === 401) {
+				localLogout()
+				return router.push('/auth')
+			}
+			setNotifModalOpen(true)
+			setNotifModalContent({msg: "An error occurred in fetching the data", error: true})	
 			return setIsLoading(false)
 		}
-		const formattedHabits = addHabitsToDate({habits: res.data, datesWithHabits: [...selectedDatesWithHabits] })
-		setHabits(formattedHabits)
-		setIsLoading(false)
 	}
+
+	async function checkIfLoggedIn() {
+		if (isLoggedIn() === false) {
+			await localLogout()
+			router.push('/auth')
+		}
+	}
+
+	useEffect(() => {
+		checkIfLoggedIn()
+	},[])
 
 	useEffect(() => {
 		fetchData()

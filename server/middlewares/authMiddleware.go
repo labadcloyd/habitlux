@@ -23,7 +23,7 @@ func AuthMiddleware(c *fiber.Ctx) *jwt.Token {
 	)
 	if err != nil {
 		log.Println(err)
-		c.Status(fiber.StatusBadRequest)
+		c.Status(fiber.StatusUnauthorized)
 		return nil
 	}
 	return token

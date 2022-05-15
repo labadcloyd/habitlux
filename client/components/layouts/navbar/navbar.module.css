@@ -14,13 +14,21 @@
 .navbarContainer {
 	display: flex;
 	align-items: center;
-	gap: 10px;
+	justify-content: space-between;
 
 	max-width: 1080px;
 	width: 100%;
 	padding: 15px;
 }
+.leftWrapper {
+	display: flex;
+	gap: 10px;
+	cursor: pointer;
+}
 .navbarContainer h1 {
+	display: flex;
+	align-items: center;
+
 	margin: 0;
 	font-size: 16px;
 	font-weight: 600;
@@ -29,4 +37,15 @@
 	display: flex;
 	align-items: center;
 	width: 20px;
+}
+
+.rightWrapper {
+	display: flex;
+	gap: 20px;
+}
+.rightWrapper h2 {
+	font-size: 14px;
+	font-weight: 400;
+	margin: 0;
+	cursor: pointer;
 }

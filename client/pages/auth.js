@@ -8,6 +8,7 @@ import { RippleLoader } from '../public/loaders'
 
 import { Signin, Signup } from '../common/services'
 import { VerifyToken } from "../common/services/auth"
+import LoaderPage from "../components/layouts/loaderPage/loaderPage"
 
 export default function Auth() {
   const router = useRouter()
@@ -64,6 +65,9 @@ export default function Auth() {
 					currentErrors.push("Server error, please try again.")
 				}
 				setErrorMsgs(currentErrors)
+			} else if (res.status === 200) {
+				localStorage.setItem('auth', JSON.stringify({isLoggedIn: true}))
+				router.push('/dashboard')
 			}
 		}
 		if (!isSignup) {
@@ -76,6 +80,9 @@ export default function Auth() {
 				const currentErrors = []
 				currentErrors.push("Username and password do not match")
 				setErrorMsgs(currentErrors)
+			} else if (res.status === 200) {
+				localStorage.setItem('auth', JSON.stringify({isLoggedIn: true}))
+				router.push('/dashboard')
 			}
 		}
 	}
@@ -94,17 +101,14 @@ export default function Auth() {
 
 	return (
 		<div className={css.pageWrapper}>
-			<div className={css.pageContainer}>
-				<a className={css.logoContainer} href="/">
-					<MediumLogo/>
-				</a>
-
-				<div className={css.formWrapper}>
-					{isLoading?
-						<div className={css.loadingWrapper}>
-							<RippleLoader/>
-						</div>
-					:
+				{isLoading ?
+					<LoaderPage />
+				:
+				<div className={css.pageContainer}>
+					<a className={css.logoContainer} href="/">
+						<MediumLogo/>
+					</a>
+					<div className={css.formWrapper}>
 						<div className={css.formContainer}>
 							<h2>{!isSignup ? "Sign in to your account" : "Register an account"}</h2>
 							
@@ -139,9 +143,9 @@ export default function Auth() {
 							</div>
 							<Button primary={true} onClick={submitData}>Continue</Button>
 						</div>
-					}
+					</div>
 				</div>
-			</div>
+			}
 		</div>
 	)
 }

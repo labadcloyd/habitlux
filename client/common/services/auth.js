@@ -19,9 +19,27 @@ export async function Signup({ username, password }) {
 	}
 }
 
+export async function Signout() {
+	try {
+		const res = await newAxios.post(AUTH_ENDPOINTS.SIGNOUT)
+		return res
+	} catch (err) {
+		return err.response
+	}
+}
+
 export async function VerifyToken() {
 	try {
 		const res = await newAxios.get(AUTH_ENDPOINTS.VERIFYTOKEN)
+		return res
+	} catch (err) {
+		return err.response
+	}
+}
+
+export async function GetUser() {
+	try {
+		const res = await newAxios.get(AUTH_ENDPOINTS.USER)
 		return res
 	} catch (err) {
 		return err.response

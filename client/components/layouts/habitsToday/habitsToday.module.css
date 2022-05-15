@@ -39,6 +39,12 @@
 	text-transform: capitalize;
 
 	margin: 0;
+	max-width: 200px;
+
+	display: block; 
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
 }
 .habitTitle span {
 	font-size: 12px;

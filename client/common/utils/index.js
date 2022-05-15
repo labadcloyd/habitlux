@@ -12,6 +12,7 @@ import {
 } from "./date"
 import { addHabitsToDate, getTodaysHabits } from "./format";
 import { useOutsideAlerter, calcBgColor } from "./helper";
+import { localLogin, localLogout, isLoggedIn} from "./auth";
 
 export {
 	newAxios,
@@ -27,5 +28,8 @@ export {
 	addHabitsToDate,
 	useOutsideAlerter,
 	calcBgColor,
-	getTodaysHabits
+	getTodaysHabits,
+	localLogin,
+	localLogout,
+	isLoggedIn
 }
