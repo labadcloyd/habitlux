@@ -148,16 +148,11 @@ export default function Dashboard() {
 	useEffect(() => {
 		if (habits !== null) {
 			//setting current habits
-			if (habitsToday.length < 1) {
-				const newHabitsToday = getTodaysHabits(habits)
-				setHabitsToday(newHabitsToday)
-			} else if (habitsToday.length > 0) {
-				const newHabitsToday = getTodaysHabits(habits)
-				// ! this is causing the habits today stay even when habit list is deleted
-				if (newHabitsToday.length === habitsToday.length) {
-					setHabitsToday(newHabitsToday)
-				}
+			const newHabitsToday = getTodaysHabits(habits)
+			if (newHabitsToday.length < 1) {
+				return
 			}
+			setHabitsToday(newHabitsToday)
 		}
 	},[habits])
 
@@ -175,6 +170,8 @@ export default function Dashboard() {
 				selectedDates={selectedDates}
 				setNotifModalOpen={setNotifModalOpen}
 				setNotifModalContent={setNotifModalContent}
+				habitsToday={habitsToday}
+				setHabitsToday={setHabitsToday}
 			/>
 			<HabitModal 
 				habit={currentHabit}

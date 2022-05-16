@@ -18,7 +18,9 @@ export default function HabitModalList(props) {
 		dateSort,
 		selectedDates,
 		setNotifModalOpen,
-		setNotifModalContent
+		setNotifModalContent,
+		habitsToday,
+		setHabitsToday
 	} = props
 
 	const [habitListState, setHabitListState] = useState(habitList)
@@ -102,6 +104,14 @@ export default function HabitModalList(props) {
 						newHabits.push(habits[i])
 					}
 				}
+				let newHabitsToday = []
+				for (let i = 0; i < habitsToday.length; i++) {
+					if (habitsToday[i].habit_name !== habitListState.habit_name) {
+						newHabitsToday.push(habitsToday[i])
+					}
+				}
+				setHabitsToday(newHabitsToday)
+				
 				setHabits(newHabits)
 				setNotifModalOpen(true)
 				setNotifModalContent({msg: "Successfully deleted habit list", error: false})	
