@@ -61,48 +61,10 @@ func CreateHabitList(c *fiber.Ctx) error {
 	}
 	// updating if old habit list already exists
 	if (oldHabitList != models.HabitList{}) {
-		newHabitList := models.HabitList {
-			Owner_ID: 						owner_id,
-			Habit_Name: 					reqData.Habit_Name,
-			Icon_Url: 						reqData.Icon_Url,
-			Color: 								reqData.Color,
-			Default_Repeat_Count: reqData.Default_Repeat_Count,
-		}
-		// updating habit list name
-		if err := database.DB.Model(&newHabitList).
-			Where("Owner_ID = ?", owner_id).
-			Where("ID = ?", oldHabitList.ID).
-			Updates(
-				map[string]interface{}{
-					"owner_id": owner_id,
-					"habit_name": reqData.Habit_Name,
-					"icon_url": reqData.Icon_Url,
-					"color": reqData.Color,
-					"default_repeat_count": reqData.Default_Repeat_Count,
-				},
-			).Error; err != nil {
-				return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
-					"message": err.Error(),
-				})
-			}
-		// updating all habits to the new habit list name
-		if err := database.DB.Model(&models.Habit{}).
-			Where("Owner_ID = ?", owner_id).
-			Where("Habit_Name = ?", oldHabitList.Habit_Name).
-			Updates(
-				map[string]interface{} {
-					"habit_name": reqData.Habit_Name,
-					"target_repeat_count": reqData.Default_Repeat_Count,
-				},
-			).Error; err != nil {
-				return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
-					"message": err.Error(),
-				})
-			}
-		log.Println("Successfully updated habit List and its habits")
-		return c.Status(fiber.StatusOK).JSON(newHabitList)
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"message": "Habitlist already exists",
+		})
 	}
-
 
 	//* saving the habit
 	habit := models.HabitList {

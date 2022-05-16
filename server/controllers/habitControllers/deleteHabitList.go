@@ -66,7 +66,7 @@ func DeleteHabitList(c *fiber.Ctx) error {
 	}
 
 	log.Println("Successfully deleted habit List and its habits")
-	return c.Status(fiber.StatusAccepted).JSON(fiber.Map{
+	return c.Status(fiber.StatusOK).JSON(fiber.Map{
 		"message": "Successfully deleted habit List and its habits",
 	})
 }

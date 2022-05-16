@@ -1,0 +1,31 @@
+.wrapper {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+
+	position: fixed;
+	top: 0;
+	width: 100vw;
+	height: 100vh;
+	z-index: 4;
+	background-color: rgba(0, 0, 0, 0.2);
+}
+.container {
+	display: flex;
+	flex-direction: column;
+	gap: 20px;
+
+	background-color: #fff;
+	padding: 20px;
+	border-radius: 10px;
+}
+.container h2{
+	margin: 0;
+	color: #ff6262;
+	font-weight: 600;
+}
+.btnContainer {
+	display: flex;
+	justify-content: space-between;
+	gap: 20px;
+}

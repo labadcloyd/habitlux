@@ -8,6 +8,7 @@ import NumberPicker from "./numberPicker/numberPicker";
 import HabitDay from "./habitDay";
 import NotifModal from "./notifModal";
 import Loader from "./loader";
+import ConfirmModal from "./confirmModal";
 
 export { 
 	TextInput, 
@@ -19,5 +20,6 @@ export {
 	NumberPicker, 
 	HabitDay,
 	NotifModal,
-	Loader
+	Loader,
+	ConfirmModal
 }

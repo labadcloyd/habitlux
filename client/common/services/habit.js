@@ -23,18 +23,26 @@ export async function createUserHabit(habit) {
 	return res
 }
 
-export async function createUserHabitList(habit) {
+export async function createUserHabitList(habitList) {
 	const res = await newAxios.post(
 		HABIT_ENDPOINTS.CREATE_HABIT_LIST,
-		{ ...habit }
+		{ ...habitList }
 	)
 	return res
 }
 
-export async function updateUserHabitList(habit) {
+export async function updateUserHabitList(habitList) {
 	const res = await newAxios.put(
 		HABIT_ENDPOINTS.UPDATE_HABIT_LIST,
-		{ ...habit }
+		{ ...habitList }
+	)
+	return res
+}
+
+export async function deleteUserHabitList({habit_name}) {
+	const res = await newAxios.delete(
+		HABIT_ENDPOINTS.DELETE_HABIT_LIST,
+		{ data: { habit_name: habit_name } }
 	)
 	return res
 }

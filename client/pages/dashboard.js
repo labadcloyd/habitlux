@@ -153,6 +153,7 @@ export default function Dashboard() {
 				setHabitsToday(newHabitsToday)
 			} else if (habitsToday.length > 0) {
 				const newHabitsToday = getTodaysHabits(habits)
+				// ! this is causing the habits today stay even when habit list is deleted
 				if (newHabitsToday.length === habitsToday.length) {
 					setHabitsToday(newHabitsToday)
 				}
@@ -216,12 +217,14 @@ export default function Dashboard() {
 								setCurrentHabitList={setCurrentHabitList}
 								key={0}
 							/>
-							<HabitsToday
-								habitsToday={habitsToday} 
-								setCurrentHabit={setCurrentHabit}
-								setIsHabitModalOpen={setIsHabitModalOpen}
-								key={1}
-							/>
+							{(habits !== null || habits?.length > 0) &&
+								<HabitsToday
+									habitsToday={habitsToday} 
+									setCurrentHabit={setCurrentHabit}
+									setIsHabitModalOpen={setIsHabitModalOpen}
+									key={1}
+								/>
+							}
 							<Footer/>
 						</AnimatePresence>
 					}
