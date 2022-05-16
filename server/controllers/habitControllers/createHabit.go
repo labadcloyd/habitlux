@@ -58,39 +58,11 @@ func CreateHabit(c *fiber.Ctx) error {
 			})
 		}
 	}
-
-	// updating habit if it already exists
+	// returning error if record exists
 	if (oldHabit != models.Habit{}) {
-		habit := models.Habit {
-			ID:										oldHabit.ID,
-			Owner_ID: 						owner_id,
-			Habit_Name:						reqData.Habit_Name,
-			Date_Created: 				reqData.Date_Created,
-			Comment: 							reqData.Comment,
-			Target_Repeat_Count: 	reqData.Target_Repeat_Count,
-			Repeat_Count: 				reqData.Repeat_Count,
-		}
-		if err := database.DB.Model(models.Habit{}).
-			Where("Owner_ID = ?", owner_id).
-			Where("ID = ?", oldHabit.ID).
-			Updates(
-				map[string]interface{}{
-					"id": oldHabit.ID, 
-					"owner_id": owner_id,
-					"habit_name": reqData.Habit_Name,
-					"date_created": reqData.Date_Created,
-					"comment": reqData.Comment,
-					"target_repeat_count": reqData.Target_Repeat_Count,
-					"repeat_count": reqData.Repeat_Count,
-				},
-			).Error; err != nil {
-				return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
-					"message": err.Error(),
-				})
-		}
-	
-		log.Println("Successfully updated habit")
-		return c.Status(fiber.StatusOK).JSON(habit)
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"message": "Habit already exists",
+		})
 	}
 
 	//* saving the habit
