@@ -189,7 +189,7 @@ export default function Dashboard() {
 				setContent={setNotifModalContent}
 			/>
 			<div className={css.pageContainer}>
-				<div className={css.contentContainer}>
+				<div className={css.contentWrapper}>
 					<DateChanger
 						setIsLoading={setIsLoading}
 						setCurrentHabitList={setCurrentHabitList}
@@ -203,28 +203,30 @@ export default function Dashboard() {
 						<LoaderPage />
 					:
 						<AnimatePresence>
-							<DateHabits 
-								isLoading={isLoading}
-								dateSort={dateSort}
-								habits={habits}
-								selectedDates={selectedDates}
-								setCurrentHabit={setCurrentHabit}
-								setIsHabitModalOpen={setIsHabitModalOpen}
-								setIsHabitModalListOpen={setIsHabitModalListOpen}
-								setCurrentHabitList={setCurrentHabitList}
-								key={0}
-							/>
-							{(habits !== null || habits?.length > 0) &&
-								<HabitsToday
-									habitsToday={habitsToday} 
+							<div className={css.contentContainer}>
+								<DateHabits 
+									isLoading={isLoading}
+									dateSort={dateSort}
+									habits={habits}
+									selectedDates={selectedDates}
 									setCurrentHabit={setCurrentHabit}
 									setIsHabitModalOpen={setIsHabitModalOpen}
-									key={1}
+									setIsHabitModalListOpen={setIsHabitModalListOpen}
+									setCurrentHabitList={setCurrentHabitList}
+									key={0}
 								/>
-							}
-							<Footer/>
+								{(habits !== null || habits?.length > 0) &&
+									<HabitsToday
+										habitsToday={habitsToday} 
+										setCurrentHabit={setCurrentHabit}
+										setIsHabitModalOpen={setIsHabitModalOpen}
+										key={1}
+									/>
+								}
+							</div>
 						</AnimatePresence>
 					}
+					<Footer/>
 				</div>
 			</div>
 		</div>
