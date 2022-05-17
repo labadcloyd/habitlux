@@ -11,4 +11,5 @@ func AuthRoutes(app *fiber.App) {
 	app.Get("/api/user", controllers.User)
 	app.Post("/api/logout", controllers.Logout)
 	app.Get("/api/verifytoken", controllers.VerifyToken)
+	app.Post("/api/demologin", controllers.DemoLogin)
 }

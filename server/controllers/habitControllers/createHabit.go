@@ -51,6 +51,7 @@ func CreateHabit(c *fiber.Ctx) error {
 	if err := database.DB.Model(&models.Habit{}).
 	Where("Owner_ID = ?", owner_id).
 	Where("Date_Created = ?", reqData.Date_Created).
+	Where("Habit_Name = ?", reqData.Habit_Name).
 	First(&oldHabit).Error; err != nil {
 		if ( !(errors.Is(err, gorm.ErrRecordNotFound)) ) {
 			return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{

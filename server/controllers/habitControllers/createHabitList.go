@@ -46,7 +46,7 @@ func CreateHabitList(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusBadRequest).JSON(reqErrors)
 	}
 
-	//* updating habitlist if it already exists
+	//* checking if it already exists
 	oldHabitList := models.HabitList{}
 	if err := database.DB.Model(&models.HabitList{}).
 		Where("Owner_ID = ?", owner_id).
@@ -59,7 +59,7 @@ func CreateHabitList(c *fiber.Ctx) error {
 		}
 		log.Println(err)
 	}
-	// updating if old habit list already exists
+	// returning error if old habit list already exists
 	if (oldHabitList != models.HabitList{}) {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 			"message": "Habitlist already exists",
