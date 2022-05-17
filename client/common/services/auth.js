@@ -45,3 +45,12 @@ export async function GetUser() {
 		return err.response
 	}
 }
+
+export async function DemoLogin() {
+	try {
+		const res = await newAxios.post(AUTH_ENDPOINTS.DEMO_LOGIN)
+		return res
+	} catch (err) {
+		return err.response
+	}
+}

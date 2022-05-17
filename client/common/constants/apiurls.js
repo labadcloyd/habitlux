@@ -5,7 +5,8 @@ export const AUTH_ENDPOINTS = {
 	SIGNIN: '/api/login',
 	SIGNOUT: '/api/logout',
 	USER: '/api/user',
-	VERIFYTOKEN: '/api/verifytoken'
+	VERIFYTOKEN: '/api/verifytoken',
+	DEMO_LOGIN: '/api/demologin'
 }
 
 export const HABIT_ENDPOINTS = {

@@ -1,16 +1,26 @@
 import Link from 'next/link'
 import css from '../styles/Home.module.css'
 import { Mockup } from '../public/svgs'
-import { Footer } from '../components/layouts'
+import { useRouter } from 'next/router'
+import { DemoLogin } from '../common/services/auth'
+import { localLogin } from '../common/utils'
 
 export default function Home() {
+	const router = useRouter()
+
+  async function demoLogin() {
+    await localLogin()
+    await DemoLogin()
+    router.push('/dashboard')
+  }
+
   return (
     <div className={css.pageWrapper}>
       <div className={css.pageContainer} >
         <div className={css.headerWrapper}>
           <h1>Build up Your Habits</h1>
           <div className={css.buttonWrapper}>
-            <Link href="/" passHref> Demo </Link>
+            <a onClick={demoLogin}> Demo </a>
             <Link href="/auth" passHref> Sign in / Sign up </Link>
           </div>
         </div>
