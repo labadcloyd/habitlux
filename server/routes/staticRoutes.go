@@ -10,7 +10,7 @@ func StaticRoutes(app *fiber.App) {
 		Browse:        true,
 		Index:         "index.html",
 	}
-	app.Static("/", 					"./build/index.html", staticConfig)
+	app.Static("/", 					"./build", staticConfig)
 	app.Static("/auth", 			"./build/auth.html", staticConfig)
 	app.Static("/dashboard",	"./build/dashboard.html", staticConfig)
 }

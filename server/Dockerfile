@@ -1,28 +1,15 @@
-# Building the binary of the App
-FROM golang:1.15 AS build
-
-# `boilerplate` should be replaced with your project name
-WORKDIR /go/src/habitlux
-
-# Copy all the Code and stuff to compile everything
-COPY . .
-
-# Downloads all the dependencies in advance (could be left out, but it's more clear this way)
-RUN go mod download
-
-# Builds the application as a staticly linked one, to allow it to run on alpine
-RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -a -installsuffix cgo -o app .
-
-
-# Moving the binary to the 'final Image' to make it smaller
-FROM alpine:latest
-
+# Stage 1
+FROM golang:alpine as builder
+RUN apk update && apk add --no-cache git
+RUN mkdir /build 
+ADD . /build/
+WORKDIR /build
+RUN go get -d -v
+RUN go build -o habitlux .
+# Stage 2
+FROM alpine
+RUN adduser -S -D -H -h /app appuser
+USER appuser
+COPY --from=builder /build/ /app/
 WORKDIR /app
-
-# `boilerplate` should be replaced here as well
-COPY --from=build /go/src/habitlux/app .
-
-# Exposes port 3000 because our program listens on that port
-EXPOSE 3000
-
-CMD ["./app"]
+CMD ["./habitlux"]
