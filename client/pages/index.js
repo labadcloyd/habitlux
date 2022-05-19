@@ -11,7 +11,7 @@ export default function Home() {
   async function demoLogin() {
     await localLogin()
     await DemoLogin()
-    router.push('/dashboard')
+    await router.push('/dashboard')
   }
 
   return (

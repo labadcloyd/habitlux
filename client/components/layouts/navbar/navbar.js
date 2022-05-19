@@ -18,7 +18,7 @@ export default function Navbar() {
 				setUsername(res.data.username)
 			} catch (err) {
 				if (err.response.status === 401) {
-					localLogout()
+					await localLogout()
 					return router.push('/auth')
 				}
 			}

@@ -9,6 +9,7 @@ import { RippleLoader } from '../public/loaders'
 import { Signin, Signup } from '../common/services'
 import { VerifyToken } from "../common/services/auth"
 import LoaderPage from "../components/layouts/loaderPage/loaderPage"
+import { BASE_URL } from "../common/constants"
 
 export default function Auth() {
   const router = useRouter()
@@ -76,14 +77,13 @@ export default function Auth() {
 			if (errLength > 0) { return }
 
 			const res = await Signin(data)
-			console.log(res)
 			if (res.status !== 200) {
 				const currentErrors = []
 				currentErrors.push("Username and password do not match")
 				setErrorMsgs(currentErrors)
 			} else if (res.status === 200) {
-				localStorage.setItem('auth', JSON.stringify({isLoggedIn: true}))
-				router.push('/dashboard')
+				await localStorage.setItem('auth', JSON.stringify({isLoggedIn: true}))
+				await router.push('/dashboard')
 			}
 		}
 	}

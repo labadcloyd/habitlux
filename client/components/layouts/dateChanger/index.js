@@ -1,3 +1,3 @@
-import DateChanger from "./DateChanger";
+import DateChanger from "./dateChanger";
 
 export default DateChanger

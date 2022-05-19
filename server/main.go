@@ -2,6 +2,7 @@ package main
 
 import (
 	"habit-tracker/database"
+	"habit-tracker/helpers"
 	"habit-tracker/routes"
 	"log"
 
@@ -19,16 +20,17 @@ func main() {
 	app.Use(cors.New(cors.Config {
 		AllowCredentials: true,
 	}))
+	
+	// ui
+	routes.StaticRoutes(app)
 
 	// routes
 	routes.AuthRoutes(app)
 	routes.HabitRoutes(app)
 
-
-	// returning 404 after wrong route
-	app.Use(func(c *fiber.Ctx) error {
-		return c.Status(fiber.StatusNotFound).SendString("Error 404: not found")
-	})
-
-	log.Fatal(app.Listen(":3001"))
+	port := helpers.GoDotEnvVariable("PORT")
+	if port == "" {
+		port = "3000"
+	}
+	log.Fatal(app.Listen(":"+ port))
 }

@@ -1,4 +1,4 @@
-export const BASE_URL = 'http://localhost:3001'
+export const BASE_URL = 'https://habitlux.herokuapp.com'
 
 export const AUTH_ENDPOINTS = {
 	SIGNUP: '/api/signup',
