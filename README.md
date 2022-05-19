@@ -2,7 +2,7 @@
 <br />
 <div align="center">
   <a href="https://github.com/labadcloyd/habitlux">
-    <img src="https://github.com/labadcloyd/habitlux/tree/master/.public/favicon.ico" alt="Logo" width="80" height="80">
+    <img src="https://raw.githubusercontent.com/labadcloyd/habitlux/master/.public/favicon.ico" alt="Logo" width="80" height="80">
   </a>
 
   <h3 align="center">Habitlux</h3>
@@ -146,4 +146,4 @@ Project Link: [https://github.com/labadcloyd/habitlux](https://github.com/labadc
 <p align="right">(<a href="#top">back to top</a>)</p>
 
 
-[product-screenshot]: https://github.com/labadcloyd/habitlux/tree/master/.public/screenshot.png
+[product-screenshot]: https://raw.githubusercontent.com/labadcloyd/habitlux/master/.public/screenshot.jpg
