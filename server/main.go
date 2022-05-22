@@ -12,7 +12,22 @@ import (
 
 func main() {
 	database.Connect()
-	app := fiber.New()
+	app := fiber.New(fiber.Config{
+    ErrorHandler: func(ctx *fiber.Ctx, err error) error {
+        code := fiber.StatusInternalServerError
+        if e, ok := err.(*fiber.Error); ok {
+					code = e.Code
+        }
+        // Send custom error page
+        err = ctx.Status(code).SendFile("./build/notfound.html")
+        if err != nil {
+            // In case the SendFile fails
+            return ctx.Status(fiber.StatusInternalServerError).SendString("Internal Server Error")
+        }
+        // Return from handler
+        return nil
+    },
+})
 
 	// allowing clients from different urls to access server
 	// it is very important that we use the cors config first before-
