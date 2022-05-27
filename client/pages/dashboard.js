@@ -85,7 +85,6 @@ export default function Dashboard() {
 			setNotifModalContent({msg: "An error occurred in fetching the data", error: true})	
 			return setIsLoading(false)
 		}
-		
 	}
 
 	async function changeDate({increment}) {

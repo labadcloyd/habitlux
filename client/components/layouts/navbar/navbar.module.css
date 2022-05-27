@@ -46,6 +46,7 @@
 .rightWrapper h2 {
 	font-size: 14px;
 	font-weight: 400;
+	text-transform: capitalize;
 	margin: 0;
 	cursor: pointer;
 }

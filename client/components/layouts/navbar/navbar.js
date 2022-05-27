@@ -46,8 +46,9 @@ export default function Navbar() {
 				</div>
 
 				<div className={css.rightWrapper}>
+					<h2 onClick={() => {router.push('/dashboard')}}> Dashboard </h2>
 					{ username &&
-						<h2 onClick={() => {router.push('/dashboard')}}> {username} </h2>
+						<h2> {username} </h2>
 					}
 					<h2 onClick={logout}>Logout</h2>
 				</div>
