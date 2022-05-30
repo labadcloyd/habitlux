@@ -48,11 +48,10 @@ func CreateHabit(c *fiber.Ctx) error {
 	//* checking if record exists
 	oldHabit := models.Habit{}
 
-	if err := database.DB.Model(&models.Habit{}).
-	Where("Owner_ID = ?", owner_id).
-	Where("Date_Created = ?", reqData.Date_Created).
-	Where("Habit_Name = ?", reqData.Habit_Name).
-	First(&oldHabit).Error; err != nil {
+	if err := database.DB.Raw(`SELECT * FROM habits
+			WHERE owner_id = ? AND date_created = ? AND habit_name = ?
+		`, owner_id, reqData.Date_Created, reqData.Habit_Name).
+		Scan(&oldHabit).Error; err != nil {
 		if ( !(errors.Is(err, gorm.ErrRecordNotFound)) ) {
 			return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
 				"message": err.Error(),

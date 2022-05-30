@@ -48,10 +48,10 @@ func CreateHabitList(c *fiber.Ctx) error {
 
 	//* checking if it already exists
 	oldHabitList := models.HabitList{}
-	if err := database.DB.Model(&models.HabitList{}).
-		Where("Owner_ID = ?", owner_id).
-		Where("habit_name = ?", reqData.Habit_Name).
-		Find(&oldHabitList).Error; err != nil {
+	if err := database.DB.Raw(`
+			SELECT * FROM habit_lists WHERE owner_id = ? AND habit_name = ? LIMIT 1`,
+			owner_id, reqData.Habit_Name).
+		Scan(&oldHabitList).Error; err != nil {
 			if ( !(errors.Is(err, gorm.ErrRecordNotFound)) ) {
 				return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
 					"message": err.Error(),

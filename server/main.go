@@ -27,7 +27,7 @@ func main() {
         // Return from handler
         return nil
     },
-})
+	})
 
 	// allowing clients from different urls to access server
 	// it is very important that we use the cors config first before-

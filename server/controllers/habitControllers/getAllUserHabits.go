@@ -49,9 +49,9 @@ func GetAllUserHabits(c *fiber.Ctx) error {
 	habitList := []models.HabitList{}
 	habitListFormatted := []ResGetUserHabits{}
 	// getting the list of habit names
-	if err := database.DB.Model(&models.HabitList{}).
-		Where("Owner_ID = ?", owner_id).
-		Find(&habitList).Error; err != nil {
+	if err := database.DB.Raw(`
+			SELECT * FROM habit_lists WHERE owner_id = ? LIMIT 1
+		`, owner_id).Scan(&habitList).Error; err != nil {
 			log.Println(err)
 			c.Status(fiber.StatusBadRequest)
 			return c.JSON(fiber.Map{
@@ -59,12 +59,12 @@ func GetAllUserHabits(c *fiber.Ctx) error {
 			})
 	}
 	// getting habits
-	if err := database.DB.Model(&models.Habit{}).
-		Where("Owner_ID = ?", owner_id).
-		Where("Date_Created BETWEEN ? AND ?", reqData.Start_Date, reqData.End_Date).
-		Group("Habit_Name, Date_Created").
-		Order("Date_Created asc").
-		Find(&habits).Error; err != nil {
+	if err := database.DB.
+		Raw(`SELECT * FROM habits
+			WHERE owner_ID = ? AND date_Created BETWEEN ? AND ?
+			ORDER BY habit_Name, date_Created asc
+		`, owner_id, reqData.Start_Date, reqData.End_Date).
+		Scan(&habits).Error; err != nil {
 			log.Println(err)
 			c.Status(fiber.StatusBadRequest)
 			return c.JSON(fiber.Map{
