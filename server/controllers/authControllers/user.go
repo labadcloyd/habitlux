@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"database/sql"
 	"habit-tracker/database"
 	"habit-tracker/models"
 	"log"
@@ -32,18 +33,16 @@ func User(c *fiber.Ctx) error {
 
 	user := models.User{}
 
-	row, err := database.DB.
-		Query("SEELCT * FROM users WHERE id = $1 LIMIT 1", claims.Issuer)
-	if err != nil {
-		log.Println(err)
-		c.Status(fiber.StatusBadRequest)
-		return c.JSON(fiber.Map{
-			"message": "No user found",
-		})
-	}
-	defer row.Close()
+	row := database.DB.
+		QueryRow("SEELCT * FROM users WHERE id = $1", claims.Issuer)
 	// scanning and returning error
-	if err := row.Scan(&user.Username, &user.ID); err != nil {
+	err = row.Scan(&user.Username, &user.ID)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+				"message": "No user found",
+			})
+		}
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 			"message": "An error occured in scanning user",
 		})

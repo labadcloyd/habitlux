@@ -18,6 +18,7 @@ func Signup(c *fiber.Ctx) error {
 	// data validation
 	reqData := new(ReqSignUp)
 	if err := c.BodyParser(&reqData); err != nil {
+		log.Println("Error: ", err)
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
 			"message": err.Error(),
 		})
@@ -25,6 +26,7 @@ func Signup(c *fiber.Ctx) error {
 	errors := helpers.ValidateStruct(*reqData)
 
 	if errors != nil {
+		log.Println("Error: ", errors)
 		return c.Status(fiber.StatusBadRequest).JSON(errors)
 	}
 
@@ -36,10 +38,13 @@ func Signup(c *fiber.Ctx) error {
 	}
 
 	// saving user
-	if _, err := database.DB.
-		Exec("INSERT INTO users (username, password) VALUES ($1, $2)", user.Username, user.Password)
-		err != nil {
-			return c.Status(fiber.StatusBadRequest).JSON(err)
+	row := database.DB.
+		QueryRow("INSERT INTO users (username, password) VALUES ($1, $2) RETURNING id", user.Username, user.Password)
+
+	err := row.Scan(&user.ID)
+	if err != nil {
+		log.Println("Error: ", err.Error())
+		return c.Status(fiber.StatusInternalServerError).JSON(err)
 	}
 
 	// generating jwt token

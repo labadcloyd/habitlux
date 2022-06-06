@@ -28,26 +28,18 @@ func Login(c *fiber.Ctx) error {
 	var user = models.User{}
 
 	// checking if user exists
-	row, err := database.DB.
-		Query("SELECT * FROM users WHERE username = $1 LIMIT 1", reqData.Username); 
-	if err != nil {
-		c.Status(fiber.StatusInternalServerError)
-		return c.JSON(fiber.Map {
-			"message": "An error occured in scanning user",
-		})
-	}
-	defer row.Close()
+	row := database.DB.
+		QueryRow("SELECT * FROM users WHERE username = $1", reqData.Username); 
 	// scanning and returning error
 	if err := row.Scan(&user.Username, &user.ID); err != nil {
-		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map {
 			"message": "user not found",
 		})
 	}
 
 	// checking if password matches user
 	if err := bcrypt.CompareHashAndPassword(user.Password, []byte(reqData.Password)); err != nil {
-		c.Status(fiber.StatusBadRequest)
-		return c.JSON(fiber.Map{
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 			"message": "inccorect password",
 		})
 	}

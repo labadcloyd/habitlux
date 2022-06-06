@@ -17,16 +17,10 @@ import (
 func DemoLogin(c *fiber.Ctx) error {
 	// checking if user exists
 	var user = models.User{}
-
-	row, err := database.DB.Query("SELECT * FROM users WHERE username = $1 LIMIT 1", "demo")
-	if err != nil {
-		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
-			"message": "An error occured in the server",
-		})
-	}
-	defer row.Close()
+	row := database.DB.QueryRow("SELECT * FROM users WHERE username = $1", "demo")
 	// scanning and returning error
-	if err = row.Scan(&user.Username, &user.ID); err == sql.ErrNoRows {
+	err := row.Scan(&user.Username, &user.ID)
+	if err == sql.ErrNoRows {
 		// hashing password and formatting data
 		password, _ := bcrypt.GenerateFromPassword([]byte("vErYSeCuRePaSsWoRd123!"), 10)
 		user = models.User {
@@ -34,18 +28,15 @@ func DemoLogin(c *fiber.Ctx) error {
 			Password: password,
 		}
 		// saving user
-		row2, err := database.DB.
-			Query("INSERT INTO users (username, password) VALUES ($1, $2) RETURNING id", user.Username, user.Password)
-		if err != nil {
-				return c.Status(fiber.StatusInternalServerError).JSON(err)
-		}
+		row2 := database.DB.
+			QueryRow("INSERT INTO users (username, password) VALUES ($1, $2) RETURNING id", user.Username, user.Password)
 		// scanning and returning error
-		if err := row2.Scan(&user.ID); err != nil {
+		if err = row2.Scan(&user.ID); err != nil {
+			log.Println("Error: ", err.Error())
 			return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
 				"message": "An error occured in scanning user after query",
 			})
 		}
-		defer row2.Close()
 	}
 
 	// generating jwt token
