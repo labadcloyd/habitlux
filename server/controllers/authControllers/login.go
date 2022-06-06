@@ -8,8 +8,8 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/golang-jwt/jwt/v4"
 	"github.com/gofiber/fiber/v2"
+	"github.com/golang-jwt/jwt/v4"
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -28,17 +28,18 @@ func Login(c *fiber.Ctx) error {
 	var user = models.User{}
 
 	// checking if user exists
-	if err := database.
-		DB.Where("username = ?", reqData.Username).First(&user).Error; 
-		err != nil {
-			c.Status(fiber.StatusBadRequest)
-			return c.JSON(fiber.Map{
-				"message": "user not found",
-			})
+	row, err := database.DB.
+		Query("SELECT * FROM users WHERE username = $1 LIMIT 1", reqData.Username); 
+	if err != nil {
+		c.Status(fiber.StatusInternalServerError)
+		return c.JSON(fiber.Map {
+			"message": "An error occured in scanning user",
+		})
 	}
-	if user.ID == 0 {
-		c.Status(fiber.StatusBadRequest)
-		return c.JSON(fiber.Map{
+	defer row.Close()
+	// scanning and returning error
+	if err := row.Scan(&user.Username, &user.ID); err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 			"message": "user not found",
 		})
 	}

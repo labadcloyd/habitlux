@@ -16,28 +16,30 @@ import (
 
 func Signup(c *fiber.Ctx) error {
 	// data validation
-	data := new(ReqSignUp)
-	if err := c.BodyParser(&data); err != nil {
+	reqData := new(ReqSignUp)
+	if err := c.BodyParser(&reqData); err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
 			"message": err.Error(),
 		})
 	}
-	errors := helpers.ValidateStruct(*data)
+	errors := helpers.ValidateStruct(*reqData)
 
 	if errors != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(errors)
 	}
 
-	// hashing password and formatting data
-	password, _ := bcrypt.GenerateFromPassword([]byte(data.Password), 10)
+	// hashing password and formatting reqData
+	password, _ := bcrypt.GenerateFromPassword([]byte(reqData.Password), 10)
 	user := models.User {
-		Username: data.Username,
+		Username: reqData.Username,
 		Password: password,
 	}
 
 	// saving user
-	if err := database.DB.Create(&user).Error; err != nil {
-		return c.Status(fiber.StatusBadRequest).JSON(err)
+	if _, err := database.DB.
+		Exec("INSERT INTO users (username, password) VALUES ($1, $2)", user.Username, user.Password)
+		err != nil {
+			return c.Status(fiber.StatusBadRequest).JSON(err)
 	}
 
 	// generating jwt token

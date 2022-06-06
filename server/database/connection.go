@@ -3,8 +3,10 @@ package database
 import (
 	"habit-tracker/helpers"
 	"log"
+	"time"
 
 	"database/sql"
+
 	_ "github.com/lib/pq"
 )
 
@@ -17,6 +19,7 @@ func Connect() {
 	if err != nil {
 		log.Fatal(err)
 	}
+	DB.SetConnMaxIdleTime(time.Minute * 2)
 	pingErr := DB.Ping()
 	if pingErr != nil {
 		log.Fatal(pingErr)
