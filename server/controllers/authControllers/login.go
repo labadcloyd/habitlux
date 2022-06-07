@@ -59,12 +59,12 @@ func Login(c *fiber.Ctx) error {
 
 	// saving jwt to cookie
 	cookie := fiber.Cookie{
-		Name: "jwt",
-		Value: token,
-		Expires: time.Now().AddDate(0, 1, 0),
+		Name: 		"jwt",
+		Value: 		token,
+		Expires: 	time.Now().AddDate(0, 1, 0),
 		HTTPOnly: true,
 		SameSite: "None",
-		Secure: true,
+		Secure: 	true,
 	}
 
 	c.Cookie(&cookie)
