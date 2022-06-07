@@ -34,7 +34,7 @@ func User(c *fiber.Ctx) error {
 	user := models.User{}
 
 	row := database.DB.
-		QueryRow("SEELCT * FROM users WHERE id = $1", claims.Issuer)
+		QueryRow("SELECT username, id FROM users WHERE id = $1", claims.Issuer)
 	// scanning and returning error
 	err = row.Scan(&user.Username, &user.ID)
 	if err != nil {
@@ -43,6 +43,7 @@ func User(c *fiber.Ctx) error {
 				"message": "No user found",
 			})
 		}
+		log.Println("Error: ", err.Error())
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 			"message": "An error occured in scanning user",
 		})

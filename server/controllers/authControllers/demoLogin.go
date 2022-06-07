@@ -17,9 +17,9 @@ import (
 func DemoLogin(c *fiber.Ctx) error {
 	// checking if user exists
 	var user = models.User{}
-	row := database.DB.QueryRow("SELECT * FROM users WHERE username = $1", "demo")
+	row := database.DB.QueryRow("SELECT username, id, password FROM users WHERE username = $1", "demo")
 	// scanning and returning error
-	err := row.Scan(&user.Username, &user.ID)
+	err := row.Scan(&user.Username, &user.ID, &user.Password)
 	if err == sql.ErrNoRows {
 		// hashing password and formatting data
 		password, _ := bcrypt.GenerateFromPassword([]byte("vErYSeCuRePaSsWoRd123!"), 10)

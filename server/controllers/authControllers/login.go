@@ -29,9 +29,9 @@ func Login(c *fiber.Ctx) error {
 
 	// checking if user exists
 	row := database.DB.
-		QueryRow("SELECT * FROM users WHERE username = $1", reqData.Username); 
+		QueryRow("SELECT username, id, password FROM users WHERE username = $1", reqData.Username); 
 	// scanning and returning error
-	if err := row.Scan(&user.Username, &user.ID); err != nil {
+	if err := row.Scan(&user.Username, &user.ID, &user.Password); err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map {
 			"message": "user not found",
 		})
