@@ -69,7 +69,7 @@ export default function Dashboard() {
 				Start_Date: newSelectedDates[0],
 				End_Date: newSelectedDates[newSelectedDates.length - 1]
 			})
-			if (res.data.length < 1) {
+			if (!res.data) {
 				setHabits(null)
 				return setIsLoading(false)
 			}
@@ -77,7 +77,8 @@ export default function Dashboard() {
 			setHabits(formattedHabits)
 			setIsLoading(false)
 		} catch(err) {
-			if (err.response.status === 401) {
+			console.log(err)
+			if (err?.response?.status === 401) {
 				localLogout()
 				return router.push('/auth')
 			}
@@ -111,7 +112,7 @@ export default function Dashboard() {
 				Start_Date: newSelectedDates[0],
 				End_Date: newSelectedDates[newSelectedDates.length - 1]
 			})
-			if (res.data.length < 1) {
+			if (res.data?.length < 1 || !res.data) {
 				setHabits(null)
 				return setIsLoading(false)
 			}
@@ -119,6 +120,7 @@ export default function Dashboard() {
 			setHabits(formattedHabits)
 			return setIsLoading(false)
 		} catch(err) {
+			console.log(err)
 			if (err.response.status === 401) {
 				localLogout()
 				return router.push('/auth')

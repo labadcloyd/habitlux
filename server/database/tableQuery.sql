@@ -1,6 +1,6 @@
 CREATE TABLE users (
     id                      SERIAL PRIMARY KEY,
-    username                VARCHAR(100),
+    username                VARCHAR(100) UNIQUE,
     password                VARCHAR(1000)
 );
 CREATE TABLE habit_lists (
@@ -21,6 +21,6 @@ CREATE TABLE habits (
     target_repeat_count     INT,
     repeat_count            INT,
     FOREIGN KEY(owner_id)   REFERENCES users(id) ON DELETE CASCADE,
-    FOREIGN KEY(habit_name) REFERENCES habit_lists(habit_name) ON DELETE CASCADE
+    FOREIGN KEY(habit_name) REFERENCES habit_lists(habit_name) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
