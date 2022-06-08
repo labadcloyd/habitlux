@@ -2,27 +2,27 @@ package database
 
 import (
 	"habit-tracker/helpers"
-	"habit-tracker/models"
 	"log"
-	"gorm.io/driver/mysql"
-	"gorm.io/gorm"
+	"time"
+
+	"database/sql"
+
+	_ "github.com/lib/pq"
 )
 
-var DB *gorm.DB
+var DB *sql.DB
 
 func Connect() {
-	dbUrl := helpers.GoDotEnvVariable("MYSQL_URL")
-	
-	connection, err := gorm.Open(mysql.Open(dbUrl), &gorm.Config{})
-
+	connStr := helpers.GoDotEnvVariable("POSTGRES_URL")
+	var err error
+	DB, err = sql.Open("postgres", connStr)
 	if err != nil {
-		panic("Could not connect to the database")
+		log.Fatal(err)
 	}
-	log.Println("Successfully connected to database")
-
-	DB = connection
-
-	connection.AutoMigrate(&models.User{})
-	connection.AutoMigrate(&models.Habit{})
-	connection.AutoMigrate(&models.HabitList{})
+	DB.SetConnMaxIdleTime(time.Minute * 2)
+	pingErr := DB.Ping()
+	if pingErr != nil {
+		log.Fatal(pingErr)
+	}
+	log.Println("Connected!")
 }

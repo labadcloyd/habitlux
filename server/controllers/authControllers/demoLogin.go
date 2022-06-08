@@ -1,14 +1,15 @@
 package controllers
 
 import (
+	"database/sql"
 	"habit-tracker/database"
 	"habit-tracker/models"
 	"log"
 	"strconv"
 	"time"
 
-	"github.com/golang-jwt/jwt/v4"
 	"github.com/gofiber/fiber/v2"
+	"github.com/golang-jwt/jwt/v4"
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -16,24 +17,28 @@ import (
 func DemoLogin(c *fiber.Ctx) error {
 	// checking if user exists
 	var user = models.User{}
-
-	if err := database.DB.
-		Where("username = ?", "demo").
-		First(&user).Error; 
-		err != nil {
-			// hashing password and formatting data
-			password, _ := bcrypt.GenerateFromPassword([]byte("vErYSeCuRePaSsWoRd123!"), 10)
-			user = models.User {
-				Username: "demo",
-				Password: password,
-			}
-		
-			// saving user
-			if err := database.DB.Create(&user).Error; err != nil {
-				return c.Status(fiber.StatusBadRequest).JSON(err)
-			}
+	row := database.DB.QueryRow("SELECT username, id, password FROM users WHERE username = $1", "demo")
+	// scanning and returning error
+	err := row.Scan(&user.Username, &user.ID, &user.Password)
+	if err == sql.ErrNoRows {
+		// hashing password and formatting data
+		password, _ := bcrypt.GenerateFromPassword([]byte("vErYSeCuRePaSsWoRd123!"), 10)
+		user = models.User {
+			Username: "demo",
+			Password: password,
+		}
+		// saving user
+		row2 := database.DB.
+			QueryRow("INSERT INTO users (username, password) VALUES ($1, $2) RETURNING id", user.Username, user.Password)
+		// scanning and returning error
+		if err = row2.Scan(&user.ID); err != nil {
+			log.Println("Error: ", err.Error())
+			return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+				"message": "An error occured in scanning user after query",
+			})
+		}
 	}
-	
+
 	// generating jwt token
 	claims := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.RegisteredClaims{
 		Issuer: strconv.Itoa(int(user.ID)),
@@ -49,12 +54,12 @@ func DemoLogin(c *fiber.Ctx) error {
 
 	// saving jwt to cookie
 	cookie := fiber.Cookie{
-		Name: "jwt",
-		Value: token,
-		Expires: time.Now().AddDate(0, 1, 0),
+		Name: 		"jwt",
+		Value: 		token,
+		Expires: 	time.Now().AddDate(0, 1, 0),
 		HTTPOnly: true,
 		SameSite: "None",
-		Secure: true,
+		Secure: 	true,
 	}
 
 	c.Cookie(&cookie)

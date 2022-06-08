@@ -8,8 +8,8 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/golang-jwt/jwt/v4"
 	"github.com/gofiber/fiber/v2"
+	"github.com/golang-jwt/jwt/v4"
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -28,25 +28,18 @@ func Login(c *fiber.Ctx) error {
 	var user = models.User{}
 
 	// checking if user exists
-	if err := database.
-		DB.Where("username = ?", reqData.Username).First(&user).Error; 
-		err != nil {
-			c.Status(fiber.StatusBadRequest)
-			return c.JSON(fiber.Map{
-				"message": "user not found",
-			})
-	}
-	if user.ID == 0 {
-		c.Status(fiber.StatusBadRequest)
-		return c.JSON(fiber.Map{
+	row := database.DB.
+		QueryRow("SELECT username, id, password FROM users WHERE username = $1", reqData.Username); 
+	// scanning and returning error
+	if err := row.Scan(&user.Username, &user.ID, &user.Password); err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map {
 			"message": "user not found",
 		})
 	}
 
 	// checking if password matches user
 	if err := bcrypt.CompareHashAndPassword(user.Password, []byte(reqData.Password)); err != nil {
-		c.Status(fiber.StatusBadRequest)
-		return c.JSON(fiber.Map{
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 			"message": "inccorect password",
 		})
 	}
@@ -66,12 +59,12 @@ func Login(c *fiber.Ctx) error {
 
 	// saving jwt to cookie
 	cookie := fiber.Cookie{
-		Name: "jwt",
-		Value: token,
-		Expires: time.Now().AddDate(0, 1, 0),
+		Name: 		"jwt",
+		Value: 		token,
+		Expires: 	time.Now().AddDate(0, 1, 0),
 		HTTPOnly: true,
 		SameSite: "None",
-		Secure: true,
+		Secure: 	true,
 	}
 
 	c.Cookie(&cookie)

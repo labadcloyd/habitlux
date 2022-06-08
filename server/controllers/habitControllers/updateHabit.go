@@ -53,25 +53,18 @@ func UpdateHabit(c *fiber.Ctx) error {
 		Target_Repeat_Count: 	reqData.Target_Repeat_Count,
 		Repeat_Count: 				reqData.Repeat_Count,
 	}
-	if err := database.DB.
-		Raw(`UPDATE habits
-			SET id = ?,
-				owner_id = ?,
-				habit_name = ?,
-				date_created = ?,
-				comment = ?,
-				target_repeat_count = ?,
-				repeat_count = ?
-			WHERE owner_id = ? AND id = ?
-		`,
-		reqData.ID,
-		owner_id,
-		reqData.Habit_Name,
-		reqData.Date_Created,
-		reqData.Comment,
-		reqData.Target_Repeat_Count,
-		reqData.Repeat_Count,
-		owner_id, reqData.ID).Scan(&habit).Error; err != nil {
+	if _, err := database.DB.
+		Exec(`UPDATE habits
+			SET
+				habit_name = $1, date_created = $2, comment = $3, target_repeat_count = $4, repeat_count = $5
+			WHERE owner_id = $6 AND id = $7`,
+			reqData.Habit_Name,
+			reqData.Date_Created,
+			reqData.Comment,
+			reqData.Target_Repeat_Count,
+			reqData.Repeat_Count,
+			owner_id, reqData.ID)
+		err != nil {
 			return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 				"message": err.Error(),
 			})

@@ -45,57 +45,71 @@ func GetAllUserHabits(c *fiber.Ctx) error {
 	}
 
 	//* querying the data
-	habits := []models.Habit{}
-	habitList := []models.HabitList{}
-	habitListFormatted := []ResGetUserHabits{}
+	habitListMap := make(map[string]int)
+	habitListFormatted := make([]ResGetUserHabits, 0, 100)
 	// getting the list of habit names
-	if err := database.DB.Raw(`
-			SELECT * FROM habit_lists WHERE owner_id = ? LIMIT 1
-		`, owner_id).Scan(&habitList).Error; err != nil {
-			log.Println(err)
-			c.Status(fiber.StatusBadRequest)
-			return c.JSON(fiber.Map{
-				"message": err,
-			})
+	rows, err := database.DB.
+		Query(`SELECT * FROM habit_lists WHERE owner_id = $1`, owner_id)
+	if err != nil {
+		log.Println(err)
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"message": err,
+		})
+	}
+	defer rows.Close()
+
+	i := 0
+	for rows.Next() {
+		var newHabitList ResGetUserHabits
+		newHabitList.Habits = make([]models.Habit, 0, 100)
+		if err := rows.
+			Scan(
+				&newHabitList.ID,
+				&newHabitList.Owner_ID,
+				&newHabitList.Habit_Name,
+				&newHabitList.Icon_Url,
+				&newHabitList.Color,
+				&newHabitList.Default_Repeat_Count,
+			); err != nil {
+				return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+					"message": err,
+				})
+		}
+		habitListFormatted = append(habitListFormatted, newHabitList)
+		habitListMap[newHabitList.Habit_Name] = i
+		i++
 	}
 	// getting habits
-	if err := database.DB.
-		Raw(`SELECT * FROM habits
-			WHERE owner_ID = ? AND date_Created BETWEEN ? AND ?
-			ORDER BY habit_Name, date_Created asc
-		`, owner_id, reqData.Start_Date, reqData.End_Date).
-		Scan(&habits).Error; err != nil {
-			log.Println(err)
-			c.Status(fiber.StatusBadRequest)
-			return c.JSON(fiber.Map{
-				"message": err,
-			})
+	rows2, err := database.DB.
+		Query(`SELECT * FROM habits
+		WHERE owner_ID = $1 AND date_Created BETWEEN $2 AND $3
+		ORDER BY habit_Name, date_Created asc`,
+		owner_id, reqData.Start_Date, reqData.End_Date)
+	if err != nil {
+		log.Println(err)
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"message": err,
+		})
 	}
-	if len(habitList) < 1 {
-		return c.JSON([]models.HabitList{})
-	}
-
-	//* formatting data
-	// initializing slice size (creates a joker element in order to append elements later)
-	for i := 0; i < len(habitList); i++ {
-		newHabit := ResGetUserHabits {
-			ID:										habitList[i].ID,
-			Owner_ID:							habitList[i].Owner_ID,
-			Habit_Name:						habitList[i].Habit_Name,
-			Icon_Url: 						habitList[i].Icon_Url,	
-			Color:								habitList[i].Color,
-			Default_Repeat_Count: habitList[i].Default_Repeat_Count,
-			Habits:								[]models.Habit{},
+	defer rows2.Close()
+	for rows2.Next() {
+		var newHabit models.Habit
+		if err := rows2.
+			Scan(
+				&newHabit.ID,
+				&newHabit.Owner_ID,
+				&newHabit.Habit_Name,
+				&newHabit.Date_Created,
+				&newHabit.Comment,
+				&newHabit.Target_Repeat_Count,
+				&newHabit.Repeat_Count,
+			); err != nil {
+				return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+					"message": err,
+				})
 		}
-		for j := 0; j < len(habits); j++ {
-			if habitList[i].Habit_Name == habits[j].Habit_Name {
-				newHabit.Habits = append(newHabit.Habits, habits[j])
-				// * you can still Make this loop more efficient 
-				// * by removing the elements that have already been appended
-				// habits = append(habits[:j], habits[:]...)
-			}
-		}
-		habitListFormatted = append(habitListFormatted, newHabit)
+		habitListFormatted[habitListMap[newHabit.Habit_Name]].Habits = 
+			append(habitListFormatted[habitListMap[newHabit.Habit_Name]].Habits, newHabit)
 	}
 	return c.JSON(habitListFormatted)
 }

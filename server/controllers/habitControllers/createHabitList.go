@@ -1,17 +1,18 @@
 package controllers
 
 import (
-	"errors"
 	"habit-tracker/database"
 	"habit-tracker/helpers"
+
 	"habit-tracker/middlewares"
 	"habit-tracker/models"
 	"log"
+
 	"strconv"
 
 	"github.com/gofiber/fiber/v2"
+	"github.com/lib/pq"
 	"github.com/golang-jwt/jwt/v4"
-	"gorm.io/gorm"
 )
 
 
@@ -32,7 +33,7 @@ func CreateHabitList(c *fiber.Ctx) error {
 		})
 	}
 	owner_id := uint(u64)
-	
+
 	//* data validation
 	reqData := new(ReqCreateHabitList)
 	if err := c.BodyParser(&reqData); err != nil {
@@ -45,39 +46,31 @@ func CreateHabitList(c *fiber.Ctx) error {
 	if reqErrors != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(reqErrors)
 	}
-
-	//* checking if it already exists
-	oldHabitList := models.HabitList{}
-	if err := database.DB.Raw(`
-			SELECT * FROM habit_lists WHERE owner_id = ? AND habit_name = ? LIMIT 1`,
-			owner_id, reqData.Habit_Name).
-		Scan(&oldHabitList).Error; err != nil {
-			if ( !(errors.Is(err, gorm.ErrRecordNotFound)) ) {
-				return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
-					"message": err.Error(),
-				})
-		}
-		log.Println(err)
-	}
-	// returning error if old habit list already exists
-	if (oldHabitList != models.HabitList{}) {
-		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
-			"message": "Habitlist already exists",
-		})
-	}
-
-	//* saving the habit
+	//* saving the habitlist
 	habit := models.HabitList {
-		Owner_ID: owner_id,
-		Habit_Name: reqData.Habit_Name,
-		Icon_Url: reqData.Icon_Url,
-		Color: reqData.Color,
+		Owner_ID: 						owner_id,
+		Habit_Name:						reqData.Habit_Name,
+		Color: 								reqData.Color,
 		Default_Repeat_Count: reqData.Default_Repeat_Count,
 	}
-	if err := database.DB.Create(&habit).Error; err != nil {
-		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
-			"message": err.Error(),
-		})
+	row := database.DB.QueryRow(`
+		INSERT INTO
+		habit_lists (owner_id, habit_name, icon_url, color, default_repeat_count)
+		VALUES ($1, $2, $3, $4, $5) RETURNING id`, 
+		owner_id, reqData.Habit_Name, reqData.Icon_Url, reqData.Color, reqData.Default_Repeat_Count,
+	)
+	err = row.Scan(&habit.ID)
+	if err, ok := err.(*pq.Error); ok {
+		if err.Code.Name() == "unique_violation" {
+			return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+				"message": `Habit list: '`+reqData.Habit_Name+`' already exists` ,
+			})
+		} else {
+			log.Println("Error: ", err, "Error code: ", err.Code.Name())
+			return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+				"message": err.Message,
+			})
+		}
 	}
 
 	return c.JSON(habit)

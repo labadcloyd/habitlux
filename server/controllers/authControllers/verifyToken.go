@@ -9,7 +9,7 @@ func VerifyToken(c *fiber.Ctx) error {
 	//* auth middleware
 	token := middlewares.AuthMiddleware(c)
 	if token == nil {
-		return c.JSON(fiber.Map{
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 			"message": "Unauthenticated",
 		})
 	}

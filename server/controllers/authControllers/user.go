@@ -1,12 +1,13 @@
 package controllers
 
 import (
+	"database/sql"
 	"habit-tracker/database"
 	"habit-tracker/models"
 	"log"
 
-	"github.com/golang-jwt/jwt/v4"
 	"github.com/gofiber/fiber/v2"
+	"github.com/golang-jwt/jwt/v4"
 )
 
 func User(c *fiber.Ctx) error {
@@ -32,14 +33,20 @@ func User(c *fiber.Ctx) error {
 
 	user := models.User{}
 
-	if err := database.DB.Where("id = ?", claims.Issuer).First(&user).Error;
-		err != nil {
-			log.Println(err)
-			c.Status(fiber.StatusBadRequest)
-			return c.JSON(fiber.Map{
+	row := database.DB.
+		QueryRow("SELECT username, id FROM users WHERE id = $1", claims.Issuer)
+	// scanning and returning error
+	err = row.Scan(&user.Username, &user.ID)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 				"message": "No user found",
 			})
 		}
-
+		log.Println("Error: ", err.Error())
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"message": "An error occured in scanning user",
+		})
+	}
 	return c.JSON(user)
 }

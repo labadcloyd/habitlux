@@ -44,18 +44,8 @@ func UpdateHabitList(c *fiber.Ctx) error {
 	}
 
 	//* updating the habitList
-	// getting the old habit list first
-	oldHabitList := models.HabitList{}
-	if err := database.DB.Model(&models.HabitList{}).
-		Where("Owner_ID = ?", owner_id).
-		Where("ID = ?", reqData.ID).
-		Find(&oldHabitList).Error; err != nil {
-			log.Println(err)
-			return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
-				"message": err.Error(),
-			})
-	}
 	newHabitList := models.HabitList {
+		ID:										reqData.ID,
 		Owner_ID: 						owner_id,
 		Habit_Name: 					reqData.Habit_Name,
 		Icon_Url: 						reqData.Icon_Url,
@@ -63,36 +53,18 @@ func UpdateHabitList(c *fiber.Ctx) error {
 		Default_Repeat_Count: reqData.Default_Repeat_Count,
 	}
 	// updating habit list name
-	if err := database.DB.Model(&newHabitList).
-		Where("Owner_ID = ?", owner_id).
-		Where("ID = ?", reqData.ID).
-		Updates(
-			map[string]interface{}{
-				"owner_id": owner_id,
-				"habit_name": reqData.Habit_Name,
-				"icon_url": reqData.Icon_Url,
-				"color": reqData.Color,
-				"default_repeat_count": reqData.Default_Repeat_Count,
-			},
-		).Error; err != nil {
+	if _, err := database.DB.
+		Exec(`UPDATE habit_lists
+			SET
+				habit_name = $1, icon_url = $2, color = $3, default_repeat_count = $4
+			WHERE owner_id = $5 AND id = $6`,
+			reqData.Habit_Name, reqData.Icon_Url, reqData.Color, reqData.Default_Repeat_Count,
+			owner_id, reqData.ID)
+		err != nil {
 			return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 				"message": err.Error(),
 			})
-	}
-	// updating all habits to the new habit list name
-	if err := database.DB.Model(&models.Habit{}).
-		Where("Owner_ID = ?", owner_id).
-		Where("Habit_Name = ?", oldHabitList.Habit_Name).
-		Updates(
-			map[string]interface{} {
-				"habit_name": reqData.Habit_Name,
-				"target_repeat_count": reqData.Default_Repeat_Count,
-			},
-		).Error; err != nil {
-			return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
-				"message": err.Error(),
-			})
-	}
+		}
 
 	log.Println("Successfully updated habit List and its habits")
 	return c.Status(fiber.StatusOK).JSON(newHabitList)

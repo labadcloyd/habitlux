@@ -4,7 +4,6 @@ import (
 	"habit-tracker/database"
 	"habit-tracker/helpers"
 	"habit-tracker/middlewares"
-	"habit-tracker/models"
 	"log"
 	"strconv"
 
@@ -44,15 +43,13 @@ func DeleteHabit(c *fiber.Ctx) error {
 	}
 
 	//* deleting the habit
-	habit := models.Habit{}
-	if err := database.DB.Model(&habit).
-		Where("Owner_ID = ?", owner_id).
-		Where("ID = ?", reqData.ID).
-		Delete(&habit).Error; err != nil {
+	if _, err := database.DB.Exec(`
+		DELETE FROM habits WHERE owner_id = $1 AND id = $2`, owner_id, reqData.ID)
+		err != nil {
 			return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 				"message": err.Error(),
 			})
-	}
+		}
 
 	log.Println("Successfully deleted habbit")
 	return c.Status(fiber.StatusAccepted).JSON(fiber.Map{

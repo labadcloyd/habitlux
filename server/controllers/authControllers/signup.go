@@ -16,28 +16,35 @@ import (
 
 func Signup(c *fiber.Ctx) error {
 	// data validation
-	data := new(ReqSignUp)
-	if err := c.BodyParser(&data); err != nil {
+	reqData := new(ReqSignUp)
+	if err := c.BodyParser(&reqData); err != nil {
+		log.Println("Error: ", err)
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
 			"message": err.Error(),
 		})
 	}
-	errors := helpers.ValidateStruct(*data)
+	errors := helpers.ValidateStruct(*reqData)
 
 	if errors != nil {
+		log.Println("Error: ", errors)
 		return c.Status(fiber.StatusBadRequest).JSON(errors)
 	}
 
-	// hashing password and formatting data
-	password, _ := bcrypt.GenerateFromPassword([]byte(data.Password), 10)
+	// hashing password and formatting reqData
+	password, _ := bcrypt.GenerateFromPassword([]byte(reqData.Password), 10)
 	user := models.User {
-		Username: data.Username,
+		Username: reqData.Username,
 		Password: password,
 	}
 
 	// saving user
-	if err := database.DB.Create(&user).Error; err != nil {
-		return c.Status(fiber.StatusBadRequest).JSON(err)
+	row := database.DB.
+		QueryRow("INSERT INTO users (username, password) VALUES ($1, $2) RETURNING id", user.Username, user.Password)
+
+	err := row.Scan(&user.ID)
+	if err != nil {
+		log.Println("Error: ", err.Error())
+		return c.Status(fiber.StatusInternalServerError).JSON(err)
 	}
 
 	// generating jwt token
@@ -55,12 +62,12 @@ func Signup(c *fiber.Ctx) error {
 
 	// saving jwt to cookie
 	cookie := fiber.Cookie{
-		Name: "jwt",
-		Value: token,
-		Expires: time.Now().AddDate(0, 1, 0),
+		Name: 		"jwt",
+		Value: 		token,
+		Expires: 	time.Now().AddDate(0, 1, 0),
 		HTTPOnly: true,
 		SameSite: "None",
-		Secure: true,
+		Secure: 	true,
 	}
 
 	c.Cookie(&cookie)
