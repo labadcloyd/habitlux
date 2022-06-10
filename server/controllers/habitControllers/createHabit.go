@@ -52,8 +52,8 @@ func CreateHabit(c *fiber.Ctx) error {
 	row := database.DB.
 		QueryRow(`
 			SELECT id FROM habits 
-			WHERE owner_id = $1 AND date_created = $2 AND habit_name = $3`,
-			owner_id, reqData.Date_Created, reqData.Habit_Name,
+			WHERE owner_id = $1 AND date_created = $2 AND habit_list_id = $3`,
+			owner_id, reqData.Date_Created, reqData.Habit_List_ID,
 		)
 	err = row.Scan(&oldHabit.ID)
 	// only checking if the error is not caused by empty rows
@@ -73,6 +73,7 @@ func CreateHabit(c *fiber.Ctx) error {
 	habit := models.Habit {
 		Owner_ID: 						owner_id,
 		Habit_Name: 					reqData.Habit_Name,
+		Habit_List_ID:        reqData.Habit_List_ID,
 		Date_Created: 				reqData.Date_Created,
 		Comment: 							reqData.Comment,
 		Repeat_Count: 				reqData.Repeat_Count,
@@ -80,11 +81,12 @@ func CreateHabit(c *fiber.Ctx) error {
 	}
 	row = database.DB.QueryRow(`
 		INSERT INTO
-		habits (owner_id, habit_name, date_created, comment, target_repeat_count, repeat_count)
-		VALUES ($1, $2, $3, $4, $5, $6)
+		habits (owner_id, habit_name, habit_list_id, date_created, comment, target_repeat_count, repeat_count)
+		VALUES ($1, $2, $3, $4, $5, $6, $7)
 		RETURNING id`, 
 		owner_id,
 		reqData.Habit_Name,
+		reqData.Habit_List_ID,
 		reqData.Date_Created,
 		reqData.Comment,
 		reqData.Target_Repeat_Count,
