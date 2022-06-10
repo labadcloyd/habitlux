@@ -45,7 +45,7 @@ func GetAllUserHabits(c *fiber.Ctx) error {
 	}
 
 	//* querying the data
-	habitListMap := make(map[string]int)
+	habitListMap := make(map[int]int)
 	habitListFormatted := make([]ResGetUserHabits, 0, 100)
 	// getting the list of habit names
 	rows, err := database.DB.
@@ -76,7 +76,7 @@ func GetAllUserHabits(c *fiber.Ctx) error {
 				})
 		}
 		habitListFormatted = append(habitListFormatted, newHabitList)
-		habitListMap[newHabitList.Habit_Name] = i
+		habitListMap[int(newHabitList.ID)] = i
 		i++
 	}
 	// getting habits
@@ -98,6 +98,7 @@ func GetAllUserHabits(c *fiber.Ctx) error {
 			Scan(
 				&newHabit.ID,
 				&newHabit.Owner_ID,
+				&newHabit.Habit_List_ID,
 				&newHabit.Habit_Name,
 				&newHabit.Date_Created,
 				&newHabit.Comment,
@@ -108,8 +109,8 @@ func GetAllUserHabits(c *fiber.Ctx) error {
 					"message": err,
 				})
 		}
-		habitListFormatted[habitListMap[newHabit.Habit_Name]].Habits = 
-			append(habitListFormatted[habitListMap[newHabit.Habit_Name]].Habits, newHabit)
+		habitListFormatted[habitListMap[int(newHabit.Habit_List_ID)]].Habits = 
+			append(habitListFormatted[habitListMap[int(newHabit.Habit_List_ID)]].Habits, newHabit)
 	}
 	return c.JSON(habitListFormatted)
 }

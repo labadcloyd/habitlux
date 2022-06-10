@@ -44,7 +44,7 @@ func DeleteHabitList(c *fiber.Ctx) error {
 
 	//* deleting the habitlist
 	if _, err := database.DB.Exec(`
-		DELETE FROM habit_lists WHERE owner_id = $1 AND habit_name = $2`, owner_id, reqData.Habit_Name)
+		DELETE FROM habit_lists WHERE owner_id = $1 AND id = $2`, owner_id, reqData.ID)
 		err != nil {
 			return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 				"message": err.Error(),

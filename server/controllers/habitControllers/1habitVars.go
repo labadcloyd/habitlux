@@ -7,6 +7,7 @@ import (
 
 type ReqCreateHabit struct {
 	Habit_Name						string	    				`json:"habit_name" validate:"required,min=1,max=32"`
+	Habit_List_ID         uint 								`json:"habit_list_id" validate:"required,min=1,max=32"`
 	Date_Created          helpers.Datetime		`json:"date_created" validate:"required,min=1,max=32"`
 	Comment               string    					`json:"comment"`
 	Target_Repeat_Count 	uint      					`json:"target_repeat_count"`
@@ -16,6 +17,7 @@ type ReqCreateHabit struct {
 type ReqUpdateHabit struct {
 	ID                    uint      					`json:"id" validate:"required"`
 	Habit_Name						string	    				`json:"habit_name" validate:"required,min=1,max=32"`
+	Habit_List_ID         uint 								`json:"habit_list_id" validate:"required,min=1,max=32"`
 	Date_Created          helpers.Datetime		`json:"date_created" validate:"required,min=1,max=32"`
 	Comment               string    					`json:"comment"`
 	Target_Repeat_Count 	uint      					`json:"target_repeat_count"`
@@ -42,7 +44,7 @@ type ReqUpdateHabitList struct {
 }
 
 type ReqDeleteHabitList struct {
-	Habit_Name						string  						`json:"habit_name" validate:"required,min=1,max=32"`
+	ID										uint 								`json:"id" validate:"required,min=1,max=32"`
 }
 
 type ReqGetUserHabits struct {

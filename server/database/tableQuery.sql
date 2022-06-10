@@ -6,21 +6,22 @@ CREATE TABLE users (
 CREATE TABLE habit_lists (
     id                      SERIAL PRIMARY KEY,
     owner_id                INT,
-    habit_name              VARCHAR(100) UNIQUE,
+    habit_name              VARCHAR(100),
     icon_url                TEXT,
     color                   VARCHAR(30),
     default_repeat_count    INT,
     FOREIGN KEY(owner_id)   REFERENCES users(id) ON DELETE CASCADE
 );
 CREATE TABLE habits (
-    id                      SERIAL PRIMARY KEY,
-    owner_id                INT,
-    habit_name              VARCHAR(100),
-    date_created            DATE,
-    comment                 TEXT,
-    target_repeat_count     INT,
-    repeat_count            INT,
-    FOREIGN KEY(owner_id)   REFERENCES users(id) ON DELETE CASCADE,
-    FOREIGN KEY(habit_name) REFERENCES habit_lists(habit_name) ON DELETE CASCADE ON UPDATE CASCADE
+    id                          SERIAL PRIMARY KEY,
+    owner_id                    INT,
+    habit_list_id               INT,
+    habit_name                  VARCHAR(100),
+    date_created                DATE,
+    comment                     TEXT,
+    target_repeat_count         INT,
+    repeat_count                INT,
+    FOREIGN KEY(owner_id)       REFERENCES users(id) ON DELETE CASCADE,
+    FOREIGN KEY(habit_list_id)  REFERENCES habit_lists(id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
