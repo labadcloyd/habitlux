@@ -11,6 +11,7 @@ export function addHabitsToDate({ habits, datesWithHabits }) {
 		datesWithHabits.forEach((day, index) => {
 			const newCurrentHabit = newHabitlist.habits[index]
 			newCurrentHabit.habit_name = habitlist.habit_name
+			newCurrentHabit.habit_list_id = habitlist.id
 			newHabitlist.habits[index] = {...newCurrentHabit}
 
 			for (let i = 0; i < habitlist.habits.length; i++) {
@@ -44,6 +45,7 @@ export function getTodaysHabits(habits) {
 			if (moment(habit.date_created).format("YYYY-MM-DD") === currentDate) {
 				const newHabit = {
 					...habit, 
+					habit_list_id: habitlist.id,
 					color: habitlist.color, 
 					target_repeat_count: habit.target_repeat_count || habitlist.default_repeat_count
 				}
