@@ -30,7 +30,7 @@ export default function HabitModal(props) {
 		if (res.status === 200) {
 			let newHabitList = [...habits]
 			for (let i = 0; i < newHabitList.length; i++) {
-				if (newHabitList[i].habit_name === habitState.habit_name) {
+				if (newHabitList[i].habit_list_id === habitState.habit_list_id) {
 					for( let j = 0; j < newHabitList[i].habits.length; j++) {
 						if (
 							moment(newHabitList[i].habits[j].date_created).format("YYYY-MM-DD") === 
@@ -52,6 +52,7 @@ export default function HabitModal(props) {
 	}
 	async function createHabit() {
 		//! add error handling
+		//! BUG: Updates the same habit with the same name
 		const res = await createUserHabit(habitState)
 		if (res.status === 200) {
 			let newHabitList = [...habits]
