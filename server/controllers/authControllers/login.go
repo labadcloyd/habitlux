@@ -13,7 +13,6 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
-
 func Login(c *fiber.Ctx) error {
 	// data validation
 	reqData := new(ReqLogin)
@@ -29,10 +28,10 @@ func Login(c *fiber.Ctx) error {
 
 	// checking if user exists
 	row := database.DB.
-		QueryRow("SELECT username, id, password FROM users WHERE username = $1", reqData.Username); 
+		QueryRow("SELECT username, id, password FROM users WHERE username = $1", reqData.Username)
 	// scanning and returning error
 	if err := row.Scan(&user.Username, &user.ID, &user.Password); err != nil {
-		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 			"message": "user not found",
 		})
 	}
@@ -43,10 +42,10 @@ func Login(c *fiber.Ctx) error {
 			"message": "inccorect password",
 		})
 	}
-	
+
 	// generating jwt token
 	claims := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.RegisteredClaims{
-		Issuer: strconv.Itoa(int(user.ID)),
+		Issuer:    strconv.Itoa(int(user.ID)),
 		ExpiresAt: jwt.NewNumericDate(time.Now().AddDate(0, 1, 0)),
 	})
 	token, err := claims.SignedString([]byte(SecretKey))
@@ -59,12 +58,12 @@ func Login(c *fiber.Ctx) error {
 
 	// saving jwt to cookie
 	cookie := fiber.Cookie{
-		Name: 		"jwt",
-		Value: 		token,
-		Expires: 	time.Now().AddDate(0, 1, 0),
+		Name:     "jwt",
+		Value:    token,
+		Expires:  time.Now().AddDate(0, 1, 0),
 		HTTPOnly: true,
 		SameSite: "None",
-		Secure: 	true,
+		Secure:   true,
 	}
 
 	c.Cookie(&cookie)
