@@ -13,7 +13,7 @@ func VerifyToken(c *fiber.Ctx) error {
 			"message": "Unauthenticated",
 		})
 	}
-	
+
 	return c.Status(fiber.StatusOK).JSON(fiber.Map{
 		"message": "Authenticated",
 	})

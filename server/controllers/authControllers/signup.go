@@ -13,7 +13,6 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
-
 func Signup(c *fiber.Ctx) error {
 	// data validation
 	reqData := new(ReqSignUp)
@@ -32,7 +31,7 @@ func Signup(c *fiber.Ctx) error {
 
 	// hashing password and formatting reqData
 	password, _ := bcrypt.GenerateFromPassword([]byte(reqData.Password), 10)
-	user := models.User {
+	user := models.User{
 		Username: reqData.Username,
 		Password: password,
 	}
@@ -49,7 +48,7 @@ func Signup(c *fiber.Ctx) error {
 
 	// generating jwt token
 	claims := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.RegisteredClaims{
-		Issuer: strconv.Itoa(int(user.ID)),
+		Issuer:    strconv.Itoa(int(user.ID)),
 		ExpiresAt: jwt.NewNumericDate(time.Now().AddDate(0, 1, 0)),
 	})
 	token, err := claims.SignedString([]byte(SecretKey))
@@ -62,12 +61,12 @@ func Signup(c *fiber.Ctx) error {
 
 	// saving jwt to cookie
 	cookie := fiber.Cookie{
-		Name: 		"jwt",
-		Value: 		token,
-		Expires: 	time.Now().AddDate(0, 1, 0),
+		Name:     "jwt",
+		Value:    token,
+		Expires:  time.Now().AddDate(0, 1, 0),
 		HTTPOnly: true,
 		SameSite: "None",
-		Secure: 	true,
+		Secure:   true,
 	}
 
 	c.Cookie(&cookie)

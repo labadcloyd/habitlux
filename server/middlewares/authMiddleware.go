@@ -15,8 +15,8 @@ func AuthMiddleware(c *fiber.Ctx) *jwt.Token {
 
 	// parsing token
 	token, err := jwt.ParseWithClaims(
-		cookie, 
-		&jwt.RegisteredClaims{}, 
+		cookie,
+		&jwt.RegisteredClaims{},
 		func(t *jwt.Token) (interface{}, error) {
 			return []byte(SecretKey), nil
 		},
@@ -28,4 +28,3 @@ func AuthMiddleware(c *fiber.Ctx) *jwt.Token {
 	}
 	return token
 }
-		

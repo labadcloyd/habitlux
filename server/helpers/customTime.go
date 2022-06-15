@@ -15,7 +15,7 @@ func (t *Datetime) UnmarshalJSON(input []byte) error {
 	strInput := strings.Trim(string(input), `"`)
 	newTime, err := time.Parse("2006-01-02", strInput)
 	if err != nil {
-			return err
+		return err
 	}
 
 	t.Time = newTime
@@ -30,6 +30,7 @@ func (j *Datetime) Scan(value interface{}) error {
 	}
 	return nil
 }
+
 // here we just return the value
 func (j Datetime) Value() (driver.Value, error) {
 	return j.Time, nil

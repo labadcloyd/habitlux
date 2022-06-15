@@ -11,7 +11,6 @@ import (
 	"github.com/golang-jwt/jwt/v4"
 )
 
-
 func DeleteHabit(c *fiber.Ctx) error {
 	//* auth middleware
 	token := middlewares.AuthMiddleware(c)
@@ -44,12 +43,11 @@ func DeleteHabit(c *fiber.Ctx) error {
 
 	//* deleting the habit
 	if _, err := database.DB.Exec(`
-		DELETE FROM habits WHERE owner_id = $1 AND id = $2`, owner_id, reqData.ID)
-		err != nil {
-			return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
-				"message": err.Error(),
-			})
-		}
+		DELETE FROM habits WHERE owner_id = $1 AND id = $2`, owner_id, reqData.ID); err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"message": err.Error(),
+		})
+	}
 
 	log.Println("Successfully deleted habbit")
 	return c.Status(fiber.StatusAccepted).JSON(fiber.Map{

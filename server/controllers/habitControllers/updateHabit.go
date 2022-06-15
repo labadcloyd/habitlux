@@ -12,7 +12,6 @@ import (
 	"github.com/golang-jwt/jwt/v4"
 )
 
-
 func UpdateHabit(c *fiber.Ctx) error {
 	//* auth middleware
 	token := middlewares.AuthMiddleware(c)
@@ -44,14 +43,14 @@ func UpdateHabit(c *fiber.Ctx) error {
 	}
 
 	//* updating the habit
-	habit := models.Habit {
-		ID:										reqData.ID,
-		Owner_ID: 						owner_id,
-		Habit_Name:						reqData.Habit_Name,
-		Date_Created: 				reqData.Date_Created,
-		Comment: 							reqData.Comment,
-		Target_Repeat_Count: 	reqData.Target_Repeat_Count,
-		Repeat_Count: 				reqData.Repeat_Count,
+	habit := models.Habit{
+		ID:                  reqData.ID,
+		Owner_ID:            owner_id,
+		Habit_Name:          reqData.Habit_Name,
+		Date_Created:        reqData.Date_Created,
+		Comment:             reqData.Comment,
+		Target_Repeat_Count: reqData.Target_Repeat_Count,
+		Repeat_Count:        reqData.Repeat_Count,
 	}
 	if _, err := database.DB.
 		Exec(`UPDATE habits
@@ -63,11 +62,10 @@ func UpdateHabit(c *fiber.Ctx) error {
 			reqData.Comment,
 			reqData.Target_Repeat_Count,
 			reqData.Repeat_Count,
-			owner_id, reqData.ID)
-		err != nil {
-			return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
-				"message": err.Error(),
-			})
+			owner_id, reqData.ID); err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"message": err.Error(),
+		})
 	}
 
 	log.Println("Successfully updated habbit")

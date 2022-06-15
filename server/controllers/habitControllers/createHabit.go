@@ -12,10 +12,9 @@ import (
 	"strconv"
 
 	"github.com/gofiber/fiber/v2"
-	"github.com/lib/pq"
 	"github.com/golang-jwt/jwt/v4"
+	"github.com/lib/pq"
 )
-
 
 func CreateHabit(c *fiber.Ctx) error {
 	//* auth middleware
@@ -33,7 +32,7 @@ func CreateHabit(c *fiber.Ctx) error {
 		})
 	}
 	owner_id := uint(u64)
-	
+
 	//* data validation
 	reqData := new(ReqCreateHabit)
 	if err := c.BodyParser(&reqData); err != nil {
@@ -70,20 +69,20 @@ func CreateHabit(c *fiber.Ctx) error {
 	}
 
 	//* saving the habit
-	habit := models.Habit {
-		Owner_ID: 						owner_id,
-		Habit_Name: 					reqData.Habit_Name,
-		Habit_List_ID:        reqData.Habit_List_ID,
-		Date_Created: 				reqData.Date_Created,
-		Comment: 							reqData.Comment,
-		Repeat_Count: 				reqData.Repeat_Count,
-		Target_Repeat_Count: 	reqData.Target_Repeat_Count,
+	habit := models.Habit{
+		Owner_ID:            owner_id,
+		Habit_Name:          reqData.Habit_Name,
+		Habit_List_ID:       reqData.Habit_List_ID,
+		Date_Created:        reqData.Date_Created,
+		Comment:             reqData.Comment,
+		Repeat_Count:        reqData.Repeat_Count,
+		Target_Repeat_Count: reqData.Target_Repeat_Count,
 	}
 	row = database.DB.QueryRow(`
 		INSERT INTO
 		habits (owner_id, habit_name, habit_list_id, date_created, comment, target_repeat_count, repeat_count)
 		VALUES ($1, $2, $3, $4, $5, $6, $7)
-		RETURNING id`, 
+		RETURNING id`,
 		owner_id,
 		reqData.Habit_Name,
 		reqData.Habit_List_ID,
@@ -96,7 +95,7 @@ func CreateHabit(c *fiber.Ctx) error {
 	if err, ok := err.(*pq.Error); ok {
 		if err.Code.Name() == "foreign_key_violation" {
 			return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
-				"message": `Habit list: '`+reqData.Habit_Name+`' does not exist` ,
+				"message": `Habit list: '` + reqData.Habit_Name + `' does not exist`,
 			})
 		} else {
 			log.Println("Error: ", err)

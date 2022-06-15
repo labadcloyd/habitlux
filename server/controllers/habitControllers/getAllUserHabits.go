@@ -71,9 +71,9 @@ func GetAllUserHabits(c *fiber.Ctx) error {
 				&newHabitList.Color,
 				&newHabitList.Default_Repeat_Count,
 			); err != nil {
-				return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
-					"message": err,
-				})
+			return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+				"message": err,
+			})
 		}
 		habitListFormatted = append(habitListFormatted, newHabitList)
 		habitListMap[int(newHabitList.ID)] = i
@@ -84,7 +84,7 @@ func GetAllUserHabits(c *fiber.Ctx) error {
 		Query(`SELECT * FROM habits
 		WHERE owner_ID = $1 AND date_Created BETWEEN $2 AND $3
 		ORDER BY habit_Name, date_Created asc`,
-		owner_id, reqData.Start_Date, reqData.End_Date)
+			owner_id, reqData.Start_Date, reqData.End_Date)
 	if err != nil {
 		log.Println(err)
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
@@ -105,11 +105,11 @@ func GetAllUserHabits(c *fiber.Ctx) error {
 				&newHabit.Target_Repeat_Count,
 				&newHabit.Repeat_Count,
 			); err != nil {
-				return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
-					"message": err,
-				})
+			return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+				"message": err,
+			})
 		}
-		habitListFormatted[habitListMap[int(newHabit.Habit_List_ID)]].Habits = 
+		habitListFormatted[habitListMap[int(newHabit.Habit_List_ID)]].Habits =
 			append(habitListFormatted[habitListMap[int(newHabit.Habit_List_ID)]].Habits, newHabit)
 	}
 	return c.JSON(habitListFormatted)
