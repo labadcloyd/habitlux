@@ -1,9 +1,9 @@
 package controllers
 
 import (
-	"habit-tracker/database"
 	"habit-tracker/helpers"
 	"habit-tracker/models"
+	"habit-tracker/setup"
 	"log"
 	"strconv"
 	"time"
@@ -14,6 +14,8 @@ import (
 )
 
 func Signup(c *fiber.Ctx) error {
+	db := setup.DB
+
 	// data validation
 	reqData := new(ReqSignUp)
 	if err := c.BodyParser(&reqData); err != nil {
@@ -37,7 +39,7 @@ func Signup(c *fiber.Ctx) error {
 	}
 
 	// saving user
-	row := database.DB.
+	row := db.
 		QueryRow("INSERT INTO users (username, password) VALUES ($1, $2) RETURNING id", user.Username, user.Password)
 
 	err := row.Scan(&user.ID)

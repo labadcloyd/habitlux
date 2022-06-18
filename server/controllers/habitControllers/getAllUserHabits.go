@@ -1,10 +1,10 @@
 package controllers
 
 import (
-	"habit-tracker/database"
 	"habit-tracker/helpers"
 	"habit-tracker/middlewares"
 	"habit-tracker/models"
+	"habit-tracker/setup"
 	"log"
 	"strconv"
 
@@ -13,6 +13,8 @@ import (
 )
 
 func GetAllUserHabits(c *fiber.Ctx) error {
+	db := setup.DB
+
 	//* auth middleware
 	token := middlewares.AuthMiddleware(c)
 	if token == nil {
@@ -48,7 +50,7 @@ func GetAllUserHabits(c *fiber.Ctx) error {
 	habitListMap := make(map[int]int)
 	habitListFormatted := make([]ResGetUserHabits, 0, 100)
 	// getting the list of habit names
-	rows, err := database.DB.
+	rows, err := db.
 		Query(`SELECT * FROM habit_lists WHERE owner_id = $1`, owner_id)
 	if err != nil {
 		log.Println(err)
@@ -80,7 +82,7 @@ func GetAllUserHabits(c *fiber.Ctx) error {
 		i++
 	}
 	// getting habits
-	rows2, err := database.DB.
+	rows2, err := db.
 		Query(`SELECT * FROM habits
 		WHERE owner_ID = $1 AND date_Created BETWEEN $2 AND $3
 		ORDER BY habit_Name, date_Created asc`,

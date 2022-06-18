@@ -1,10 +1,10 @@
 package controllers
 
 import (
-	"habit-tracker/database"
 	"habit-tracker/helpers"
 	"habit-tracker/middlewares"
 	"habit-tracker/models"
+	"habit-tracker/setup"
 	"log"
 	"strconv"
 
@@ -13,6 +13,8 @@ import (
 )
 
 func UpdateHabit(c *fiber.Ctx) error {
+	db := setup.DB
+
 	//* auth middleware
 	token := middlewares.AuthMiddleware(c)
 	if token == nil {
@@ -52,7 +54,7 @@ func UpdateHabit(c *fiber.Ctx) error {
 		Target_Repeat_Count: reqData.Target_Repeat_Count,
 		Repeat_Count:        reqData.Repeat_Count,
 	}
-	if _, err := database.DB.
+	if _, err := db.
 		Exec(`UPDATE habits
 			SET
 				habit_name = $1, date_created = $2, comment = $3, target_repeat_count = $4, repeat_count = $5

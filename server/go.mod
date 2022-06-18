@@ -8,7 +8,10 @@ require (
 	github.com/golang-jwt/jwt/v4 v4.4.1
 )
 
-require github.com/go-playground/universal-translator v0.18.0 // indirect
+require (
+	github.com/DATA-DOG/go-sqlmock v1.5.0
+	github.com/go-playground/universal-translator v0.18.0 // indirect
+)
 
 require (
 	github.com/go-playground/locales v0.14.0 // indirect; indirect0.18.0 // indirect

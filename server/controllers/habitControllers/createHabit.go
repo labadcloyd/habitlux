@@ -2,8 +2,8 @@ package controllers
 
 import (
 	"database/sql"
-	"habit-tracker/database"
 	"habit-tracker/helpers"
+	"habit-tracker/setup"
 
 	"habit-tracker/middlewares"
 	"habit-tracker/models"
@@ -17,6 +17,8 @@ import (
 )
 
 func CreateHabit(c *fiber.Ctx) error {
+	db := setup.DB
+
 	//* auth middleware
 	token := middlewares.AuthMiddleware(c)
 	if token == nil {
@@ -48,7 +50,7 @@ func CreateHabit(c *fiber.Ctx) error {
 
 	//* checking if record exists
 	oldHabit := models.Habit{}
-	row := database.DB.
+	row := db.
 		QueryRow(`
 			SELECT id FROM habits 
 			WHERE owner_id = $1 AND date_created = $2 AND habit_list_id = $3`,
@@ -78,7 +80,7 @@ func CreateHabit(c *fiber.Ctx) error {
 		Repeat_Count:        reqData.Repeat_Count,
 		Target_Repeat_Count: reqData.Target_Repeat_Count,
 	}
-	row = database.DB.QueryRow(`
+	row = db.QueryRow(`
 		INSERT INTO
 		habits (owner_id, habit_name, habit_list_id, date_created, comment, target_repeat_count, repeat_count)
 		VALUES ($1, $2, $3, $4, $5, $6, $7)

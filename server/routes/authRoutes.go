@@ -1,15 +1,18 @@
 package routes
 
 import (
+	controllers "habit-tracker/controllers/authControllers"
+
 	"github.com/gofiber/fiber/v2"
-	"habit-tracker/controllers/authControllers"
 )
 
 func AuthRoutes(app *fiber.App) {
-	app.Post("/api/signup", controllers.Signup)
-	app.Post("/api/login", controllers.Login)
-	app.Get("/api/user", controllers.User)
-	app.Post("/api/logout", controllers.Logout)
-	app.Get("/api/verifytoken", controllers.VerifyToken)
-	app.Post("/api/demologin", controllers.DemoLogin)
+	r := app.Group("/api")
+
+	r.Post("/signup", controllers.Signup)
+	r.Post("/login", controllers.Login)
+	r.Get("/user", controllers.User)
+	r.Post("/logout", controllers.Logout)
+	r.Get("/verifytoken", controllers.VerifyToken)
+	r.Post("/demologin", controllers.DemoLogin)
 }

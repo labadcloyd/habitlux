@@ -1,9 +1,9 @@
 package controllers
 
 import (
-	"habit-tracker/database"
 	"habit-tracker/helpers"
 	"habit-tracker/middlewares"
+	"habit-tracker/setup"
 	"log"
 	"strconv"
 
@@ -12,6 +12,8 @@ import (
 )
 
 func DeleteHabitList(c *fiber.Ctx) error {
+	db := setup.DB
+
 	//* auth middleware
 	token := middlewares.AuthMiddleware(c)
 	if token == nil {
@@ -42,7 +44,7 @@ func DeleteHabitList(c *fiber.Ctx) error {
 	}
 
 	//* deleting the habitlist
-	if _, err := database.DB.Exec(`
+	if _, err := db.Exec(`
 		DELETE FROM habit_lists WHERE owner_id = $1 AND id = $2`, owner_id, reqData.ID); err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 			"message": err.Error(),

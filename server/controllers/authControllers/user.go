@@ -2,8 +2,8 @@ package controllers
 
 import (
 	"database/sql"
-	"habit-tracker/database"
 	"habit-tracker/models"
+	"habit-tracker/setup"
 	"log"
 
 	"github.com/gofiber/fiber/v2"
@@ -11,6 +11,8 @@ import (
 )
 
 func User(c *fiber.Ctx) error {
+	db := setup.DB
+
 	cookie := c.Cookies("jwt")
 
 	// parsing token
@@ -33,7 +35,7 @@ func User(c *fiber.Ctx) error {
 
 	user := models.User{}
 
-	row := database.DB.
+	row := db.
 		QueryRow("SELECT username, id FROM users WHERE id = $1", claims.Issuer)
 	// scanning and returning error
 	err = row.Scan(&user.Username, &user.ID)

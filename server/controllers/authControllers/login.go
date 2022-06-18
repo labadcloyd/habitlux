@@ -1,9 +1,9 @@
 package controllers
 
 import (
-	"habit-tracker/database"
 	"habit-tracker/helpers"
 	"habit-tracker/models"
+	"habit-tracker/setup"
 	"log"
 	"strconv"
 	"time"
@@ -14,6 +14,8 @@ import (
 )
 
 func Login(c *fiber.Ctx) error {
+	db := setup.DB
+
 	// data validation
 	reqData := new(ReqLogin)
 	if err := c.BodyParser(&reqData); err != nil {
@@ -27,7 +29,7 @@ func Login(c *fiber.Ctx) error {
 	var user = models.User{}
 
 	// checking if user exists
-	row := database.DB.
+	row := db.
 		QueryRow("SELECT username, id, password FROM users WHERE username = $1", reqData.Username)
 	// scanning and returning error
 	if err := row.Scan(&user.Username, &user.ID, &user.Password); err != nil {
