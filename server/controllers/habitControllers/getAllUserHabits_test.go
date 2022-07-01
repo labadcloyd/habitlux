@@ -19,8 +19,8 @@ func TestGetAllUserHabits(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if err := GetAllUserHabits(tt.args.c); (err != nil) != tt.wantErr {
-				t.Errorf("GetAllUserHabits() error = %v, wantErr %v", err, tt.wantErr)
+			if err := CreateHabitList(tt.args.c); (err != nil) != tt.wantErr {
+				t.Errorf("CreateHabitList() error = %v, wantErr %v", err, tt.wantErr)
 			}
 		})
 	}
