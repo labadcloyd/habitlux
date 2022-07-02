@@ -6,31 +6,18 @@ import (
 	"habit-tracker/models"
 	"habit-tracker/setup"
 	"log"
-	"strconv"
 
 	"github.com/gofiber/fiber/v2"
-	"github.com/golang-jwt/jwt/v4"
 )
 
 func GetAllUserHabits(c *fiber.Ctx) error {
 	db := setup.DB
 
 	//* auth middleware
-	token := middlewares.AuthMiddleware(c)
-	if token == nil {
-		return c.JSON(fiber.Map{
-			"message": "Unauthenticated",
-		})
+	token, owner_id, err := middlewares.AuthMiddleware(c)
+	if token == nil || owner_id == 0 || err != nil {
+		return err
 	}
-	claims := token.Claims.(*jwt.RegisteredClaims)
-
-	u64, err := strconv.ParseUint(claims.Issuer, 10, 32)
-	if err != nil {
-		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
-			"message": err.Error(),
-		})
-	}
-	owner_id := uint(u64)
 
 	//* data validation
 	reqData := ReqGetUserHabits{}

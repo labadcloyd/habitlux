@@ -1,14 +1,20 @@
 package controllers
 
 import (
+	"bytes"
+	"encoding/json"
 	"habit-tracker/setup"
 	"log"
+	"net/http"
 	"net/http/httptest"
 	"testing"
 
 	"github.com/DATA-DOG/go-sqlmock"
 	"github.com/stretchr/testify/assert"
 )
+
+type RouteRes struct {
+}
 
 func TestCreateHabit(t *testing.T) {
 	// Initial Setup
@@ -19,7 +25,7 @@ func TestCreateHabit(t *testing.T) {
 	defer db.Close()
 
 	db, app := setup.MockSetupApp()
-	app.Post("/habit", CreateHabit)
+	app.Post("/api/habit", CreateHabit)
 
 	setup.SetupMockDB(db, t)
 	log.Fatal(app.Listen(":3001"))
@@ -32,15 +38,28 @@ func TestCreateHabit(t *testing.T) {
 
 	// Test Cases
 	tests := []struct {
-		description  string // description of the test case
-		route        string // route path to test
-		expectedCode int    // expected HTTP status code
-	}{}
+		description  string       // description of the test case
+		body         interface{}  // request body data
+		cookie       *http.Cookie // cookie that contains the token
+		expectedCode int          // expected HTTP status code
+		expectedRes  interface{}  // expected result data
+	}{
+		{
+			description:  "Returns error with empty cookie",
+			body:         nil,
+			cookie:       nil,
+			expectedCode: 401,
+			expectedRes:  RouteRes{},
+		},
+	}
 
 	for _, test := range tests {
-		req := httptest.NewRequest("POST", test.route, nil)
+		payloadBuf := new(bytes.Buffer)
+		json.NewEncoder(payloadBuf).Encode(test.body)
+		req := httptest.NewRequest("POST", "/api/habit", payloadBuf)
 		req.AddCookie(cookie)
 		resp, _ := app.Test(req, -1)
 		assert.Equalf(t, test.expectedCode, resp.StatusCode, test.description)
+		assert.Equalf(t, test.expectedRes, resp.Body, test.description)
 	}
 }
