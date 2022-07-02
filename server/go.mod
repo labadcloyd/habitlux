@@ -18,10 +18,7 @@ require (
 	gopkg.in/yaml.v3 v3.0.0-20210107192922-496545a6307b // indirect
 )
 
-require (
-	github.com/DATA-DOG/go-sqlmock v1.5.0
-	github.com/go-playground/universal-translator v0.18.0 // indirect
-)
+require github.com/go-playground/universal-translator v0.18.0 // indirect
 
 require (
 	github.com/go-playground/locales v0.14.0 // indirect; indirect0.18.0 // indirect

@@ -6,6 +6,9 @@ import (
 	"habit-tracker/models"
 	"log"
 	"net/http"
+	"os"
+	"path/filepath"
+	"runtime"
 	"strconv"
 	"testing"
 	"time"
@@ -13,11 +16,12 @@ import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
 	"github.com/golang-jwt/jwt/v4"
+	"github.com/joho/godotenv"
 	"golang.org/x/crypto/bcrypt"
 )
 
 var DB *sql.DB
-var SecretKey = helpers.GoDotEnvVariable("SECRET_KEY")
+var SecretKey = os.Getenv("SECRET_KEY")
 
 func SetupApp(db *sql.DB) *fiber.App {
 	DB = db
@@ -66,6 +70,20 @@ func ConnectDB() *sql.DB {
 
 // TEST VARS
 func MockSetupApp() (*sql.DB, *fiber.App) {
+	// ! <--- I have no idea how this part works
+	_, file, _, ok := runtime.Caller(0)
+	if !ok {
+		log.Fatalln("Unable to identify current directory (needed to load .env.test)")
+		os.Exit(1)
+	}
+	basepath := filepath.Dir(file)
+	// ! --->
+	err := godotenv.Load(filepath.Join(basepath, "../.env"))
+	if err != nil {
+		log.Println(err)
+		log.Fatalln("Error loading .env file in main")
+	}
+
 	db := MockConnectDB()
 	app := fiber.New(fiber.Config{
 		ErrorHandler: func(ctx *fiber.Ctx, err error) error {
@@ -145,7 +163,7 @@ func SetupMockDB(db *sql.DB, t *testing.T) error {
 }
 
 func ClearMockDB(db *sql.DB, t *testing.T) error {
-	_, err := db.Exec(`DROP TABLE users; DROP TABLE habit_lists; DROP TABLE habits;`)
+	_, err := db.Exec(`DROP TABLE habits; DROP TABLE habit_lists; DROP TABLE users;`)
 	if err != nil {
 		t.Fatalf("an error '%s' was not expected when setting up the db tables", err)
 	}
