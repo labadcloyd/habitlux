@@ -1,8 +1,9 @@
 package helpers
 
 import (
-	"github.com/go-playground/validator/v10"
 	"regexp"
+
+	"github.com/go-playground/validator/v10"
 )
 
 // validator function
@@ -28,10 +29,10 @@ func ValidatePassword(fl validator.FieldLevel) bool {
 	return false
 }
 
-func ValidateStruct(data interface{}) []*ErrorResponse {
+func ValidateStruct(data *interface{}) []*ErrorResponse {
 	Validate.RegisterValidation("missingRequiredCharacters", ValidatePassword)
 	var errors []*ErrorResponse
-	err := Validate.Struct(data)
+	err := Validate.Struct(*data)
 	if err != nil {
 		for _, err := range err.(validator.ValidationErrors) {
 			var element ErrorResponse

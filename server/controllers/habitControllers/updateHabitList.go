@@ -1,7 +1,6 @@
 package controllers
 
 import (
-	"habit-tracker/helpers"
 	"habit-tracker/middlewares"
 	"habit-tracker/models"
 	"habit-tracker/setup"
@@ -21,15 +20,8 @@ func UpdateHabitList(c *fiber.Ctx) error {
 
 	//* data validation
 	reqData := new(ReqUpdateHabitList)
-	if err := c.BodyParser(&reqData); err != nil {
-		log.Println("err: ", err)
-		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
-			"message": err.Error(),
-		})
-	}
-	errors := helpers.ValidateStruct(*reqData)
-	if errors != nil {
-		return c.Status(fiber.StatusBadRequest).JSON(errors)
+	if err = middlewares.BodyValidation(reqData, c); err != nil {
+		return err
 	}
 
 	//* updating the habitList

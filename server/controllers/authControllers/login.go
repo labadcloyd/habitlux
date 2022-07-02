@@ -1,7 +1,7 @@
 package controllers
 
 import (
-	"habit-tracker/helpers"
+	"habit-tracker/middlewares"
 	"habit-tracker/models"
 	"habit-tracker/setup"
 	"log"
@@ -18,12 +18,8 @@ func Login(c *fiber.Ctx) error {
 
 	// data validation
 	reqData := new(ReqLogin)
-	if err := c.BodyParser(&reqData); err != nil {
+	if err := middlewares.BodyValidation(reqData, c); err != nil {
 		return err
-	}
-	errors := helpers.ValidateStruct(*reqData)
-	if errors != nil {
-		return c.Status(fiber.StatusBadRequest).JSON(errors)
 	}
 
 	var user = models.User{}

@@ -2,7 +2,6 @@ package controllers
 
 import (
 	"database/sql"
-	"habit-tracker/helpers"
 	"habit-tracker/setup"
 
 	"habit-tracker/middlewares"
@@ -24,15 +23,8 @@ func CreateHabit(c *fiber.Ctx) error {
 
 	//* data validation
 	reqData := new(ReqCreateHabit)
-	if err := c.BodyParser(&reqData); err != nil {
-		log.Println("err: ", err)
-		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
-			"message": err.Error(),
-		})
-	}
-	reqErrors := helpers.ValidateStruct(*reqData)
-	if reqErrors != nil {
-		return c.Status(fiber.StatusBadRequest).JSON(reqErrors)
+	if err = middlewares.BodyValidation(reqData, c); err != nil {
+		return err
 	}
 
 	//* checking if record exists

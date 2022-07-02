@@ -1,7 +1,6 @@
 package controllers
 
 import (
-	"habit-tracker/helpers"
 	"habit-tracker/middlewares"
 	"habit-tracker/models"
 	"habit-tracker/setup"
@@ -20,17 +19,9 @@ func GetAllUserHabits(c *fiber.Ctx) error {
 	}
 
 	//* data validation
-	reqData := ReqGetUserHabits{}
-	if err := c.QueryParser(&reqData); err != nil {
-		log.Println("err: ", err)
-		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
-			"message": err.Error(),
-		})
-	}
-	errors := helpers.ValidateStruct(reqData)
-
-	if errors != nil {
-		return c.Status(fiber.StatusBadRequest).JSON(errors)
+	reqData := new(ReqGetUserHabits)
+	if err = middlewares.QueryValidation(reqData, c); err != nil {
+		return err
 	}
 
 	//* querying the data
