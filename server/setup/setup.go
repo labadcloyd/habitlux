@@ -22,29 +22,27 @@ import (
 
 var DB *sql.DB
 var SecretKey = os.Getenv("SECRET_KEY")
+var FiberConfig = fiber.Config{
+	ErrorHandler: func(ctx *fiber.Ctx, err error) error {
+		code := fiber.StatusInternalServerError
+		if e, ok := err.(*fiber.Error); ok {
+			code = e.Code
+		}
+		// Send custom error page
+		err = ctx.Status(code).SendFile("./build/notfound.html")
+		if err != nil {
+			// In case the SendFile fails
+			return ctx.Status(fiber.StatusInternalServerError).SendString("Internal Server Error")
+		}
+		// Return from handler
+		return nil
+	},
+}
 
 func SetupApp(db *sql.DB) *fiber.App {
 	DB = db
-	app := fiber.New(fiber.Config{
-		ErrorHandler: func(ctx *fiber.Ctx, err error) error {
-			code := fiber.StatusInternalServerError
-			if e, ok := err.(*fiber.Error); ok {
-				code = e.Code
-			}
-			// Send custom error page
-			err = ctx.Status(code).SendFile("./build/notfound.html")
-			if err != nil {
-				// In case the SendFile fails
-				return ctx.Status(fiber.StatusInternalServerError).SendString("Internal Server Error")
-			}
-			// Return from handler
-			return nil
-		},
-	})
+	app := fiber.New(FiberConfig)
 
-	// allowing clients from different urls to access server
-	// it is very important that we use the cors config first before-
-	// declaring any routes
 	app.Use(cors.New(cors.Config{
 		AllowCredentials: true,
 	}))
@@ -85,26 +83,9 @@ func MockSetupApp() (*sql.DB, *fiber.App) {
 	}
 
 	db := MockConnectDB()
-	app := fiber.New(fiber.Config{
-		ErrorHandler: func(ctx *fiber.Ctx, err error) error {
-			code := fiber.StatusInternalServerError
-			if e, ok := err.(*fiber.Error); ok {
-				code = e.Code
-			}
-			// Send custom error page
-			err = ctx.Status(code).SendFile("./build/notfound.html")
-			if err != nil {
-				// In case the SendFile fails
-				return ctx.Status(fiber.StatusInternalServerError).SendString("Internal Server Error")
-			}
-			// Return from handler
-			return nil
-		},
-	})
+	// ! Registering config disables adding routes in test files
+	app := fiber.New()
 
-	// allowing clients from different urls to access server
-	// it is very important that we use the cors config first before-
-	// declaring any routes
 	app.Use(cors.New(cors.Config{
 		AllowCredentials: true,
 	}))
