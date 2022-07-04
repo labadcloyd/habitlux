@@ -1,27 +1,29 @@
 package controllers
 
 import (
+	"database/sql"
 	"habit-tracker/middlewares"
 	"habit-tracker/models"
-	"habit-tracker/setup"
 	"log"
 
 	"github.com/gofiber/fiber/v2"
 )
 
-func UpdateHabitList(c *fiber.Ctx) error {
-	db := setup.DB
-
+func UpdateHabitList(c *fiber.Ctx, db *sql.DB) error {
 	//* auth middleware
 	token, owner_id, err := middlewares.AuthMiddleware(c)
 	if token == nil || owner_id == 0 || err != nil {
-		return err
+		return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
+			"message": "Unautherized",
+		})
 	}
 
 	//* data validation
 	reqData := new(ReqUpdateHabitList)
 	if err = middlewares.BodyValidation(reqData, c); err != nil {
-		return err
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"message": err.Error(),
+		})
 	}
 
 	//* updating the habitList

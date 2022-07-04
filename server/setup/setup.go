@@ -21,7 +21,7 @@ import (
 )
 
 var DB *sql.DB
-var SecretKey = os.Getenv("SECRET_KEY")
+var SecretKey string
 var FiberConfig = fiber.Config{
 	ErrorHandler: func(ctx *fiber.Ctx, err error) error {
 		code := fiber.StatusInternalServerError
@@ -39,8 +39,7 @@ var FiberConfig = fiber.Config{
 	},
 }
 
-func SetupApp(db *sql.DB) *fiber.App {
-	DB = db
+func SetupApp() *fiber.App {
 	app := fiber.New(FiberConfig)
 
 	app.Use(cors.New(cors.Config{
@@ -50,8 +49,10 @@ func SetupApp(db *sql.DB) *fiber.App {
 	return app
 }
 
-func ConnectDB() *sql.DB {
+func ConnectDB() {
+	SecretKey = helpers.GoDotEnvVariable("SECRET_KEY")
 	connStr := helpers.GoDotEnvVariable("POSTGRES_URL")
+	log.Println(SecretKey)
 	var err error
 	db, err := sql.Open("postgres", connStr)
 	if err != nil {
@@ -63,12 +64,13 @@ func ConnectDB() *sql.DB {
 		log.Fatal(pingErr)
 	}
 	log.Println("Connected!")
-	return db
+	DB = db
 }
 
 // TEST VARS
 func MockSetupApp() (*sql.DB, *fiber.App) {
 	// ! <--- I have no idea how this part works
+	// this code comes from here: https://github.com/joho/godotenv/issues/43#issuecomment-787017199
 	_, file, _, ok := runtime.Caller(0)
 	if !ok {
 		log.Fatalln("Unable to identify current directory (needed to load .env.test)")
@@ -151,7 +153,7 @@ func ClearMockDB(db *sql.DB, t *testing.T) error {
 	return nil
 }
 
-func SetupMockAccount(db *sql.DB) (*http.Cookie, error) {
+func SetupMockAccount(db *sql.DB) (*http.Cookie, uint, error) {
 	var user = models.User{}
 	password, _ := bcrypt.GenerateFromPassword([]byte("vErYSeCuRePaSsWoRd123!"), 10)
 	user = models.User{
@@ -164,16 +166,19 @@ func SetupMockAccount(db *sql.DB) (*http.Cookie, error) {
 	// scanning and returning error
 	if err := row2.Scan(&user.ID); err != nil {
 		log.Println("Error: ", err.Error())
-		return nil, err
+		return nil, 0, err
 	}
 	// generating jwt token
 	claims := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.RegisteredClaims{
 		Issuer:    strconv.Itoa(int(user.ID)),
 		ExpiresAt: jwt.NewNumericDate(time.Now().AddDate(0, 1, 0)),
 	})
+	if SecretKey == "" {
+		SecretKey = os.Getenv("SECRET_KEY")
+	}
 	token, err := claims.SignedString([]byte(SecretKey))
 	if err != nil {
-		return nil, err
+		return nil, 0, err
 	}
 
 	// saving jwt to cookie
@@ -186,5 +191,5 @@ func SetupMockAccount(db *sql.DB) (*http.Cookie, error) {
 		Secure:   true,
 	}
 	log.Println("Successfully logged demo user in")
-	return &cookie, nil
+	return &cookie, user.ID, nil
 }

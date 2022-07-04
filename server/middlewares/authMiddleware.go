@@ -9,9 +9,8 @@ import (
 	"github.com/golang-jwt/jwt/v4"
 )
 
-var SecretKey = os.Getenv("SECRET_KEY")
-
 func AuthMiddleware(c *fiber.Ctx) (*jwt.Token, uint, error) {
+	SecretKey := os.Getenv("SECRET_KEY")
 	cookie := c.Cookies("jwt")
 
 	// parsing token

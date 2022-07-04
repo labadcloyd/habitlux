@@ -2,6 +2,7 @@ package routes
 
 import (
 	controllers "habit-tracker/controllers/habitControllers"
+	"habit-tracker/setup"
 
 	"github.com/gofiber/fiber/v2"
 )
@@ -9,11 +10,11 @@ import (
 func HabitRoutes(app *fiber.App) {
 	r := app.Group("/api")
 
-	r.Get("/habit", controllers.GetAllUserHabits)
-	r.Post("/habit", controllers.CreateHabit)
-	r.Post("/habitlist", controllers.CreateHabitList)
-	r.Put("/habit", controllers.UpdateHabit)
-	r.Put("/habitlist", controllers.UpdateHabitList)
-	r.Delete("/habit", controllers.DeleteHabit)
-	r.Delete("/habitlist", controllers.DeleteHabitList)
+	r.Get("/habit", func(c *fiber.Ctx) error { return controllers.GetAllUserHabits(c, setup.DB) })
+	r.Post("/habit", func(c *fiber.Ctx) error { return controllers.CreateHabit(c, setup.DB) })
+	r.Post("/habitlist", func(c *fiber.Ctx) error { return controllers.CreateHabitList(c, setup.DB) })
+	r.Put("/habit", func(c *fiber.Ctx) error { return controllers.UpdateHabit(c, setup.DB) })
+	r.Put("/habitlist", func(c *fiber.Ctx) error { return controllers.UpdateHabitList(c, setup.DB) })
+	r.Delete("/habit", func(c *fiber.Ctx) error { return controllers.DeleteHabit(c, setup.DB) })
+	r.Delete("/habitlist", func(c *fiber.Ctx) error { return controllers.DeleteHabitList(c, setup.DB) })
 }

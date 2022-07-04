@@ -5,6 +5,7 @@ import (
 	"habit-tracker/models"
 )
 
+// REQUEST TYPES
 type ReqCreateHabit struct {
 	Habit_Name          string           `json:"habit_name" validate:"required,min=1,max=32"`
 	Habit_List_ID       uint             `json:"habit_list_id" validate:"required,min=1,max=32"`
@@ -52,6 +53,7 @@ type ReqGetUserHabits struct {
 	End_Date   string `query:"end_date" validate:"required,min=1,max=32"`
 }
 
+// RESPONSE TYPES
 type ResGetUserHabits struct {
 	ID                   uint           `json:"id"`
 	Owner_ID             uint           `json:"owner_id"`
@@ -60,4 +62,15 @@ type ResGetUserHabits struct {
 	Color                string         `json:"color"`
 	Default_Repeat_Count uint           `json:"default_repeat_count"`
 	Habits               []models.Habit `json:"habits"`
+}
+
+type ResCreateHabit struct {
+	ID                  uint
+	Owner_ID            uint
+	Habit_List_ID       uint
+	Habit_Name          string
+	Date_Created        helpers.Datetime
+	Comment             string
+	Target_Repeat_Count uint
+	Repeat_Count        uint
 }

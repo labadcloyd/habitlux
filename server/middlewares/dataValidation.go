@@ -10,30 +10,24 @@ import (
 
 func BodyValidation(ReqStruct interface{}, c *fiber.Ctx) error {
 	if err := c.BodyParser(ReqStruct); err != nil {
-		log.Println("err: ", err)
-		c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
-			"message": err.Error(),
-		})
-		return err
+		log.Println("err on line 13: ", err)
+		return errors.New("failed validating data")
 	}
-	err := helpers.ValidateStruct(&ReqStruct)
+	err := helpers.ValidateStruct(ReqStruct)
 	if err != nil {
-		c.Status(fiber.StatusBadRequest).JSON(err)
+		log.Println("err on line 18: ", err)
 		return errors.New("failed validating data")
 	}
 	return nil
 }
 func QueryValidation(ReqStruct interface{}, c *fiber.Ctx) error {
 	if err := c.QueryParser(ReqStruct); err != nil {
-		log.Println("err: ", err)
-		c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
-			"message": err.Error(),
-		})
-		return err
+		log.Println("err on line 25: ", err)
+		return errors.New("failed validating data")
 	}
 	err := helpers.ValidateStruct(&ReqStruct)
 	if err != nil {
-		c.Status(fiber.StatusBadRequest).JSON(err)
+		log.Println("err on line 30: ", err)
 		return errors.New("failed validating data")
 	}
 	return nil

@@ -8,8 +8,8 @@ import (
 )
 
 func main() {
-	DB := setup.ConnectDB()
-	app := setup.SetupApp(DB)
+	setup.ConnectDB()
+	app := setup.SetupApp()
 
 	port := helpers.GoDotEnvVariable("PORT")
 	if port == "" {

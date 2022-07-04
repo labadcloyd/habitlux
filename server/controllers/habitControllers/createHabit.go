@@ -2,7 +2,6 @@ package controllers
 
 import (
 	"database/sql"
-	"habit-tracker/setup"
 
 	"habit-tracker/middlewares"
 	"habit-tracker/models"
@@ -12,19 +11,21 @@ import (
 	"github.com/lib/pq"
 )
 
-func CreateHabit(c *fiber.Ctx) error {
-	db := setup.DB
-
+func CreateHabit(c *fiber.Ctx, db *sql.DB) error {
 	//* auth middleware
 	token, owner_id, err := middlewares.AuthMiddleware(c)
 	if token == nil || owner_id == 0 || err != nil {
-		return err
+		return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
+			"message": "Unautherized",
+		})
 	}
 
 	//* data validation
 	reqData := new(ReqCreateHabit)
 	if err = middlewares.BodyValidation(reqData, c); err != nil {
-		return err
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"message": err.Error(),
+		})
 	}
 
 	//* checking if record exists
