@@ -53,6 +53,20 @@ func TestCreateHabit(t *testing.T) {
 		Target_Repeat_Count: 4,
 		Repeat_Count:        1,
 	}
+	incompletePayload2 := testPayload{
+		Habit_Name:          "test",
+		Date_Created:        "2022-02-01",
+		Comment:             "",
+		Target_Repeat_Count: 4,
+		Repeat_Count:        1,
+	}
+	incompletePayload3 := testPayload{
+		Habit_List_ID:       1,
+		Habit_Name:          "test",
+		Comment:             "",
+		Target_Repeat_Count: 4,
+		Repeat_Count:        1,
+	}
 	nonExistingParentPayload := testPayload{
 		Habit_Name:          "test",
 		Habit_List_ID:       2,
@@ -86,8 +100,22 @@ func TestCreateHabit(t *testing.T) {
 			expectedBody: "{\"message\":\"failed validating data\"}",
 			setupFunc:    func() {},
 		}, {
-			description:  "Returns error with incomplete fields",
+			description:  "Returns error with empty habit name",
 			body:         incompletePayload,
+			cookie:       cookie,
+			expectedCode: 400,
+			expectedBody: "{\"message\":\"failed validating data\"}",
+			setupFunc:    func() {},
+		}, {
+			description:  "Returns error with empty habit list id",
+			body:         incompletePayload2,
+			cookie:       cookie,
+			expectedCode: 400,
+			expectedBody: "{\"message\":\"failed validating data\"}",
+			setupFunc:    func() {},
+		}, {
+			description:  "Returns error with empty date created field",
+			body:         incompletePayload3,
 			cookie:       cookie,
 			expectedCode: 400,
 			expectedBody: "{\"message\":\"failed validating data\"}",
