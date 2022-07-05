@@ -25,7 +25,7 @@ func QueryValidation(ReqStruct interface{}, c *fiber.Ctx) error {
 		log.Println("err on line 25: ", err)
 		return errors.New("failed validating data")
 	}
-	err := helpers.ValidateStruct(&ReqStruct)
+	err := helpers.ValidateStruct(ReqStruct)
 	if err != nil {
 		log.Println("err on line 30: ", err)
 		return errors.New("failed validating data")

@@ -52,7 +52,6 @@ func SetupApp() *fiber.App {
 func ConnectDB() {
 	SecretKey = helpers.GoDotEnvVariable("SECRET_KEY")
 	connStr := helpers.GoDotEnvVariable("POSTGRES_URL")
-	log.Println(SecretKey)
 	var err error
 	db, err := sql.Open("postgres", connStr)
 	if err != nil {

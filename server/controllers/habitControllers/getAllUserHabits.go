@@ -20,7 +20,7 @@ func GetAllUserHabits(c *fiber.Ctx, db *sql.DB) error {
 
 	//* data validation
 	reqData := new(ReqGetUserHabits)
-	if err = middlewares.BodyValidation(reqData, c); err != nil {
+	if err = middlewares.QueryValidation(reqData, c); err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 			"message": err.Error(),
 		})
