@@ -25,10 +25,34 @@ func UpdateHabit(c *fiber.Ctx, db *sql.DB) error {
 			"message": err.Error(),
 		})
 	}
+	//* checking if habit with the same date exists
+	duplicateHabit := models.Habit{}
+	row := db.
+		QueryRow(`
+			SELECT id FROM habits 
+			WHERE owner_id = $1 AND date_created = $2 AND habit_list_id = $3`,
+			owner_id, reqData.Date_Created, reqData.Habit_List_ID,
+		)
+	err = row.Scan(&duplicateHabit.ID)
+	// only checking if the error is not caused by empty rows
+	if err != nil && err != sql.ErrNoRows {
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"message": err.Error(),
+		})
+	}
+	// returning error if record exists
+	if (duplicateHabit != models.Habit{}) {
+		if duplicateHabit.ID != 0 && duplicateHabit.ID != reqData.ID {
+			return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+				"message": "Habit already exists",
+			})
+		}
+	}
 
 	//* updating the habit
 	habit := models.Habit{
 		ID:                  reqData.ID,
+		Habit_List_ID:       reqData.Habit_List_ID,
 		Owner_ID:            owner_id,
 		Habit_Name:          reqData.Habit_Name,
 		Date_Created:        reqData.Date_Created,
@@ -39,9 +63,8 @@ func UpdateHabit(c *fiber.Ctx, db *sql.DB) error {
 	if _, err := db.
 		Exec(`UPDATE habits
 			SET
-				habit_name = $1, date_created = $2, comment = $3, target_repeat_count = $4, repeat_count = $5
-			WHERE owner_id = $6 AND id = $7`,
-			reqData.Habit_Name,
+			date_created = $1, comment = $2, target_repeat_count = $3, repeat_count = $4
+			WHERE owner_id = $5 AND id = $6`,
 			reqData.Date_Created,
 			reqData.Comment,
 			reqData.Target_Repeat_Count,

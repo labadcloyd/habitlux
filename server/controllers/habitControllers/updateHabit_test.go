@@ -29,6 +29,7 @@ func TestUpdateHabit(t *testing.T) {
 	// Variables
 	type testPayload struct {
 		ID                  uint   `json:"id"`
+		Habit_List_ID       uint   `json:"habit_list_id"`
 		Habit_Name          string `json:"habit_name"`
 		Date_Created        string `json:"date_created"`
 		Comment             string `json:"comment"`
@@ -37,7 +38,17 @@ func TestUpdateHabit(t *testing.T) {
 	}
 	completePayload := testPayload{
 		ID:                  1,
-		Habit_Name:          "test2",
+		Habit_List_ID:       1,
+		Habit_Name:          "test",
+		Date_Created:        "2022-01-02",
+		Comment:             "",
+		Target_Repeat_Count: 4,
+		Repeat_Count:        1,
+	}
+	duplicatePayload := testPayload{
+		ID:                  1,
+		Habit_List_ID:       1,
+		Habit_Name:          "test",
 		Date_Created:        "2022-05-02",
 		Comment:             "",
 		Target_Repeat_Count: 4,
@@ -57,6 +68,7 @@ func TestUpdateHabit(t *testing.T) {
 	}
 	violatingPayload := testPayload{
 		ID:                  1,
+		Habit_List_ID:       1,
 		Habit_Name:          "asdasdasdasdasdasdasdasdasdasdasdasasdasdasddaasd",
 		Date_Created:        "2022-02-01",
 		Comment:             "",
@@ -108,36 +120,39 @@ func TestUpdateHabit(t *testing.T) {
 			expectedBody: "{\"message\":\"failed validating data\"}",
 			setupFunc:    func() {},
 		}, {
-			description:  "Returns success when fields are complete and user is authenticated",
-			body:         completePayload,
+			description:  "Returns error when habit with the same date_created exists",
+			body:         duplicatePayload,
 			cookie:       cookie,
-			expectedCode: 200,
-			expectedBody: "{\"id\":1,\"owner_id\":1,\"habit_list_id\":0,\"habit_name\":\"test2\",\"date_created\":\"2022-05-02T00:00:00Z\",\"comment\":\"\",\"target_repeat_count\":4,\"repeat_count\":1}",
+			expectedCode: 400,
+			expectedBody: "{\"message\":\"Habit already exists\"}",
 			setupFunc: func() {
 				db.QueryRow(`
 					INSERT INTO
 					habit_lists (owner_id, habit_name, icon_url, color, default_repeat_count)
-					VALUES ($1, $2, $3, $4, $5) RETURNING id`,
+					VALUES ($1, $2, $3, $4, $5)`,
 					owner_id, "test", "", "#ffffff", 2,
 				)
 				db.QueryRow(`
 					INSERT INTO
 					habits (owner_id, habit_name, habit_list_id, date_created, comment, target_repeat_count, repeat_count)
-					VALUES ($1, $2, $3, $4, $5, $6, $7)
-					RETURNING id`,
-					owner_id, "test", 1, "2022-02-01", "", 1, 1,
+					VALUES ($1, $2, $3, $4, $5, $6, $7)`,
+					owner_id, "test", 1, "2022-01-01", "", 1, 1,
+				)
+				db.QueryRow(`
+					INSERT INTO
+					habits (owner_id, habit_name, habit_list_id, date_created, comment, target_repeat_count, repeat_count)
+					VALUES ($1, $2, $3, $4, $5, $6, $7)`,
+					owner_id, "test", 1, "2022-05-02", "", 1, 1,
 				)
 			},
+		}, {
+			description:  "Returns success when fields are complete and user is authenticated",
+			body:         completePayload,
+			cookie:       cookie,
+			expectedCode: 200,
+			expectedBody: "{\"id\":1,\"owner_id\":1,\"habit_list_id\":1,\"habit_name\":\"test\",\"date_created\":\"2022-01-02T00:00:00Z\",\"comment\":\"\",\"target_repeat_count\":4,\"repeat_count\":1}",
+			setupFunc:    func() {},
 		},
-		// TODO Add this edge case to the endpoint
-		// {
-		// 	description:  "Returns error when habit with the same date_created exists",
-		// 	body:         completePayload,
-		// 	cookie:       cookie,
-		// 	expectedCode: 400,
-		// 	expectedBody: "{\"message\":\"Habit already exists\"}",
-		// 	setupFunc:    func() {},
-		// },
 	}
 
 	for _, test := range tests {
