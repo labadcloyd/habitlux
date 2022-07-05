@@ -26,6 +26,27 @@ func UpdateHabitList(c *fiber.Ctx, db *sql.DB) error {
 		})
 	}
 
+	//* checking if habitlist name already exists
+	oldHabitList := models.HabitList{}
+	row := db.
+		QueryRow(`
+			SELECT id FROM habit_lists 
+			WHERE owner_id = $1 AND habit_name = $2`,
+			owner_id, reqData.Habit_Name,
+		)
+	err = row.Scan(&oldHabitList.ID)
+	// only checking if the error is not caused by empty rows
+	if err != nil && err != sql.ErrNoRows {
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"message": err.Error(),
+		})
+	}
+	// returning error if record exists
+	if (oldHabitList != models.HabitList{}) {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"message": "Habit list already exists",
+		})
+	}
 	//* updating the habitList
 	newHabitList := models.HabitList{
 		ID:                   reqData.ID,

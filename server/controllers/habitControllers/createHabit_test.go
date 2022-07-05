@@ -75,7 +75,14 @@ func TestCreateHabit(t *testing.T) {
 		Target_Repeat_Count: 4,
 		Repeat_Count:        1,
 	}
-
+	violatingPayload := testPayload{
+		Habit_Name:          "asdasdasdasdasdasdasdasdasdasdasdasasdasdasddaasd",
+		Habit_List_ID:       1,
+		Date_Created:        "2022-02-01",
+		Comment:             "",
+		Target_Repeat_Count: 4,
+		Repeat_Count:        1,
+	}
 	// Test Cases
 	tests := []struct {
 		description  string       // description of the test case
@@ -116,6 +123,13 @@ func TestCreateHabit(t *testing.T) {
 		}, {
 			description:  "Returns error with empty date created field",
 			body:         incompletePayload3,
+			cookie:       cookie,
+			expectedCode: 400,
+			expectedBody: "{\"message\":\"failed validating data\"}",
+			setupFunc:    func() {},
+		}, {
+			description:  "Returns error when habit name is too long",
+			body:         violatingPayload,
 			cookie:       cookie,
 			expectedCode: 400,
 			expectedBody: "{\"message\":\"failed validating data\"}",

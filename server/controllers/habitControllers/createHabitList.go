@@ -28,6 +28,28 @@ func CreateHabitList(c *fiber.Ctx, db *sql.DB) error {
 		})
 	}
 
+	//* checking if habitlist already exists
+	oldHabitList := models.HabitList{}
+	row := db.
+		QueryRow(`
+			SELECT id FROM habit_lists 
+			WHERE owner_id = $1 AND habit_name = $2`,
+			owner_id, reqData.Habit_Name,
+		)
+	err = row.Scan(&oldHabitList.ID)
+	// only checking if the error is not caused by empty rows
+	if err != nil && err != sql.ErrNoRows {
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"message": err.Error(),
+		})
+	}
+	// returning error if record exists
+	if (oldHabitList != models.HabitList{}) {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"message": "Habit list already exists",
+		})
+	}
+
 	//* saving the habitlist
 	habit := models.HabitList{
 		Owner_ID:             owner_id,
@@ -35,7 +57,7 @@ func CreateHabitList(c *fiber.Ctx, db *sql.DB) error {
 		Color:                reqData.Color,
 		Default_Repeat_Count: reqData.Default_Repeat_Count,
 	}
-	row := db.QueryRow(`
+	row = db.QueryRow(`
 		INSERT INTO
 		habit_lists (owner_id, habit_name, icon_url, color, default_repeat_count)
 		VALUES ($1, $2, $3, $4, $5) RETURNING id`,

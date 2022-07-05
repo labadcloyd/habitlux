@@ -34,7 +34,7 @@ func DeleteHabit(c *fiber.Ctx, db *sql.DB) error {
 	}
 
 	log.Println("Successfully deleted habbit")
-	return c.Status(fiber.StatusAccepted).JSON(fiber.Map{
+	return c.Status(fiber.StatusOK).JSON(fiber.Map{
 		"message": "Successfully deleted habbit",
 	})
 }
