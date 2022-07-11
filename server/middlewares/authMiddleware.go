@@ -1,16 +1,16 @@
 package middlewares
 
 import (
-	"habit-tracker/helpers"
 	"log"
+	"os"
+	"strconv"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/golang-jwt/jwt/v4"
 )
 
-var SecretKey = helpers.GoDotEnvVariable("SECRET_KEY")
-
-func AuthMiddleware(c *fiber.Ctx) *jwt.Token {
+func AuthMiddleware(c *fiber.Ctx) (*jwt.Token, uint, error) {
+	SecretKey := os.Getenv("SECRET_KEY")
 	cookie := c.Cookies("jwt")
 
 	// parsing token
@@ -23,8 +23,14 @@ func AuthMiddleware(c *fiber.Ctx) *jwt.Token {
 	)
 	if err != nil {
 		log.Println(err)
-		c.Status(fiber.StatusUnauthorized)
-		return nil
+		return nil, 0, err
 	}
-	return token
+	claims := token.Claims.(*jwt.RegisteredClaims)
+	u64, err := strconv.ParseUint(claims.Issuer, 10, 32)
+	if err != nil {
+		return nil, 0, err
+	}
+
+	owner_id := uint(u64)
+	return token, owner_id, nil
 }

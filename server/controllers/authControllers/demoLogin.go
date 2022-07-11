@@ -2,7 +2,6 @@ package controllers
 
 import (
 	"database/sql"
-	"habit-tracker/database"
 	"habit-tracker/models"
 	"log"
 	"strconv"
@@ -13,10 +12,10 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
-func DemoLogin(c *fiber.Ctx) error {
+func DemoLogin(c *fiber.Ctx, db *sql.DB) error {
 	// checking if user exists
 	var user = models.User{}
-	row := database.DB.QueryRow("SELECT username, id, password FROM users WHERE username = $1", "demo")
+	row := db.QueryRow("SELECT username, id, password FROM users WHERE username = $1", "demo")
 	// scanning and returning error
 	err := row.Scan(&user.Username, &user.ID, &user.Password)
 	if err == sql.ErrNoRows {
@@ -27,7 +26,7 @@ func DemoLogin(c *fiber.Ctx) error {
 			Password: password,
 		}
 		// saving user
-		row2 := database.DB.
+		row2 := db.
 			QueryRow("INSERT INTO users (username, password) VALUES ($1, $2) RETURNING id", user.Username, user.Password)
 		// scanning and returning error
 		if err = row2.Scan(&user.ID); err != nil {

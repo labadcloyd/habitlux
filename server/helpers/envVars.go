@@ -1,9 +1,10 @@
 package helpers
 
 import (
-	"github.com/joho/godotenv"
 	"log"
 	"os"
+
+	"github.com/joho/godotenv"
 )
 
 func GoDotEnvVariable(key string) string {
@@ -12,7 +13,7 @@ func GoDotEnvVariable(key string) string {
 	err := godotenv.Load(".env")
 
 	if err != nil {
-		log.Println("Error loading .env file")
+		log.Fatalln("Error loading .env file in helper")
 	}
 
 	return os.Getenv(key)

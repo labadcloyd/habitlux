@@ -2,53 +2,35 @@ package controllers
 
 import (
 	"database/sql"
-	"habit-tracker/database"
-	"habit-tracker/helpers"
 
 	"habit-tracker/middlewares"
 	"habit-tracker/models"
 	"log"
 
-	"strconv"
-
 	"github.com/gofiber/fiber/v2"
-	"github.com/golang-jwt/jwt/v4"
 	"github.com/lib/pq"
 )
 
-func CreateHabit(c *fiber.Ctx) error {
+func CreateHabit(c *fiber.Ctx, db *sql.DB) error {
 	//* auth middleware
-	token := middlewares.AuthMiddleware(c)
-	if token == nil {
-		return c.JSON(fiber.Map{
-			"message": "Unauthenticated",
-		})
-	}
-	claims := token.Claims.(*jwt.RegisteredClaims)
-	u64, err := strconv.ParseUint(claims.Issuer, 10, 32)
-	if err != nil {
+	token, owner_id, err := middlewares.AuthMiddleware(c)
+	if token == nil || owner_id == 0 || err != nil {
 		return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
-			"message": err.Error(),
+			"message": "Unautherized",
 		})
 	}
-	owner_id := uint(u64)
 
 	//* data validation
 	reqData := new(ReqCreateHabit)
-	if err := c.BodyParser(&reqData); err != nil {
-		log.Println("err: ", err)
-		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+	if err = middlewares.BodyValidation(reqData, c); err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 			"message": err.Error(),
 		})
-	}
-	reqErrors := helpers.ValidateStruct(*reqData)
-	if reqErrors != nil {
-		return c.Status(fiber.StatusBadRequest).JSON(reqErrors)
 	}
 
 	//* checking if record exists
 	oldHabit := models.Habit{}
-	row := database.DB.
+	row := db.
 		QueryRow(`
 			SELECT id FROM habits 
 			WHERE owner_id = $1 AND date_created = $2 AND habit_list_id = $3`,
@@ -78,7 +60,7 @@ func CreateHabit(c *fiber.Ctx) error {
 		Repeat_Count:        reqData.Repeat_Count,
 		Target_Repeat_Count: reqData.Target_Repeat_Count,
 	}
-	row = database.DB.QueryRow(`
+	row = db.QueryRow(`
 		INSERT INTO
 		habits (owner_id, habit_name, habit_list_id, date_created, comment, target_repeat_count, repeat_count)
 		VALUES ($1, $2, $3, $4, $5, $6, $7)

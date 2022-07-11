@@ -1,8 +1,9 @@
 package helpers
 
 import (
-	"github.com/go-playground/validator/v10"
 	"regexp"
+
+	"github.com/go-playground/validator/v10"
 )
 
 // validator function

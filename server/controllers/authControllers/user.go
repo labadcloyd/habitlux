@@ -2,7 +2,7 @@ package controllers
 
 import (
 	"database/sql"
-	"habit-tracker/database"
+	"habit-tracker/middlewares"
 	"habit-tracker/models"
 	"log"
 
@@ -10,22 +10,11 @@ import (
 	"github.com/golang-jwt/jwt/v4"
 )
 
-func User(c *fiber.Ctx) error {
-	cookie := c.Cookies("jwt")
-
-	// parsing token
-	token, err := jwt.ParseWithClaims(
-		cookie,
-		&jwt.RegisteredClaims{},
-		func(t *jwt.Token) (interface{}, error) {
-			return []byte(SecretKey), nil
-		},
-	)
-	if err != nil {
-		log.Println(err)
-		c.Status(fiber.StatusBadRequest)
-		return c.JSON(fiber.Map{
-			"message": "Unauthenticated",
+func User(c *fiber.Ctx, db *sql.DB) error {
+	token, owner_id, err := middlewares.AuthMiddleware(c)
+	if token == nil || owner_id == 0 || err != nil {
+		return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
+			"message": "Unautherized",
 		})
 	}
 
@@ -33,7 +22,7 @@ func User(c *fiber.Ctx) error {
 
 	user := models.User{}
 
-	row := database.DB.
+	row := db.
 		QueryRow("SELECT username, id FROM users WHERE id = $1", claims.Issuer)
 	// scanning and returning error
 	err = row.Scan(&user.Username, &user.ID)

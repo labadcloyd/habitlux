@@ -1,8 +1,8 @@
 package controllers
 
 import (
-	"habit-tracker/database"
-	"habit-tracker/helpers"
+	"database/sql"
+	"habit-tracker/middlewares"
 	"habit-tracker/models"
 	"log"
 	"strconv"
@@ -13,20 +13,13 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
-func Signup(c *fiber.Ctx) error {
+func Signup(c *fiber.Ctx, db *sql.DB) error {
 	// data validation
 	reqData := new(ReqSignUp)
-	if err := c.BodyParser(&reqData); err != nil {
-		log.Println("Error: ", err)
-		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+	if err := middlewares.BodyValidation(reqData, c); err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 			"message": err.Error(),
 		})
-	}
-	errors := helpers.ValidateStruct(*reqData)
-
-	if errors != nil {
-		log.Println("Error: ", errors)
-		return c.Status(fiber.StatusBadRequest).JSON(errors)
 	}
 
 	// hashing password and formatting reqData
@@ -37,7 +30,7 @@ func Signup(c *fiber.Ctx) error {
 	}
 
 	// saving user
-	row := database.DB.
+	row := db.
 		QueryRow("INSERT INTO users (username, password) VALUES ($1, $2) RETURNING id", user.Username, user.Password)
 
 	err := row.Scan(&user.ID)

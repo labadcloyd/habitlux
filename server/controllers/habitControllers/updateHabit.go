@@ -1,50 +1,58 @@
 package controllers
 
 import (
-	"habit-tracker/database"
-	"habit-tracker/helpers"
+	"database/sql"
 	"habit-tracker/middlewares"
 	"habit-tracker/models"
 	"log"
-	"strconv"
 
 	"github.com/gofiber/fiber/v2"
-	"github.com/golang-jwt/jwt/v4"
 )
 
-func UpdateHabit(c *fiber.Ctx) error {
+func UpdateHabit(c *fiber.Ctx, db *sql.DB) error {
 	//* auth middleware
-	token := middlewares.AuthMiddleware(c)
-	if token == nil {
-		return c.JSON(fiber.Map{
-			"message": "Unauthenticated",
+	token, owner_id, err := middlewares.AuthMiddleware(c)
+	if token == nil || owner_id == 0 || err != nil {
+		return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
+			"message": "Unautherized",
 		})
 	}
-	claims := token.Claims.(*jwt.RegisteredClaims)
-	u64, err := strconv.ParseUint(claims.Issuer, 10, 32)
-	if err != nil {
-		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
-			"message": err.Error(),
-		})
-	}
-	owner_id := uint(u64)
 
 	//* data validation
-	reqData := ReqUpdateHabit{}
-	if err := c.BodyParser(&reqData); err != nil {
-		log.Println("err: ", err)
+	reqData := new(ReqUpdateHabit)
+	if err = middlewares.BodyValidation(reqData, c); err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"message": err.Error(),
+		})
+	}
+	//* checking if habit with the same date exists
+	duplicateHabit := models.Habit{}
+	row := db.
+		QueryRow(`
+			SELECT id FROM habits 
+			WHERE owner_id = $1 AND date_created = $2 AND habit_list_id = $3`,
+			owner_id, reqData.Date_Created, reqData.Habit_List_ID,
+		)
+	err = row.Scan(&duplicateHabit.ID)
+	// only checking if the error is not caused by empty rows
+	if err != nil && err != sql.ErrNoRows {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
 			"message": err.Error(),
 		})
 	}
-	errors := helpers.ValidateStruct(reqData)
-	if errors != nil {
-		return c.Status(fiber.StatusBadRequest).JSON(errors)
+	// returning error if record exists
+	if (duplicateHabit != models.Habit{}) {
+		if duplicateHabit.ID != 0 && duplicateHabit.ID != reqData.ID {
+			return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+				"message": "Habit already exists",
+			})
+		}
 	}
 
 	//* updating the habit
 	habit := models.Habit{
 		ID:                  reqData.ID,
+		Habit_List_ID:       reqData.Habit_List_ID,
 		Owner_ID:            owner_id,
 		Habit_Name:          reqData.Habit_Name,
 		Date_Created:        reqData.Date_Created,
@@ -52,12 +60,11 @@ func UpdateHabit(c *fiber.Ctx) error {
 		Target_Repeat_Count: reqData.Target_Repeat_Count,
 		Repeat_Count:        reqData.Repeat_Count,
 	}
-	if _, err := database.DB.
+	if _, err := db.
 		Exec(`UPDATE habits
 			SET
-				habit_name = $1, date_created = $2, comment = $3, target_repeat_count = $4, repeat_count = $5
-			WHERE owner_id = $6 AND id = $7`,
-			reqData.Habit_Name,
+			date_created = $1, comment = $2, target_repeat_count = $3, repeat_count = $4
+			WHERE owner_id = $5 AND id = $6`,
 			reqData.Date_Created,
 			reqData.Comment,
 			reqData.Target_Repeat_Count,

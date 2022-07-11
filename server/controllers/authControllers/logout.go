@@ -1,11 +1,13 @@
 package controllers
 
 import (
-	"github.com/gofiber/fiber/v2"
+	"database/sql"
 	"time"
+
+	"github.com/gofiber/fiber/v2"
 )
 
-func Logout(c *fiber.Ctx) error {
+func Logout(c *fiber.Ctx, db *sql.DB) error {
 	cookie := fiber.Cookie{
 		Name:     "jwt",
 		Value:    "",

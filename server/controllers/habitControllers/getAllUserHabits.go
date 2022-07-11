@@ -1,54 +1,36 @@
 package controllers
 
 import (
-	"habit-tracker/database"
-	"habit-tracker/helpers"
+	"database/sql"
 	"habit-tracker/middlewares"
 	"habit-tracker/models"
 	"log"
-	"strconv"
 
 	"github.com/gofiber/fiber/v2"
-	"github.com/golang-jwt/jwt/v4"
 )
 
-func GetAllUserHabits(c *fiber.Ctx) error {
+func GetAllUserHabits(c *fiber.Ctx, db *sql.DB) error {
 	//* auth middleware
-	token := middlewares.AuthMiddleware(c)
-	if token == nil {
-		return c.JSON(fiber.Map{
-			"message": "Unauthenticated",
+	token, owner_id, err := middlewares.AuthMiddleware(c)
+	if token == nil || owner_id == 0 || err != nil {
+		return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
+			"message": "Unautherized",
 		})
 	}
-	claims := token.Claims.(*jwt.RegisteredClaims)
-
-	u64, err := strconv.ParseUint(claims.Issuer, 10, 32)
-	if err != nil {
-		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
-			"message": err.Error(),
-		})
-	}
-	owner_id := uint(u64)
 
 	//* data validation
-	reqData := ReqGetUserHabits{}
-	if err := c.QueryParser(&reqData); err != nil {
-		log.Println("err: ", err)
-		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+	reqData := new(ReqGetUserHabits)
+	if err = middlewares.QueryValidation(reqData, c); err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 			"message": err.Error(),
 		})
-	}
-	errors := helpers.ValidateStruct(reqData)
-
-	if errors != nil {
-		return c.Status(fiber.StatusBadRequest).JSON(errors)
 	}
 
 	//* querying the data
 	habitListMap := make(map[int]int)
 	habitListFormatted := make([]ResGetUserHabits, 0, 100)
 	// getting the list of habit names
-	rows, err := database.DB.
+	rows, err := db.
 		Query(`SELECT * FROM habit_lists WHERE owner_id = $1`, owner_id)
 	if err != nil {
 		log.Println(err)
@@ -80,7 +62,7 @@ func GetAllUserHabits(c *fiber.Ctx) error {
 		i++
 	}
 	// getting habits
-	rows2, err := database.DB.
+	rows2, err := db.
 		Query(`SELECT * FROM habits
 		WHERE owner_ID = $1 AND date_Created BETWEEN $2 AND $3
 		ORDER BY habit_Name, date_Created asc`,

@@ -1,8 +1,8 @@
 package controllers
 
 import (
-	"habit-tracker/database"
-	"habit-tracker/helpers"
+	"database/sql"
+	"habit-tracker/middlewares"
 	"habit-tracker/models"
 	"log"
 	"strconv"
@@ -13,21 +13,19 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
-func Login(c *fiber.Ctx) error {
+func Login(c *fiber.Ctx, db *sql.DB) error {
 	// data validation
 	reqData := new(ReqLogin)
-	if err := c.BodyParser(&reqData); err != nil {
-		return err
-	}
-	errors := helpers.ValidateStruct(*reqData)
-	if errors != nil {
-		return c.Status(fiber.StatusBadRequest).JSON(errors)
+	if err := middlewares.BodyValidation(reqData, c); err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"message": err.Error(),
+		})
 	}
 
 	var user = models.User{}
 
 	// checking if user exists
-	row := database.DB.
+	row := db.
 		QueryRow("SELECT username, id, password FROM users WHERE username = $1", reqData.Username)
 	// scanning and returning error
 	if err := row.Scan(&user.Username, &user.ID, &user.Password); err != nil {
