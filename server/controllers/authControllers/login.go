@@ -1,9 +1,9 @@
 package controllers
 
 import (
+	"database/sql"
 	"habit-tracker/middlewares"
 	"habit-tracker/models"
-	"habit-tracker/setup"
 	"log"
 	"strconv"
 	"time"
@@ -13,13 +13,13 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
-func Login(c *fiber.Ctx) error {
-	db := setup.DB
-
+func Login(c *fiber.Ctx, db *sql.DB) error {
 	// data validation
 	reqData := new(ReqLogin)
 	if err := middlewares.BodyValidation(reqData, c); err != nil {
-		return err
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"message": err.Error(),
+		})
 	}
 
 	var user = models.User{}

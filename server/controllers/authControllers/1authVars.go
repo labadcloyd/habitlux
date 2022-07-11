@@ -1,8 +1,8 @@
 package controllers
 
-import "habit-tracker/helpers"
+import "os"
 
-var SecretKey = helpers.GoDotEnvVariable("SECRET_KEY")
+var SecretKey = os.Getenv("SECRET_KEY")
 
 type ReqSignUp struct {
 	Username string `json:"username" validate:"required,min=3,max=32"`

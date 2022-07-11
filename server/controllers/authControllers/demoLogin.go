@@ -3,7 +3,6 @@ package controllers
 import (
 	"database/sql"
 	"habit-tracker/models"
-	"habit-tracker/setup"
 	"log"
 	"strconv"
 	"time"
@@ -13,9 +12,7 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
-func DemoLogin(c *fiber.Ctx) error {
-	db := setup.DB
-
+func DemoLogin(c *fiber.Ctx, db *sql.DB) error {
 	// checking if user exists
 	var user = models.User{}
 	row := db.QueryRow("SELECT username, id, password FROM users WHERE username = $1", "demo")
