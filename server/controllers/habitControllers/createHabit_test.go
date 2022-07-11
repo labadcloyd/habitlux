@@ -13,9 +13,6 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-type RouteRes struct {
-}
-
 func TestCreateHabit(t *testing.T) {
 	// Initial Setup
 	db, app := setup.MockSetupApp()
