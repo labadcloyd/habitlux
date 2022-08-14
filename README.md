@@ -106,7 +106,15 @@ The things you need to install the software and how to install them
 ### Running the API tests
 
 The tests written for the API are integration tests and by default go test runs in parallel. This would be a nightmare for running integration tests.
-To disable this default behavior simply run this command:
+Follow the steps below:
+
+1. Setup a test postgres server on your local machine. [Read Here](https://www.google.com/search?q=create+local+server+postgresql+in+pqadmin4&sxsrf=ALiCzsY3YLouyEPVuXh9HpBK_l99c3pshg%3A1660444156064&ei=_F34Yp-2A8amoASW5JbICA&ved=0ahUKEwifpN3ApMX5AhVGE4gKHRayBYkQ4dUDCA4&uact=5&oq=create+local+server+postgresql+in+pqadmin4&gs_lcp=Cgdnd3Mtd2l6EAMyBggAEB4QFjIFCAAQhgMyBQgAEIYDMgUIABCGAzIFCAAQhgMyBQgAEIYDOgcIABBHELADOgUIABCABDoFCCEQoAE6BwghEKABEApKBAhBGABKBAhGGABQxgZYiyNg7CNoAnABeACAAZwCiAG5F5IBBDItMTKYAQCgAQHIAQjAAQE&sclient=gws-wiz)
+
+2. Create a .env file following the format of the sample.env file and input the necessary variables.
+
+3. Open a cmd terminal and change directory to the server directory
+
+4. Finally, run the test while disabling the default parallel behavior:
 
 ```go test -p 1 ./...
 
