@@ -18,8 +18,6 @@
   </p>
 </div>
 
-
-
 <!-- TABLE OF CONTENTS -->
 <details>
   <summary>Table of Contents</summary>
@@ -44,9 +42,8 @@
   </ol>
 </details>
 
-
-
 <!-- ABOUT THE PROJECT -->
+
 ## About The Project
 
 [![Habitlux Screen Shot][product-screenshot]](https://habitlux.herokuapp.com/)
@@ -57,26 +54,24 @@ Of course, the app still has a lot more to improve, so if you have any feature r
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
-
-
 ### Built With
 
 The project's frontend was created with the following libraries and technologies:
 
-* [Next.js](https://nextjs.org/)
-* [React.js](https://reactjs.org/)
-* [Framer Motion](https://www.framer.com/motion/)
+- [Next.js](https://nextjs.org/)
+- [React.js](https://reactjs.org/)
+- [Framer Motion](https://www.framer.com/motion/)
 
-And the project's backend was created with the following libraries and technologies: 
-* [Golang](https://go.dev/)
-* [Go Fiber](https://gofiber.io/)
-* [MySQL](https://www.mysql.com/)
+And the project's backend was created with the following libraries and technologies:
+
+- [Golang](https://go.dev/)
+- [Go Fiber](https://gofiber.io/)
+- [MySQL](https://www.mysql.com/)
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
-
-
 <!-- GETTING STARTED -->
+
 ## Getting Started
 
 These instructions will get you a copy of the project up and running on your local machine for development and testing purposes.
@@ -84,8 +79,9 @@ These instructions will get you a copy of the project up and running on your loc
 ### Prerequisites
 
 The things you need to install the software and how to install them
-* [Golang](https://go.dev/dl/)
-* npm
+
+- [Golang](https://go.dev/dl/)
+- npm
   ```sh
   npm install npm@latest -g
   ```
@@ -107,9 +103,27 @@ The things you need to install the software and how to install them
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
+### Running the API tests
 
+The tests written for the API are integration tests and by default go test runs in parallel. This would be a nightmare for running integration tests.
+Follow the steps below:
+
+1. Setup a test postgres server on your local machine. [Read Here](https://www.google.com/search?q=create+local+server+postgresql+in+pqadmin4&sxsrf=ALiCzsY3YLouyEPVuXh9HpBK_l99c3pshg%3A1660444156064&ei=_F34Yp-2A8amoASW5JbICA&ved=0ahUKEwifpN3ApMX5AhVGE4gKHRayBYkQ4dUDCA4&uact=5&oq=create+local+server+postgresql+in+pqadmin4&gs_lcp=Cgdnd3Mtd2l6EAMyBggAEB4QFjIFCAAQhgMyBQgAEIYDMgUIABCGAzIFCAAQhgMyBQgAEIYDOgcIABBHELADOgUIABCABDoFCCEQoAE6BwghEKABEApKBAhBGABKBAhGGABQxgZYiyNg7CNoAnABeACAAZwCiAG5F5IBBDItMTKYAQCgAQHIAQjAAQE&sclient=gws-wiz)
+
+2. Create a .env file following the format of the sample.env file and input the necessary variables.
+
+3. Open a cmd terminal and change directory to the server directory
+
+4. Finally, run the test while disabling the default parallel behavior:
+
+```go test -p 1 ./...
+
+```
+
+<p align="right">(<a href="#top">back to top</a>)</p>
 
 <!-- CONTRIBUTING -->
+
 ## Contributing
 
 Contributions are what make the open source community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.
@@ -125,18 +139,16 @@ Don't forget to give the project a star! Thanks again!
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
-
-
 <!-- LICENSE -->
+
 ## License
 
 Distributed under the MIT License. See `LICENSE.txt` for more information.
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
-
-
 <!-- CONTACT -->
+
 ## Contact
 
 Cloyd Abad - [Linkedin](https://www.linkedin.com/in/labadcloyd/)
@@ -144,6 +156,5 @@ Cloyd Abad - [Linkedin](https://www.linkedin.com/in/labadcloyd/)
 Project Link: [https://github.com/labadcloyd/habitlux](https://github.com/labadcloyd/habitlux)
 
 <p align="right">(<a href="#top">back to top</a>)</p>
-
 
 [product-screenshot]: https://raw.githubusercontent.com/labadcloyd/habitlux/master/.public/screenshot.jpg
