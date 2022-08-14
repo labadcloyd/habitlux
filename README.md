@@ -115,10 +115,9 @@ Follow the steps below:
 3. Open a cmd terminal and change directory to the server directory
 
 4. Finally, run the test while disabling the default parallel behavior:
-
-```go test -p 1 ./...
-
-```
+   ```sh
+    go test -p 1 ./...
+   ```
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
